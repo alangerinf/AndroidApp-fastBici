@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -18,16 +17,14 @@ import android.view.MenuItem;
 
 import com.google.android.gms.maps.SupportMapFragment;
 
-import org.w3c.dom.Text;
-
-public class MainActivity extends AppCompatActivity
+public class ActivityMain extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
-        BlankFragment.OnFragmentInteractionListener
+        FragmentSelectFinishMap.OnFragmentInteractionListener
         {
 
     private Fragment myFragment = null;
             SupportMapFragment mapFragment;
-    public static final String TAG = MainActivity.class.getSimpleName();
+    public static final String TAG = ActivityMain.class.getSimpleName();
 
 
     @Override
@@ -37,7 +34,7 @@ public class MainActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        myFragment = new BlankFragment();
+        myFragment = new FragmentSelectFinishMap(this);
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
@@ -106,13 +103,9 @@ public class MainActivity extends AppCompatActivity
             // Handle the camera action
         } else if (id == R.id.nav_gallery) {
 
-        } else if (id == R.id.nav_slideshow) {
-
-        } else if (id == R.id.nav_manage) {
 
         } else if (id == R.id.nav_share) {
 
-        } else if (id == R.id.nav_send) {
 
         }
 

@@ -1,4 +1,4 @@
-package com.example.activitymaps.views;
+package com.alanger.fastbici.views;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -13,8 +13,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 
-import com.example.activitymaps.ActivityMain;
-import com.example.activitymaps.R;
+import com.alanger.fastbici.R;
 
 
 public class ActivityLogin extends Activity {
@@ -46,24 +45,6 @@ public class ActivityLogin extends Activity {
                                 Intent intent = new Intent(getBaseContext(), ActivityMain.class);
                                 startActivity(intent);
 
-/*
-                                if(spnPlanta.getSelectedItemPosition()>0 && spnCultivo.getSelectedItemPosition()>0){
-                                    Log.d("autentification","intentando");
-                                    LoginHelper loginHelper = new LoginHelper(ActivityLogin.this);
-                                    loginHelper.intentoLogueo(
-                                            eTextUser.getText().toString(),
-                                            eTextPassword.getText().toString(),
-                                            listPlantas.get(spnPlanta.getSelectedItemPosition()-1).getId(),
-                                            listCultivos.get(spnCultivo.getSelectedItemPosition()-1).getId()
-                                    );
-                                }else {
-                                    if(spnPlanta.getSelectedItemPosition()==0){
-                                        Toast.makeText(getBaseContext(),"Elija una Planta",Toast.LENGTH_SHORT).show();
-                                    }else {
-                                        Toast.makeText(getBaseContext(),"Elija un Cultivo",Toast.LENGTH_SHORT).show();
-                                    }
-                                }
-*/
                             }
                         },200
                 );

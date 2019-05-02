@@ -15,7 +15,8 @@
         android:scaleType="centerCrop"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:src="@color/colorPrimaryText"
+        android:src="@drawable/fondo_login"
+
         android:contentDescription="sdfsdf" />
 
     <android.support.constraint.ConstraintLayout
@@ -31,8 +32,8 @@
             android:id="@+id/constComboBackground"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:alpha="0.8"
 
+            android:alpha="0.8"
             android:background="@drawable/shape_white_br30"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -52,16 +53,14 @@
 
             <ImageView
                 android:id="@+id/iViewLogoIncavo"
-                android:layout_width="156dp"
-                android:layout_height="109dp"
-                android:layout_marginStart="32dp"
+                android:layout_width="126dp"
+                android:layout_height="106dp"
+                android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
-                android:layout_marginEnd="32dp"
                 android:adjustViewBounds="true"
                 android:contentDescription="logo"
                 android:cropToPadding="true"
                 android:src="@mipmap/ic_launcher_round"
-                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -81,20 +80,20 @@
             <android.support.constraint.ConstraintLayout
                 android:id="@+id/constETextUsuario"
                 android:layout_width="250dp"
-                android:layout_height="30dp"
+                android:layout_height="40dp"
                 android:layout_marginStart="24dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="24dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView"
+                app:layout_constraintTop_toBottomOf="@+id/iViewLogoIncavo"
                 tools:ignore="MissingConstraints">
 
                 <android.support.constraint.ConstraintLayout
                     android:layout_width="0dp"
                     android:layout_height="0dp"
                     android:alpha="0.5"
-                    android:background="@color/materialGrey600"
+                    android:background="@drawable/shape_materialgrey600_br15"
                     app:layout_constraintBottom_toBottomOf="@+id/eTextUsuario"
                     app:layout_constraintEnd_toEndOf="@+id/eTextUsuario"
                     app:layout_constraintStart_toStartOf="@+id/eTextUsuario"
@@ -106,7 +105,7 @@
                 <EditText
                     android:id="@+id/eTextUsuario"
                     android:layout_width="match_parent"
-                    android:layout_height="30dp"
+                    android:layout_height="0dp"
                     android:background="@android:color/transparent"
                     android:hint="@string/usuario"
                     android:inputType="text"
@@ -114,6 +113,10 @@
                     android:paddingRight="15dp"
                     android:textColorHint="@color/colorPrimaryText"
                     android:textSize="@dimen/textsize_secondary"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
                     tools:ignore="Autofill,MissingConstraints" />
 
             </android.support.constraint.ConstraintLayout>
@@ -124,8 +127,8 @@
             -->
             <android.support.constraint.ConstraintLayout
                 android:id="@+id/constETextContrasena"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_width="250dp"
+                android:layout_height="40dp"
                 android:layout_marginTop="16dp"
                 app:layout_constraintEnd_toEndOf="@+id/constETextUsuario"
                 app:layout_constraintStart_toStartOf="@+id/constETextUsuario"
@@ -135,7 +138,7 @@
                     android:layout_width="0dp"
                     android:layout_height="0dp"
                     android:alpha="0.5"
-                    android:background="@color/materialGrey600"
+                    android:background="@drawable/shape_materialgrey600_br15"
                     app:layout_constraintBottom_toBottomOf="@+id/eTextPassword"
                     app:layout_constraintEnd_toEndOf="@+id/eTextPassword"
                     app:layout_constraintStart_toStartOf="@+id/eTextPassword"
@@ -147,7 +150,7 @@
                 <EditText
                     android:id="@+id/eTextPassword"
                     android:layout_width="match_parent"
-                    android:layout_height="30dp"
+                    android:layout_height="0dp"
                     android:background="@android:color/transparent"
                     android:hint="@string/contrasena"
                     android:inputType="textPassword"
@@ -155,6 +158,10 @@
                     android:paddingEnd="40dp"
                     android:textColorHint="@color/colorPrimaryText"
                     android:textSize="@dimen/textsize_secondary"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
                     tools:ignore="Autofill,MissingConstraints" />
 
             </android.support.constraint.ConstraintLayout>
@@ -166,13 +173,11 @@
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="8dp"
-                android:layout_marginBottom="16dp"
-                android:background="@drawable/shape_primarydark_br15"
+                android:background="@drawable/shape_white_br15"
                 android:text="@string/ingresar"
-                android:textColor="#fff"
                 android:textAllCaps="false"
+                android:textColor="@color/black"
                 android:textSize="@dimen/textsize_tertiary"
-                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="@+id/constETextContrasena"
                 app:layout_constraintStart_toStartOf="@+id/constETextContrasena"
                 app:layout_constraintTop_toBottomOf="@+id/constETextContrasena" />
@@ -182,25 +187,50 @@
                 android:layout_width="wrap_content"
                 android:layout_height="0dp"
                 android:layout_marginEnd="8dp"
+                android:contentDescription="password"
+                android:src="@drawable/ic_remove_red_eye_black_24dp"
                 app:layout_constraintBottom_toBottomOf="@+id/constETextContrasena"
                 app:layout_constraintEnd_toEndOf="@+id/constETextContrasena"
-                app:layout_constraintTop_toTopOf="@+id/constETextContrasena"
-                android:src="@drawable/ic_remove_red_eye_black_24dp"
-                android:contentDescription="password" />
+                app:layout_constraintTop_toTopOf="@+id/constETextContrasena" />
 
             <TextView
-                android:id="@+id/textView"
+                android:id="@+id/textView14"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:text="FastBici S. A."
-                android:textColor="@color/colorPrimaryText"
-                android:textSize="@dimen/textsize_primary"
+                android:layout_marginBottom="16dp"
+                android:text="Recuperar Contraseña"
+                android:textColor="@color/colorPrimaryDark"
                 android:textStyle="bold"
-                app:layout_constraintEnd_toEndOf="@+id/iViewLogoIncavo"
-                app:layout_constraintStart_toStartOf="@+id/iViewLogoIncavo"
-                app:layout_constraintTop_toBottomOf="@+id/iViewLogoIncavo"
-                tools:ignore="MissingConstraints" />
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="@+id/btnEnter"
+                app:layout_constraintStart_toStartOf="@+id/btnEnter"
+                app:layout_constraintTop_toBottomOf="@+id/btnEnter" />
+
+            <android.support.constraint.ConstraintLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="24dp"
+                app:layout_constraintBottom_toBottomOf="@+id/iViewLogoIncavo"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/iViewLogoIncavo"
+                app:layout_constraintTop_toTopOf="@+id/iViewLogoIncavo">
+
+                <TextView
+                    android:id="@+id/textView19"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="2dp"
+                    android:text="FastBici"
+                    android:textColor="@color/black"
+
+                    android:textSize="38sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="1.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </android.support.constraint.ConstraintLayout>
 
         </android.support.constraint.ConstraintLayout>
 
@@ -213,8 +243,25 @@
         android:layout_marginBottom="@dimen/mark_margin_bottom"
         android:layout_marginEnd="@dimen/mark_margin_end"
         android:text="@string/company_mark"
-        android:textColor="@color/secondary_text"
+        android:textColor="@color/white"
         android:textSize="@dimen/mark_size_text"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <TextView
+        android:id="@+id/textView16"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        android:text="ENVÍO DE PAQUETES"
+        android:textAlignment="textEnd"
+        android:textAllCaps="true"
+        android:visibility="invisible"
+        android:textColor="@color/colorPrimary"
+        android:textSize="40sp"
+        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 

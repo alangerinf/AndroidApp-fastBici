@@ -1,11 +1,10 @@
-package com.example.activitymaps;
+package com.alanger.fastbici;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
-import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
-import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
+import android.content.res.Resources;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Build;
@@ -15,6 +14,7 @@ import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,7 +27,10 @@ import android.widget.Toast;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.example.activitymaps.app.AppController;
+import com.alanger.fastbici.app.AppController;
+import com.alanger.fastbici.views.ActivityGoalDetail;
+import com.alanger.fastbici.views.ActivityMain;
+import com.alanger.fastbici.views.Configuracion;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -36,6 +39,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MapStyleOptions;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -65,19 +69,28 @@ public class FragmentSelectFinishMap extends Fragment implements OnMapReadyCallb
     private GoogleMap mMap;
     private MapView mapView;
 
+
+    static ConstraintLayout cLayoutDataPicker;
+
+    static ConstraintLayout cLBtnContinuar;
+    static FloatingActionButton fab;
+
     private OnFragmentInteractionListener mListener;
 
     ActivityMain activityMain;
+
     @SuppressLint("ValidFragment")
     public FragmentSelectFinishMap(ActivityMain activityMain) {
-        this.activityMain= activityMain;
+        this.activityMain = activityMain;
     }
+
     String TAG = FragmentSelectFinishMap.class.getSimpleName();
     double lat, lng, latInicio, lngInicio;
     String direccion, numero;
     final Handler handler = new Handler();
     TextView txt_direccion;
     ImageView marker_pedir;
+
     /**
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
@@ -105,10 +118,7 @@ public class FragmentSelectFinishMap extends Fragment implements OnMapReadyCallb
         }
     }
 
-    static ConstraintLayout cLayoutDataPicker;
 
-    static ConstraintLayout cLBtnContinuar;
-    static FloatingActionButton fab;
     @Override
     public void onStart() {
         super.onStart();
@@ -116,28 +126,13 @@ public class FragmentSelectFinishMap extends Fragment implements OnMapReadyCallb
         txt_direccion = (TextView) getView().findViewById(R.id.tViewLlegada);
         txt_direccion.setText("hola");
         cLayoutDataPicker = (ConstraintLayout) getView().findViewById(R.id.cLayoutDataPicker);
-
         cLayoutDataPicker.setVisibility(View.INVISIBLE);
-        final Animation animLeftIn =
-                android.view.animation.AnimationUtils.loadAnimation(getContext(),R.anim.left_in);
-        final Animation animLeftOut =
-                android.view.animation.AnimationUtils.loadAnimation(getContext(),R.anim.left_out);
 
-        Handler handler = new Handler();
-        handler.postDelayed(
-                new Runnable() {
-                    @Override
-                    public void run() {
-                        cLayoutDataPicker.startAnimation(animLeftIn);
-                        cLayoutDataPicker.setVisibility(View.VISIBLE);
-                    }
-                },200
-        );
+        mostrarDataPicker();
 
-
-        cLBtnContinuar= getView().findViewById(R.id.cLBtnContinuar);
+        cLBtnContinuar = getView().findViewById(R.id.cLBtnContinuar);
         final Animation animBtn =
-                android.view.animation.AnimationUtils.loadAnimation(getContext(),R.anim.press_btn);
+                android.view.animation.AnimationUtils.loadAnimation(getContext(), R.anim.press_btn);
 
         fab = getView().findViewById(R.id.floatingActionButton2);
 
@@ -146,7 +141,7 @@ public class FragmentSelectFinishMap extends Fragment implements OnMapReadyCallb
                     @Override
                     public void onClick(View v) {
                         v.startAnimation(animBtn);
-                        Toast.makeText(getContext(),"click",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), "click", Toast.LENGTH_SHORT).show();
                     }
                 }
         );
@@ -155,7 +150,7 @@ public class FragmentSelectFinishMap extends Fragment implements OnMapReadyCallb
                 new View.OnClickListener() {
                     @Override
                     public void onClick(final View v) {
-                       // Toast.makeText(getContext(),"click",Toast.LENGTH_SHORT).show();
+                        // Toast.makeText(getContext(),"click",Toast.LENGTH_SHORT).show();
 
                         Handler handler = new Handler();
                         handler.post(
@@ -166,31 +161,58 @@ public class FragmentSelectFinishMap extends Fragment implements OnMapReadyCallb
                                     }
                                 }
                         );
-
-                        handler.post(
+                        ocultarDataPicker();
+                        handler.postDelayed(
                                 new Runnable() {
                                     @Override
                                     public void run() {
-                                        cLayoutDataPicker.startAnimation(animLeftOut);
+                                        openDetail();
                                     }
-                                }
+                                },180
                         );
-                        handler.postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                openDetail();
-                                cLayoutDataPicker.setVisibility(View.INVISIBLE);
-                            }
-                        },180);
-
                     }
                 }
         );
     }
 
+    private void mostrarDataPicker(){
+        final Animation animLeftIn =
+                android.view.animation.AnimationUtils.loadAnimation(getContext(), R.anim.left_in);
+        final Animation animLeftOut =
+                android.view.animation.AnimationUtils.loadAnimation(getContext(), R.anim.left_out);
 
-    void openDetail(){
-        Intent intent = new Intent(getContext(),ActivityGoalDetail.class);
+        Handler handler = new Handler();
+        handler.post(
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        cLayoutDataPicker.setVisibility(View.VISIBLE);
+                        cLayoutDataPicker.startAnimation(animLeftIn);
+                    }
+                }
+        );
+    }
+
+    private void ocultarDataPicker(){
+        final Animation animLeftIn =
+                android.view.animation.AnimationUtils.loadAnimation(getContext(), R.anim.left_in);
+        final Animation animLeftOut =
+                android.view.animation.AnimationUtils.loadAnimation(getContext(), R.anim.left_out);
+        cLayoutDataPicker.setVisibility(View.VISIBLE);
+        Handler handler = new Handler();
+        handler.post(
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        cLayoutDataPicker.startAnimation(animLeftOut);
+                        cLayoutDataPicker.setVisibility(View.INVISIBLE);
+                    }
+                }
+        );
+    }
+
+    void openDetail() {
+        Intent intent = new Intent(getContext(), ActivityGoalDetail.class);
         startActivity(intent);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
             activityMain.overridePendingTransition(R.anim.zoom_forward_in, R.anim.zoom_back_out);
@@ -205,7 +227,7 @@ public class FragmentSelectFinishMap extends Fragment implements OnMapReadyCallb
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View rootView =  inflater.inflate(R.layout.activity_maps, container, false);
+        View rootView = inflater.inflate(R.layout.activity_maps, container, false);
 
         //Si usas getActivity estas suponiendo que la vista se buscara en el layout cargado por la Activity.
         //SupportMapFragment mapFragment = (SupportMapFragment) getActivity().getSupportFragmentManager().findFragmentById(R.id.map);
@@ -251,9 +273,28 @@ public class FragmentSelectFinishMap extends Fragment implements OnMapReadyCallb
         void onFragmentInteraction(Uri uri);
     }
 
+    int LOCATION_REQUEST_CODE = 678;
+
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        Log.d(TAG,"ONMAP READY");
+        Log.d(TAG, "ONMAP READY");
+
+
+
+        try {
+            // Customise the styling of the base map using a JSON object defined
+            // in a raw resource file.
+            boolean success = googleMap.setMapStyle(
+                    MapStyleOptions.loadRawResourceStyle(
+                            getContext(), R.raw.mapstyle_night));
+
+            if (!success) {
+                Log.e(TAG, "Style parsing failed.");
+            }
+        } catch (Resources.NotFoundException e) {
+            Log.e(TAG, "Can't find style. Error: ", e);
+        }
+
         mMap = googleMap;
 
         lat = -8.1190123;
@@ -261,7 +302,40 @@ public class FragmentSelectFinishMap extends Fragment implements OnMapReadyCallb
         posicionarMarker();
 
         VerificandoPermiso();
-        Log.d(TAG,"INCIANDO CAMARA");
+        Log.d(TAG, "INCIANDO CAMARA");
+
+
+        if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
+
+        if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION)
+                == PackageManager.PERMISSION_GRANTED) {
+            mMap.setMyLocationEnabled(true);
+        } else {
+            if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(),
+                    Manifest.permission.ACCESS_FINE_LOCATION)) {
+                // Mostrar diálogo explicativo
+            } else {
+                // Solicitar permiso
+                ActivityCompat.requestPermissions(
+                        getActivity(),
+                        new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                        LOCATION_REQUEST_CODE);
+            }
+        }
+
+
+        mMap.getUiSettings().setMyLocationButtonEnabled(true);
+
+// Marcadores
 
         mMap.setOnCameraIdleListener(new GoogleMap.OnCameraIdleListener() {
             @Override
@@ -269,6 +343,7 @@ public class FragmentSelectFinishMap extends Fragment implements OnMapReadyCallb
                 try {
                     if (mMap.getCameraPosition().target != null) {
                         isDrag(mMap.getCameraPosition().target.latitude, mMap.getCameraPosition().target.longitude);
+
                     } else {
                         txt_direccion.setText("global.NoPrecisa");
                     }
@@ -278,16 +353,24 @@ public class FragmentSelectFinishMap extends Fragment implements OnMapReadyCallb
                 }
             }
         });
-        Log.d(TAG,"INCIANDO CAMARA MOVE");
+
 
         mMap.setOnCameraMoveStartedListener(new GoogleMap.OnCameraMoveStartedListener() {
             @Override
             public void onCameraMoveStarted(int i) {
                // btn_pedir.setVisibility(View.INVISIBLE);
+                ocultarDataPicker();
                 txt_direccion.setText("global.BuscandoDireccion");
+                Log.d(TAG,"INCIANDO CAMARA MOVE");
             }
         });
-
+        mMap.setOnCameraMoveCanceledListener(new GoogleMap.OnCameraMoveCanceledListener() {
+            @Override
+            public void onCameraMoveCanceled() {
+                txt_direccion.setText("global.termino moverse");
+                Log.d(TAG,"INCIANDO CAMARA CANCEL");
+            }
+        });
 
     }
     private void isDrag(double cor_lat, double cor_lng) {
@@ -334,11 +417,12 @@ public class FragmentSelectFinishMap extends Fragment implements OnMapReadyCallb
                     if (ActivityCompat.checkSelfPermission(getContext(), android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                         return;
                     }
-                    mMap.setMyLocationEnabled(false);
+                    mMap.setMyLocationEnabled(true);
 
                     posicionarMarker();
 
                     txt_direccion.setText("global.BuscandoDireccion");
+
                     BuscarDireccion();
                //     runnable_coor.run();
 
@@ -353,23 +437,16 @@ public class FragmentSelectFinishMap extends Fragment implements OnMapReadyCallb
         }
     };
 
-    private void BuscarDireccion() {
-        String apiKey ="0";
 
-        try {
-            ActivityInfo ai = new ActivityInfo();
-            ai = activityMain.getPackageManager()
-                    .getActivityInfo(activityMain.getComponentName(), PackageManager.GET_META_DATA);
-            Bundle bundle = ai.metaData;
-            apiKey= bundle.getString("com.google.android.geo.API_KEY");
-        } catch (PackageManager.NameNotFoundException e) {
-            Toast.makeText(getContext(),e.toString(),Toast.LENGTH_SHORT).show();
-        }finally {
-            Toast.makeText(getContext(),apiKey,Toast.LENGTH_SHORT).show();
-        }
+
+
+    private void BuscarDireccion() {
+
+        String apiKey = Configuracion.API_KEY;
 
         String url = "https://maps.googleapis.com/maps/api/geocode/json?latlng=" + lat + "," + lng + "&key=" + apiKey;
         Log.d(TAG,"buscando: "+url);
+        mostrarDataPicker();
         JsonObjectRequest sr = new JsonObjectRequest(url, null,
                 new Response.Listener<JSONObject>() {
                     @Override
@@ -402,11 +479,13 @@ public class FragmentSelectFinishMap extends Fragment implements OnMapReadyCallb
                             if (procede == 1) {
                              //   btn_pedir.setVisibility(View.VISIBLE);
                             //    CargarUnidades();
+
                             }
 
                         } catch (JSONException e) {
                             e.printStackTrace();
                             Log.d(TAG,"jsonE: "+e.toString());
+                            Toast.makeText(getContext(),"jsonE: "+e.toString(),Toast.LENGTH_LONG).show();
                         }
 
                     }
@@ -415,6 +494,7 @@ public class FragmentSelectFinishMap extends Fragment implements OnMapReadyCallb
             public void onErrorResponse(VolleyError error) {
                 txt_direccion.setText("global.NoPrecisa");
                 Log.d(TAG,"voleyE "+error.toString());
+                Toast.makeText(getContext(),"jsonE: "+error.toString(),Toast.LENGTH_LONG).show();
             }
         });
 

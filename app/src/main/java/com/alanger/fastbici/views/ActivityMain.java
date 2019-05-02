@@ -1,5 +1,6 @@
-package com.example.activitymaps;
+package com.alanger.fastbici.views;
 
+import android.annotation.SuppressLint;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -15,6 +16,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.alanger.fastbici.FragmentSelectFinishMap;
+import com.alanger.fastbici.R;
 import com.google.android.gms.maps.SupportMapFragment;
 
 public class ActivityMain extends AppCompatActivity
@@ -27,6 +30,7 @@ public class ActivityMain extends AppCompatActivity
     public static final String TAG = ActivityMain.class.getSimpleName();
 
 
+    @SuppressLint("ResourceType")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -99,9 +103,9 @@ public class ActivityMain extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
+        if (id == R.id.nav_pedir) {
             // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
+        } else if (id == R.id.nav_tarifario) {
 
 
         } else if (id == R.id.nav_share) {

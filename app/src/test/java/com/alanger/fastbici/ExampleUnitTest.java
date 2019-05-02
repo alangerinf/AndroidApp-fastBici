@@ -1,4 +1,4 @@
-package com.example.activitymaps;
+package com.alanger.fastbici;
 
 import org.junit.Test;
 

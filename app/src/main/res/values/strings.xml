@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">IoQuiero</string>
+    <string name="app_name">FastBici</string>
     <string name="title_activity_maps">Map</string>
     <string name="title_activity_main">Fast Bici</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>

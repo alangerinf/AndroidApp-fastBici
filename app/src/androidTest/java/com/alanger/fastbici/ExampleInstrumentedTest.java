@@ -1,4 +1,4 @@
-package com.example.activitymaps;
+package com.alanger.fastbici;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;

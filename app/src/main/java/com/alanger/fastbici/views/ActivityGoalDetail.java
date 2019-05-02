@@ -1,9 +1,11 @@
-package com.example.activitymaps;
+package com.alanger.fastbici.views;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+
+import com.alanger.fastbici.R;
 
 public class ActivityGoalDetail extends AppCompatActivity {
 

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -15,11 +15,11 @@
         android:scaleType="centerCrop"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:src="@drawable/fondo_login"
+        android:src="@drawable/bg3"
 
         android:contentDescription="sdfsdf" />
 
-    <android.support.constraint.ConstraintLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constCombo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -28,19 +28,19 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <android.support.constraint.ConstraintLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/constComboBackground"
             android:layout_width="0dp"
             android:layout_height="0dp"
 
-            android:alpha="0.8"
-            android:background="@drawable/shape_white_br30"
+            android:alpha="0.9"
+            android:background="@drawable/shape_shadow_center"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <android.support.constraint.ConstraintLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/constComboContenido"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -77,7 +77,7 @@
             <!--
             ETEXT USUARIO
             -->
-            <android.support.constraint.ConstraintLayout
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/constETextUsuario"
                 android:layout_width="250dp"
                 android:layout_height="40dp"
@@ -89,7 +89,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/iViewLogoIncavo"
                 tools:ignore="MissingConstraints">
 
-                <android.support.constraint.ConstraintLayout
+                <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="0dp"
                     android:layout_height="0dp"
                     android:alpha="0.5"
@@ -99,7 +99,7 @@
                     app:layout_constraintStart_toStartOf="@+id/eTextUsuario"
                     app:layout_constraintTop_toTopOf="@+id/eTextUsuario">
 
-                </android.support.constraint.ConstraintLayout>
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
 
                 <EditText
@@ -119,13 +119,13 @@
                     app:layout_constraintTop_toTopOf="parent"
                     tools:ignore="Autofill,MissingConstraints" />
 
-            </android.support.constraint.ConstraintLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
 
             <!--
             ETEXT USUARIO
             -->
-            <android.support.constraint.ConstraintLayout
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/constETextContrasena"
                 android:layout_width="250dp"
                 android:layout_height="40dp"
@@ -134,7 +134,7 @@
                 app:layout_constraintStart_toStartOf="@+id/constETextUsuario"
                 app:layout_constraintTop_toBottomOf="@+id/constETextUsuario">
 
-                <android.support.constraint.ConstraintLayout
+                <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="0dp"
                     android:layout_height="0dp"
                     android:alpha="0.5"
@@ -144,7 +144,7 @@
                     app:layout_constraintStart_toStartOf="@+id/eTextPassword"
                     app:layout_constraintTop_toTopOf="@+id/eTextPassword">
 
-                </android.support.constraint.ConstraintLayout>
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
 
                 <EditText
@@ -152,7 +152,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:background="@android:color/transparent"
-                    android:hint="@string/contrasena"
+                    android:hint="@string/telefono"
                     android:inputType="textPassword"
                     android:paddingStart="15dp"
                     android:paddingEnd="40dp"
@@ -164,7 +164,7 @@
                     app:layout_constraintTop_toTopOf="parent"
                     tools:ignore="Autofill,MissingConstraints" />
 
-            </android.support.constraint.ConstraintLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
             <Button
                 android:id="@+id/btnEnter"
@@ -197,8 +197,9 @@
                 android:id="@+id/textView14"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="24dp"
+                android:onClick="openRecuperar"
                 android:text="Recuperar Contraseña"
                 android:textColor="@color/colorPrimaryDark"
                 android:textStyle="bold"
@@ -207,7 +208,7 @@
                 app:layout_constraintStart_toStartOf="@+id/btnEnter"
                 app:layout_constraintTop_toBottomOf="@+id/btnEnter" />
 
-            <android.support.constraint.ConstraintLayout
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="24dp"
@@ -230,11 +231,11 @@
                     app:layout_constraintHorizontal_bias="1.0"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
-            </android.support.constraint.ConstraintLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
-        </android.support.constraint.ConstraintLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
-    </android.support.constraint.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <TextView
         android:id="@+id/tViewCompanyMark"
@@ -249,21 +250,15 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <TextView
-        android:id="@+id/textView16"
-        android:layout_width="250dp"
+    <ImageView
+        android:id="@+id/imageView7"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="16dp"
-        android:text="ENVÍO DE PAQUETES"
-        android:textAlignment="textEnd"
-        android:textAllCaps="true"
-        android:visibility="invisible"
-        android:textColor="@color/colorPrimary"
-        android:textSize="40sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:src="@drawable/ic_directions_bike_black_24dp"
+        app:layout_constraintBottom_toBottomOf="@+id/background"
         app:layout_constraintEnd_toEndOf="parent" />
 
 
-</android.support.constraint.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

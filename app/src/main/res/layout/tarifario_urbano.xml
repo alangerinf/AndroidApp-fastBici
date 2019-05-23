@@ -1,142 +1,147 @@
-<RelativeLayout
+<androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/black"
     >
 
-    <RelativeLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="70dp"
-            android:background="@color/black"
-            android:id="@+id/linearLayout1"
-            android:padding="9dp"
-            >
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/logo_cliente"
-                android:id="@+id/img_logo"
-                />
-        </LinearLayout>
 
 
-        <RelativeLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/constraintLayout7"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginBottom="65dp"
-            android:layout_below="@+id/linearLayout1"
-            android:layout_marginTop="5dp"
-            >
-            <fragment xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:tools="http://schemas.android.com/tools"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="@+id/lLayoutPrecio"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <fragment
                 android:id="@+id/map"
+                android:name="com.google.android.gms.maps.SupportMapFragment"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
                 tools:context=".atv_home"
-                android:name="com.google.android.gms.maps.SupportMapFragment" />
+                tools:ignore="MissingConstraints" />
 
             <ImageView
                 android:layout_width="50dp"
                 android:layout_height="120dp"
                 android:layout_centerHorizontal="true"
                 android:layout_centerVertical="true"
-                android:layout_marginBottom="30dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
                 android:background="@drawable/marker_pedir"
-                />
+                app:layout_constraintBottom_toBottomOf="@+id/map"
+                app:layout_constraintEnd_toEndOf="@+id/map"
+                app:layout_constraintStart_toStartOf="@+id/map"
+                app:layout_constraintTop_toTopOf="@+id/map"
+                tools:ignore="MissingConstraints" />
 
             <TextView
+                android:id="@+id/txt_direccion"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/shape_primary_br15"
-                android:layout_marginLeft="5dp"
-                android:layout_marginRight="5dp"
-                android:layout_marginTop="5dp"
-                android:text="Buscando dirección..."
-                android:textSize="16dp"
-                android:textColor="@color/white"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:background="@drawable/shape_primarydark_br15"
                 android:padding="10dp"
-                android:id="@+id/txt_direccion"
-                />
+                android:text="Buscando dirección..."
+                android:textColor="@color/white"
+                android:textSize="16sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="MissingConstraints" />
 
-        </RelativeLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <LinearLayout
+            android:id="@+id/lLayoutPrecio"
             android:layout_width="match_parent"
             android:layout_height="60dp"
             android:layout_alignParentBottom="true"
-            android:background="@drawable/fondo_50"
-            >
+            app:layout_constraintBottom_toBottomOf="parent"
+            tools:ignore="MissingConstraints">
 
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginLeft="30dp"
-                android:layout_marginRight="30dp"
-                >
-                <Button
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="PUNTO DE ORIGEN"
-                    android:id="@+id/btn1"
-                    android:textSize="14dp"
-                    android:textColor="@color/white"
-                    android:visibility="invisible"
-                    android:background="@drawable/shape_primary_br15"
-                    />
+                android:layout_marginRight="30dp">
 
                 <Button
+                    android:id="@+id/btn1"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="CALCULAR PRECIO"
+                    android:background="@drawable/shape_primarydark_br15"
+                    android:text="PUNTO DE ORIGEN"
+                    android:textColor="@color/white"
+                    android:textSize="14sp"
+                    android:visibility="invisible" />
+
+                <Button
                     android:id="@+id/btn2"
-                    android:textSize="20dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
                     android:layout_gravity="center"
+                    android:background="@drawable/shape_primarydark_br15"
+                    android:text="CALCULAR PRECIO"
                     android:textColor="@color/white"
-                    android:visibility="invisible"
-                    android:background="@drawable/shape_primary_br15"
-                    />
+                    android:textSize="20sp"
+                    android:visibility="invisible" />
             </RelativeLayout>
         </LinearLayout>
 
-        <RelativeLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/constraintLayout10"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
+            android:layout_alignParentEnd="true"
             android:layout_alignParentBottom="true"
-            android:layout_alignParentRight="true"
-            android:layout_marginBottom="70dp"
-            >
+            android:layout_gravity="center"
+            android:layout_marginBottom="8dp"
+            app:layout_constraintBottom_toTopOf="@+id/lLayoutPrecio"
+            app:layout_constraintEnd_toEndOf="parent"
+            tools:ignore="MissingConstraints">
+
             <ImageButton
+                android:id="@+id/btnclear"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
-                android:id="@+id/btnclear"
-                android:background="@drawable/flecha_circulo"
                 android:layout_marginRight="5dp"
-                />
-        </RelativeLayout>
+                android:background="@drawable/flecha_circulo" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <TextView
+            android:id="@+id/txt_mensaje"
             android:layout_width="200dp"
             android:layout_height="wrap_content"
-            android:text="Arrastra el mapa y ubica el punto de origen"
-            android:background="@color/materialGrey400"
-            android:layout_marginTop="85dp"
-            android:textSize="14dp"
-            android:textColor="@color/white"
-            android:gravity="center"
-            android:layout_marginLeft="5dp"
-            android:id="@+id/txt_mensaje"
             android:layout_alignParentBottom="true"
-            android:layout_marginBottom="70dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginBottom="8dp"
+            android:background="@color/materialGrey400"
+            android:gravity="center"
             android:padding="5dp"
-            />
+            android:text="Arrastra el mapa y ubica el punto de origen"
+            android:textColor="@color/white"
+            android:textSize="14sp"
+            app:layout_constraintBottom_toTopOf="@+id/lLayoutPrecio"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:ignore="MissingConstraints" />
 
         <CheckBox
             android:layout_width="wrap_content"
@@ -145,14 +150,14 @@
             android:textColor="@color/colorPrimaryDark"
             android:layout_alignParentBottom="true"
             android:layout_marginBottom="120dp"
-            android:textSize="14dp"
+            android:textSize="14sp"
             android:textStyle="bold"
             android:id="@+id/chk_corp"
             android:visibility="invisible"
-            />
+            tools:ignore="MissingConstraints" />
 
-    </RelativeLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 
 
-</RelativeLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

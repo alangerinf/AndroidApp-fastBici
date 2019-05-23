@@ -26,6 +26,7 @@
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Light">
         <item name="colorPrimary">@color/white</item>
     </style>
+
     <style name="AppTheme2.AppBarOverlay" parent="ThemeOverlay.AppCompat.Light">
         <item name="colorPrimary">@color/white</item>
     </style>

@@ -13,6 +13,11 @@
             android:icon="@drawable/ic_monetization_on_black_24dp"
             android:title="Tarifario" />
         <item
+            android:id="@+id/nav_mispedidos"
+            android:icon="@drawable/ic_shopping_cart_black_24dp"
+            android:title="Mis Pedidos"
+            />
+        <item
             android:id="@+id/nav_contrasenha"
             android:icon="@drawable/ic_vpn_key_black_24dp"
             android:title="Cambiar Contraseña" />

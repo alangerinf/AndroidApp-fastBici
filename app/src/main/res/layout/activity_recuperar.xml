@@ -1,0 +1,249 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".views.ActivityRecuperar">
+
+    <ImageView
+        android:id="@+id/background"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:adjustViewBounds="true"
+        android:cropToPadding="true"
+        android:scaleType="centerCrop"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:src="@drawable/bg3"
+
+        android:contentDescription="sdfsdf" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constCombo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/constComboBackground"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+
+            android:alpha="0.9"
+            android:background="@drawable/shape_shadow_center"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/constComboContenido"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+
+            <ImageView
+                android:id="@+id/iViewLogoIncavo"
+                android:layout_width="126dp"
+                android:layout_height="106dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:adjustViewBounds="true"
+                android:contentDescription="logo"
+                android:cropToPadding="true"
+                android:src="@mipmap/ic_launcher_round"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+
+            <!--
+            SPINER PLANTA
+            -->
+
+            <!--
+            SPINER CULTIVO
+            -->
+
+
+            <!--
+            ETEXT USUARIO
+            -->
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/constETextUsuario"
+                android:layout_width="250dp"
+                android:layout_height="40dp"
+                android:layout_marginStart="24dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="24dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/iViewLogoIncavo"
+                tools:ignore="MissingConstraints">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:alpha="0.5"
+                    android:background="@drawable/shape_materialgrey600_br15"
+                    app:layout_constraintBottom_toBottomOf="@+id/eTextUsuario"
+                    app:layout_constraintEnd_toEndOf="@+id/eTextUsuario"
+                    app:layout_constraintStart_toStartOf="@+id/eTextUsuario"
+                    app:layout_constraintTop_toTopOf="@+id/eTextUsuario">
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+                <EditText
+                    android:id="@+id/eTextUsuario"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:background="@android:color/transparent"
+                    android:hint="@string/usuario"
+                    android:inputType="text"
+                    android:paddingLeft="15dp"
+                    android:paddingRight="15dp"
+                    android:textColorHint="@color/colorPrimaryText"
+                    android:textSize="@dimen/textsize_secondary"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:ignore="Autofill,MissingConstraints" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+            <!--
+            ETEXT USUARIO
+            -->
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/constETextContrasena"
+                android:layout_width="250dp"
+                android:layout_height="40dp"
+                android:layout_marginTop="16dp"
+                app:layout_constraintEnd_toEndOf="@+id/constETextUsuario"
+                app:layout_constraintStart_toStartOf="@+id/constETextUsuario"
+                app:layout_constraintTop_toBottomOf="@+id/constETextUsuario">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:alpha="0.5"
+                    android:background="@drawable/shape_materialgrey600_br15"
+                    app:layout_constraintBottom_toBottomOf="@+id/eTextPassword"
+                    app:layout_constraintEnd_toEndOf="@+id/eTextPassword"
+                    app:layout_constraintStart_toStartOf="@+id/eTextPassword"
+                    app:layout_constraintTop_toTopOf="@+id/eTextPassword">
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+                <EditText
+                    android:id="@+id/eTextPassword"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:background="@android:color/transparent"
+                    android:hint="@string/telefono"
+                    android:inputType="textPassword"
+                    android:paddingStart="15dp"
+                    android:paddingEnd="40dp"
+                    android:textColorHint="@color/colorPrimaryText"
+                    android:textSize="@dimen/textsize_secondary"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:ignore="Autofill,MissingConstraints" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <Button
+                android:id="@+id/btnEnter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="24dp"
+                android:background="@drawable/shape_white_br15"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
+                android:text="@string/recuperar_pass"
+                android:textAllCaps="false"
+                android:onClick="pruebaApi"
+                android:textColor="@color/black"
+                android:textSize="@dimen/textsize_tertiary"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="@+id/constETextContrasena"
+                app:layout_constraintStart_toStartOf="@+id/constETextContrasena"
+                app:layout_constraintTop_toBottomOf="@+id/constETextContrasena" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="24dp"
+                app:layout_constraintBottom_toBottomOf="@+id/iViewLogoIncavo"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/iViewLogoIncavo"
+                app:layout_constraintTop_toTopOf="@+id/iViewLogoIncavo">
+
+                <TextView
+                    android:id="@+id/textView19"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="2dp"
+                    android:text="FastBici"
+                    android:textColor="@color/black"
+
+                    android:textSize="38sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="1.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <TextView
+        android:id="@+id/tViewCompanyMark"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/mark_margin_bottom"
+        android:layout_marginEnd="@dimen/mark_margin_end"
+        android:text="@string/company_mark"
+        android:textColor="@color/white"
+        android:textSize="@dimen/mark_size_text"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <TextView
+        android:id="@+id/textView16"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        android:text="ENVÍO DE PAQUETES"
+        android:textAlignment="textEnd"
+        android:textAllCaps="true"
+        android:visibility="invisible"
+        android:textColor="@color/colorPrimary"
+        android:textSize="40sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

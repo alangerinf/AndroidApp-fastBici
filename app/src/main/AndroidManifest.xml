@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.alanger.fastbici">
+    package="com.alanger.ioquiero">
     <!--
          The ACCESS_COARSE/FINE_LOCATION permissions are not required to use
          Google Maps Android API v2, but you must specify either coarse or fine
@@ -13,35 +13,46 @@
     <uses-permission android:name="android.permission.VIBRATE" />
 
     <application
-        android:name="com.alanger.fastbici.app.AppController"
+        android:name=".app.AppController"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
+        android:screenOrientation="portrait"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name="com.alanger.fastbici.views.ActivitySugerencias"></activity>
+        <activity android:name=".views.ActivitySugerencias"
+            android:screenOrientation="portrait"/>
         <activity
-            android:name="com.alanger.fastbici.views.ActivityLogin"
+            android:name=".views.ActivityLogin"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme2.NoActionBar">
-
-        </activity>
-        <activity
-            android:name="com.alanger.fastbici.views.ActivityGoalDetail"
-            android:label="@string/title_activity_axtivity_goal_detail"
-            android:parentActivityName="com.alanger.fastbici.views.ActivityMain"
-            android:theme="@style/AppTheme2.NoActionBar"></activity>
-        <activity
-            android:name="com.alanger.fastbici.views.ActivityMain"
-            android:label="@string/title_activity_main"
-            android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".views.ActivityRecuperar"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme2.NoActionBar"></activity>
+        <activity
+            android:name=".views.tarifario_urbano_precio"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme2.NoActionBar"></activity>
+        <activity
+            android:name=".views.ActivityGoalDetail"
+            android:label="@string/title_activity_axtivity_goal_detail"
+            android:screenOrientation="portrait"
+            android:parentActivityName=".views.ActivityMain"
+            android:theme="@style/AppTheme2.NoActionBar" />
+        <activity
+            android:name=".views.ActivityMain"
+            android:label="@string/title_activity_main"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").
@@ -53,8 +64,6 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
-
-
     </application>
 
 </manifest>

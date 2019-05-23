@@ -1,0 +1,161 @@
+# This file was generated based on "schema.json". Do not edit manually.
+
+schema {
+    query: Query
+    mutation: Mutation
+}
+
+"volskaya Message Interface Description"
+interface volskayaMessageInterface {
+    message: String!
+}
+
+type Coordinate {
+    latitude: Float!
+    longitude: Float!
+}
+
+type Device {
+    imei: String!
+    name: String!
+    number: String!
+    token: String
+}
+
+type Goal {
+    goalCanceled: GoalCanceled
+    goalCoordinate: Coordinate
+    goalTypeName: String
+    products: [Product!]
+    userCyclistId: String
+}
+
+type GoalCanceled {
+    reason: String
+    time: String
+}
+
+type Mutation {
+    addUser(device: DeviceFieldsInput, email: String, id: String, isAuthenticated: Boolean, orders: [OrderFieldsInput!], password: String, userCyclist: UserCyclistFieldsInput, userProducer: UserProducerFieldsInput): UserDomain!
+    updateEmail(device: DeviceFieldsInput, email: String, id: String, isAuthenticated: Boolean, orders: [OrderFieldsInput!], password: String, userCyclist: UserCyclistFieldsInput, userProducer: UserProducerFieldsInput): volskayaMessageOutputType!
+    updatePassword(device: DeviceFieldsInput, email: String, id: String, isAuthenticated: Boolean, orders: [OrderFieldsInput!], password: String, userCyclist: UserCyclistFieldsInput, userProducer: UserProducerFieldsInput): volskayaMessageOutputType!
+    updateUserType(device: DeviceFieldsInput, email: String, id: String, isAuthenticated: Boolean, orders: [OrderFieldsInput!], password: String, userCyclist: UserCyclistFieldsInput, userProducer: UserProducerFieldsInput): volskayaMessageOutputType!
+}
+
+type Order {
+    finalPrice: Float
+    goals: [Goal!]
+    isPaid: Boolean
+    kilometers: Float
+    orderTypeName: String
+    paymentDateTime: String
+    paymentMethod: String
+    statusOrderTypeName: String
+}
+
+type Product {
+    description: String!
+    isSpecial: Boolean
+    name: String!
+    photo: String
+}
+
+type Query {
+    "Returns a list of all available users."
+    allUsers: [UserDomain!]!
+    "Return a price of one Route"
+    calculatePriceRoute(route: RouteFieldsInput!): [Int!]!
+    login(email: String, password: String): volskayaMessageOutputType!
+}
+
+type UserCyclist {
+    dni: String!
+    firstName: String!
+    lastName: String!
+}
+
+type UserDomain {
+    device: Device
+    email: String
+    id: String
+    isAuthenticated: Boolean
+    orders: [Order!]
+    password: String
+    userCyclist: UserCyclist
+    userProducer: UserProducer
+}
+
+type UserProducer {
+    address: String!
+    nameCompany: String!
+    phone: String!
+    ruc: String!
+}
+
+"Format to return some request"
+type volskayaMessageOutputType implements volskayaMessageInterface {
+    message: String!
+    responseCode: String!
+    responseMessage: String!
+}
+
+input CoordinateFieldsInput {
+    latitude: Float!
+    longitude: Float!
+}
+
+input DeviceFieldsInput {
+    imei: String!
+    name: String!
+    number: String!
+    token: String
+}
+
+input GoalCanceledFieldsInput {
+    reason: String
+    time: String
+}
+
+input GoalFieldsInput {
+    goalCanceled: GoalCanceledFieldsInput
+    goalCoordinate: CoordinateFieldsInput
+    goalTypeName: String
+    products: [ProductFieldsInput!]
+    userCyclistId: String
+}
+
+input OrderFieldsInput {
+    finalPrice: Float
+    goals: [GoalFieldsInput!]
+    isPaid: Boolean
+    kilometers: Float
+    orderTypeName: String
+    paymentDateTime: String
+    paymentMethod: String
+    statusOrderTypeName: String
+}
+
+input ProductFieldsInput {
+    description: String!
+    isSpecial: Boolean
+    name: String!
+    photo: String
+}
+
+input RouteFieldsInput {
+    coordinateA: CoordinateFieldsInput!
+    coordinateB: CoordinateFieldsInput!
+}
+
+input UserCyclistFieldsInput {
+    dni: String!
+    firstName: String!
+    lastName: String!
+}
+
+input UserProducerFieldsInput {
+    address: String!
+    nameCompany: String!
+    phone: String!
+    ruc: String!
+}

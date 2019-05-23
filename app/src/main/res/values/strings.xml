@@ -23,7 +23,9 @@
     <string name="title_activity_axtivity_goal_detail">AxtivityGoalDetail</string>
     <string name="todo">TODO</string>
     <string name="usuario">Usuario</string>
-    <string name="contrasena">Contraseña</string>
+    <string name="telefono">Telefono</string>
+    <string name="recuperar_pass">Recuperar Contraseña</string>
     <string name="ingresar">Ingresar</string>
+    <string name="contrasena">Contraseña</string>
     <string name="company_mark">.@FastBici</string>
 </resources>

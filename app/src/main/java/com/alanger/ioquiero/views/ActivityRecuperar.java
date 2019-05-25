@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.View;
 
 import com.alanger.ioquiero.AllUsersQuery;
+import com.alanger.ioquiero.LoginQuery;
 import com.alanger.ioquiero.R;
 import com.alanger.ioquiero.VolskayaGraphqlClient;
 import com.apollographql.apollo.ApolloCall;
@@ -46,6 +47,30 @@ public class ActivityRecuperar extends Activity {
 
             }
         });
+
+    }
+
+    public void Login(String email,String password){
+        VolskayaGraphqlClient.getMyApolloClient()
+                .query(
+                    LoginQuery
+                            .builder()
+                            .email(email)
+                            .pass(password)
+                            .build()
+                    )
+                .enqueue(new ApolloCall.Callback<LoginQuery.Data>() {
+
+                    @Override
+                    public void onResponse(@Nonnull Response<LoginQuery.Data> response) {
+
+                    }
+
+                    @Override
+                    public void onFailure(@Nonnull ApolloException e) {
+
+                    }
+                });
 
     }
 

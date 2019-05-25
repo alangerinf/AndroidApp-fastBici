@@ -5,7 +5,7 @@ query AllUsersQuery {
     }
 }
 
-query Login($email:String,$pass:String) {
+query LoginQuery($email:String,$pass:String) {
     login(email:$email,password: $pass) {
         responseCode
         responseMessage

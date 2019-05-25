@@ -1,0 +1,26 @@
+package com.alanger.ioquiero;
+
+import com.apollographql.apollo.ApolloClient;
+import okhttp3.OkHttpClient;
+import okhttp3.logging.HttpLoggingInterceptor;
+
+public class VolskayaGraphqlClient {
+    private static final String BASE_URL = "https://volskayaforce.herokuapp.com/graphql";
+    private static ApolloClient apolloClient;
+
+    public static ApolloClient getMyApolloClient() {
+
+        HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
+        logging.setLevel(HttpLoggingInterceptor.Level.BODY);
+
+        OkHttpClient okHttpClient = new OkHttpClient.Builder()
+                .addInterceptor(logging)
+                .build();
+
+        apolloClient = ApolloClient.builder()
+                .serverUrl(BASE_URL)
+                .okHttpClient(okHttpClient)
+                .build();
+        return apolloClient;
+    }
+}

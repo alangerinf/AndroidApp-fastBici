@@ -5,4 +5,11 @@ query AllUsersQuery {
     }
 }
 
+query Login($email:String,$pass:String) {
+    login(email:$email,password: $pass) {
+        responseCode
+        responseMessage
+    }
+}
+
 

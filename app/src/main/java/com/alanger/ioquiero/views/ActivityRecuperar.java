@@ -4,12 +4,11 @@ import android.app.Activity;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
 
 import com.alanger.ioquiero.AllUsersQuery;
 import com.alanger.ioquiero.LoginQuery;
 import com.alanger.ioquiero.R;
-import com.alanger.ioquiero.VolskayaGraphqlClient;
+import com.alanger.ioquiero.volskayaGraphql.GraphqlClient;
 import com.apollographql.apollo.ApolloCall;
 import com.apollographql.apollo.api.Response;
 import com.apollographql.apollo.exception.ApolloException;
@@ -32,7 +31,7 @@ public class ActivityRecuperar extends Activity {
 
 
     public void testVolskayaGraphql(){
-        VolskayaGraphqlClient.getMyApolloClient().query(
+        GraphqlClient.getMyApolloClient().query(
                 AllUsersQuery.builder().build()).enqueue(new ApolloCall.Callback<AllUsersQuery.Data>() {
             @Override
             public void onResponse(@Nonnull Response<AllUsersQuery.Data> response) {
@@ -51,7 +50,7 @@ public class ActivityRecuperar extends Activity {
     }
 
     public void Login(String email,String password){
-        VolskayaGraphqlClient.getMyApolloClient()
+        GraphqlClient.getMyApolloClient()
                 .query(
                     LoginQuery
                             .builder()

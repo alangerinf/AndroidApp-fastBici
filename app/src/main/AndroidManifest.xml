@@ -25,7 +25,7 @@
         <activity android:name=".views.ActivitySugerencias"
             android:screenOrientation="portrait"/>
         <activity
-            android:name=".views.ActivityLogin"
+            android:name=".login.view.LoginActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme2.NoActionBar">
             <intent-filter>

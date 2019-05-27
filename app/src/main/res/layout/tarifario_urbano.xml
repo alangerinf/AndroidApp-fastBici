@@ -33,15 +33,14 @@
                 tools:context=".atv_home"
                 tools:ignore="MissingConstraints" />
 
-            <ImageView
-                android:layout_width="50dp"
-                android:layout_height="120dp"
-                android:layout_centerHorizontal="true"
-                android:layout_centerVertical="true"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="8dp"
-                android:background="@drawable/marker_pedir"
+            <com.airbnb.lottie.LottieAnimationView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:lottie_fileName="lottie/loc1.json"
+                app:lottie_autoPlay="true"
+                app:lottie_loop="true"
+                app:lottie_scale="0.3"
+                android:translationY="-25dp"
                 app:layout_constraintBottom_toBottomOf="@+id/map"
                 app:layout_constraintEnd_toEndOf="@+id/map"
                 app:layout_constraintStart_toStartOf="@+id/map"
@@ -50,27 +49,57 @@
 
             <TextView
                 android:id="@+id/txt_direccion"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_width="0dp"
+                android:layout_height="47dp"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
-                android:layout_marginEnd="8dp"
-                android:background="@drawable/shape_primarydark_br15"
-                android:padding="10dp"
+                android:layout_marginEnd="60dp"
+                android:background="@drawable/shape_shadow_center"
+
+                android:gravity="fill_vertical"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp"
                 android:text="Buscando dirección..."
-                android:textColor="@color/white"
+                android:textColor="@color/colorPrimaryDark"
                 android:textSize="16sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:ignore="MissingConstraints" />
 
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/btnRestart"
+                android:layout_width="46dp"
+                android:layout_height="46dp"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentBottom="true"
+                android:layout_gravity="center"
+                android:layout_marginEnd="8dp"
+                android:alpha="0.5"
+                android:background="@drawable/shape_shadow_center_rectangle"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/txt_direccion"
+                tools:ignore="MissingConstraints">
+
+                <ImageView
+                    android:id="@+id/btnRestart1"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:background="@drawable/ic_restore_black_24dp"
+                    android:foregroundGravity="center"
+                    android:padding="10dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <LinearLayout
             android:id="@+id/lLayoutPrecio"
             android:layout_width="match_parent"
-            android:layout_height="60dp"
+            android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             app:layout_constraintBottom_toBottomOf="parent"
             tools:ignore="MissingConstraints">
@@ -80,10 +109,13 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginLeft="30dp"
-                android:layout_marginRight="30dp">
+                android:layout_marginRight="30dp"
+                android:paddingBottom="8dp"
+                android:paddingTop="8dp"
+                >
 
                 <Button
-                    android:id="@+id/btn1"
+                    android:id="@+id/btnFinishStep1"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@drawable/shape_primarydark_br15"
@@ -106,33 +138,13 @@
             </RelativeLayout>
         </LinearLayout>
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/constraintLayout10"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentBottom="true"
-            android:layout_gravity="center"
-            android:layout_marginBottom="8dp"
-            app:layout_constraintBottom_toTopOf="@+id/lLayoutPrecio"
-            app:layout_constraintEnd_toEndOf="parent"
-            tools:ignore="MissingConstraints">
-
-            <ImageButton
-                android:id="@+id/btnclear"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_marginRight="5dp"
-                android:background="@drawable/flecha_circulo" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
         <TextView
             android:id="@+id/txt_mensaje"
             android:layout_width="200dp"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_marginStart="8dp"
-            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="8dp"
             android:background="@color/materialGrey400"
             android:gravity="center"
             android:padding="5dp"
@@ -140,21 +152,10 @@
             android:textColor="@color/white"
             android:textSize="14sp"
             app:layout_constraintBottom_toTopOf="@+id/lLayoutPrecio"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             tools:ignore="MissingConstraints" />
 
-        <CheckBox
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Tarifario corporativo"
-            android:textColor="@color/colorPrimaryDark"
-            android:layout_alignParentBottom="true"
-            android:layout_marginBottom="120dp"
-            android:textSize="14sp"
-            android:textStyle="bold"
-            android:id="@+id/chk_corp"
-            android:visibility="invisible"
-            tools:ignore="MissingConstraints" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -73,10 +73,10 @@ public class LoginActivity extends Activity implements LoginView{
         constCombo  = findViewById(R.id.constCombo);
         progressBar = findViewById(R.id.progressBar);
 
-        defineattributes();
+        defaultAttributes();
     }
 
-    void defineattributes(){
+    void defaultAttributes(){
         handler.post(
                 () -> {
                     constCombo.setVisibility(View.INVISIBLE);
@@ -85,9 +85,6 @@ public class LoginActivity extends Activity implements LoginView{
         );
 
     }
-
-
-
 
     void defineEvents(){
         btnLogin.setOnClickListener(v -> {

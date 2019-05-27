@@ -19,14 +19,14 @@ import androidx.appcompat.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.alanger.ioquiero.views.fragments.FragmentTarifario;
+import com.alanger.ioquiero.getTariff.view.FragmentTariff;
 import com.alanger.ioquiero.views.fragments.FragmentSelectFinishMap;
 import com.alanger.ioquiero.R;
 
 public class ActivityMain extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
         FragmentSelectFinishMap.OnFragmentInteractionListener,
-        FragmentTarifario.OnFragmentInteractionListener,
+        FragmentTariff.OnFragmentInteractionListener,
         FragmentPedidos.OnFragmentInteractionListener,
         FragmentCambiarContrasenha.OnFragmentInteractionListener
         {
@@ -113,7 +113,7 @@ public class ActivityMain extends AppCompatActivity
             getSupportFragmentManager().beginTransaction().replace(R.id.content_main, myFragment).commit();
             // Handle the camera action
         } else if (id == R.id.nav_tarifario) {
-            myFragment = new FragmentTarifario(this);
+            myFragment = new FragmentTariff(this);
             getSupportFragmentManager().beginTransaction().replace(R.id.content_main, myFragment).commit();
         } else if (id == R.id.nav_mispedidos) {
             myFragment = new FragmentPedidos(this);

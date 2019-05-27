@@ -42,7 +42,6 @@ public class LoginRepositoryImpl implements LoginRepository {
                     public void onResponse(@Nonnull Response<LoginQuery.Data> response) {
                         LoginQuery.Data data = response.data();
 
-
                         String successCode = "20";
 
                         String responseCode = data.login().responseCode();
@@ -57,13 +56,8 @@ public class LoginRepositoryImpl implements LoginRepository {
 
                     @Override
                     public void onFailure(@Nonnull ApolloException e) {
-
+                        presenter.loginError(e.toString());
                     }
                 });
-
-
-
-
-
     }
 }

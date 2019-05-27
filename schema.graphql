@@ -1,4 +1,4 @@
-# This file was generated based on ".graphqlconfig". Do not edit manually.
+# This file was generated based on "schema.json". Do not edit manually.
 
 schema {
     query: Query
@@ -38,7 +38,7 @@ type GoalCanceled {
 type Mutation {
     addUser(device: DeviceFieldsInput, email: String, id: String, isAuthenticated: Boolean, orders: [OrderFieldsInput!], password: String, userCyclist: UserCyclistFieldsInput, userProducer: UserProducerFieldsInput): UserDomain!
     updateEmail(device: DeviceFieldsInput, email: String, id: String, isAuthenticated: Boolean, orders: [OrderFieldsInput!], password: String, userCyclist: UserCyclistFieldsInput, userProducer: UserProducerFieldsInput): volskayaMessageOutputType!
-    updatePassword(device: DeviceFieldsInput, email: String, id: String, isAuthenticated: Boolean, orders: [OrderFieldsInput!], password: String, userCyclist: UserCyclistFieldsInput, userProducer: UserProducerFieldsInput): volskayaMessageOutputType!
+    updatePassword(id: String!, newPassword: String!, oldPassword: String!): volskayaMessageOutputType!
     updateUserType(device: DeviceFieldsInput, email: String, id: String, isAuthenticated: Boolean, orders: [OrderFieldsInput!], password: String, userCyclist: UserCyclistFieldsInput, userProducer: UserProducerFieldsInput): volskayaMessageOutputType!
 }
 
@@ -64,7 +64,9 @@ type Query {
     "Returns a list of all available users."
     allUsers: [UserDomain!]!
     "Return a price of one Route"
-    calculatePriceRoute(route: RouteFieldsInput!): [Int!]!
+    getPrice(coordinateFinish: CoordinateFieldsInput!, coordinateStart: CoordinateFieldsInput!): volskayaMessagePriceOutputType!
+    "Return a specific User by ID"
+    getUser(id: String!): volskayaMessageUserOutputType!
     login(email: String, password: String): volskayaMessageOutputType!
 }
 
@@ -97,6 +99,18 @@ type volskayaMessageOutputType implements volskayaMessageInterface {
     message: String!
     responseCode: String!
     responseMessage: String!
+}
+
+"Format to return getPrice request"
+type volskayaMessagePriceOutputType {
+    price: Float!
+    volskayaResponse: volskayaMessageOutputType!
+}
+
+"Format to return getUser request"
+type volskayaMessageUserOutputType {
+    user: UserDomain!
+    volskayaResponse: volskayaMessageOutputType!
 }
 
 input CoordinateFieldsInput {
@@ -140,11 +154,6 @@ input ProductFieldsInput {
     isSpecial: Boolean
     name: String!
     photo: String
-}
-
-input RouteFieldsInput {
-    coordinateA: CoordinateFieldsInput!
-    coordinateB: CoordinateFieldsInput!
 }
 
 input UserCyclistFieldsInput {

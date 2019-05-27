@@ -1,25 +1,16 @@
-package com.alanger.ioquiero;
+package com.alanger.ioquiero.unused;
 
 import android.content.Context;
-import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.alanger.ioquiero.app.AppController;
-import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
-import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.StringRequest;
 import com.apollographql.apollo.ApolloClient;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.util.HashMap;
-import java.util.Map;
-import java.util.concurrent.TimeUnit;
 
 import okhttp3.OkHttpClient;
 

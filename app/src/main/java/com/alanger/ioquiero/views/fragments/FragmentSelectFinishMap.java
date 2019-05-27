@@ -352,39 +352,30 @@ public class FragmentSelectFinishMap extends Fragment implements OnMapReadyCallb
 
 // Marcadores
 
-        mMap.setOnCameraIdleListener(new GoogleMap.OnCameraIdleListener() {
-            @Override
-            public void onCameraIdle() {
-                try {
-                    if (mMap.getCameraPosition().target != null) {
-                        isDrag(mMap.getCameraPosition().target.latitude, mMap.getCameraPosition().target.longitude);
+        mMap.setOnCameraIdleListener(() -> {
+            try {
+                if (mMap.getCameraPosition().target != null) {
+                    isDrag(mMap.getCameraPosition().target.latitude, mMap.getCameraPosition().target.longitude);
 
-                    } else {
-                        txt_direccion.setText("Utils.NoPrecisa");
-                    }
-                } catch (Exception e) {
-                    //algo salio mal
+                } else {
                     txt_direccion.setText("Utils.NoPrecisa");
                 }
+            } catch (Exception e) {
+                //algo salio mal
+                txt_direccion.setText("Utils.NoPrecisa");
             }
         });
 
 
-        mMap.setOnCameraMoveStartedListener(new GoogleMap.OnCameraMoveStartedListener() {
-            @Override
-            public void onCameraMoveStarted(int i) {
-               // btn_pedir.setVisibility(View.INVISIBLE);
-                ocultarDataPicker();
-                txt_direccion.setText("Utils.BuscandoDireccion");
-                Log.d(TAG,"INCIANDO CAMARA MOVE");
-            }
+        mMap.setOnCameraMoveStartedListener(i -> {
+           // btn_pedir.setVisibility(View.INVISIBLE);
+            ocultarDataPicker();
+            txt_direccion.setText("Utils.BuscandoDireccion");
+            Log.d(TAG,"INCIANDO CAMARA MOVE");
         });
-        mMap.setOnCameraMoveCanceledListener(new GoogleMap.OnCameraMoveCanceledListener() {
-            @Override
-            public void onCameraMoveCanceled() {
-                txt_direccion.setText("Utils.termino moverse");
-                Log.d(TAG,"INCIANDO CAMARA CANCEL");
-            }
+        mMap.setOnCameraMoveCanceledListener(() -> {
+            txt_direccion.setText("Utils.termino moverse");
+            Log.d(TAG,"INCIANDO CAMARA CANCEL");
         });
 
     }

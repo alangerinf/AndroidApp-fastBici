@@ -1,4 +1,4 @@
-package com.alanger.ioquiero.views;
+package com.alanger.ioquiero.getTariff.view;
 
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -18,6 +18,7 @@ import android.widget.Toast;
 
 import com.alanger.ioquiero.R;
 import com.alanger.ioquiero.app.AppController;
+import com.alanger.ioquiero.views.Utils;
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -38,7 +39,7 @@ import java.util.Map;
 /**
  * Created by Administrador on 09/09/2017.
  */
-public class tarifario_urbano_precio extends AppCompatActivity {
+public class ActivityShowTariffResult extends AppCompatActivity {
     Context ctx;
     private WebView mWebView;
     Double lat1,lng1,lat2,lng2;
@@ -49,7 +50,7 @@ public class tarifario_urbano_precio extends AppCompatActivity {
 
     Button btn_perdir_unidad;
 
-    String precio,hora_noche_inicio,hora_noche_fin,add_urbano,corp,url_precio;
+    String precio,hora_noche_inicio,hora_noche_fin,add_urbano,url_precio;
     ProgressDialog progress;
 
     final Handler handler = new Handler();
@@ -84,20 +85,15 @@ public class tarifario_urbano_precio extends AppCompatActivity {
         txt_precio_referencial = (TextView) findViewById(R.id.txt_precio_referencial);
 
         Bundle extras = getIntent().getExtras();
-        lat1 = Double.parseDouble(extras.getString("lat1"));
-        lng1 = Double.parseDouble(extras.getString("lng1"));
-        lat2 = Double.parseDouble(extras.getString("lat2"));
-        lng2 = Double.parseDouble(extras.getString("lng2"));
-        corp = extras.getString("corp");
+        lat1 = Double.parseDouble(extras.getString("latStart"));
+        lng1 = Double.parseDouble(extras.getString("lonStart"));
+        lat2 = Double.parseDouble(extras.getString("latFinish"));
+        lng2 = Double.parseDouble(extras.getString("lonFinish"));
 
         url_precio = Utils.UL0019;
-        if(corp.equals("si")){
-            url_precio = Utils.UL0020;
-        }
+
 
         CargarDatosPrecioBase();
-
-
     }
 
     private void LoadMap(){

@@ -13,3 +13,24 @@ query LoginQuery($email:String,$pass:String) {
 }
 
 
+query GetPrice($latStart:Float!,$lonStart:Float!,$latFinish:Float!,$lonFinish:Float!) {
+    getPrice(
+        coordinateStart:
+        {
+            latitude:$latStart
+            ,longitude:$lonStart
+        }
+        ,coordinateFinish:
+        {
+            latitude:$latFinish
+            ,longitude: $lonFinish
+        }
+    ){
+        price,
+        volskayaResponse{
+            message
+            ,responseCode
+            ,responseMessage
+        }
+    }
+}

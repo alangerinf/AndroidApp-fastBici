@@ -17,45 +17,54 @@
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:screenOrientation="portrait"
         android:roundIcon="@mipmap/ic_launcher_round"
+        android:screenOrientation="portrait"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".views.ActivitySugerencias"
-            android:screenOrientation="portrait"/>
+        <activity android:name=".register.view.VerifyTokenActivity">
+
+        </activity>
+        <activity
+            android:name=".views.ActivitySugerencias"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".login.view.LoginActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme2.NoActionBar">
-
-        </activity>
-        <activity
-            android:name=".views.ActivityRecuperar"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme2.NoActionBar"></activity>
-        <activity
-            android:name=".getTariff.view.ActivityShowTariffResult"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme2.NoActionBar"></activity>
-        <activity
-            android:name=".views.ActivityGoalDetail"
-            android:label="@string/title_activity_axtivity_goal_detail"
-            android:screenOrientation="portrait"
-            android:parentActivityName=".views.ActivityMain"
-            android:theme="@style/AppTheme2.NoActionBar" />
-        <activity
-            android:name=".views.ActivityMain"
-            android:label="@string/title_activity_main"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
         </activity>
+        <activity
+            android:name=".register.view.RegisteActivityA"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme2.NoActionBar"></activity>
+        <activity
+            android:name=".register.view.RegisteActivityB"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme2.NoActionBar"></activity>
+        <activity
+            android:name=".views.ActivityRecuperar"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme2.NoActionBar" />
+        <activity
+            android:name=".getTariff.view.ActivityShowTariffResult"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme2.NoActionBar" />
+        <activity
+            android:name=".views.ActivityGoalDetail"
+            android:label="@string/title_activity_axtivity_goal_detail"
+            android:parentActivityName=".views.ActivityMain"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme2.NoActionBar" />
+        <activity
+            android:name=".views.ActivityMain"
+            android:label="@string/title_activity_main"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").

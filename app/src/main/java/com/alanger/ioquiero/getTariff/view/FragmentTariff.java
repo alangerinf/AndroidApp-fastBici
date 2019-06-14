@@ -1,11 +1,9 @@
 package com.alanger.ioquiero.getTariff.view;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.net.Uri;
@@ -22,10 +20,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.alanger.ioquiero.R;
 import com.alanger.ioquiero.app.AppController;
 import com.alanger.ioquiero.views.ActivityMain;
@@ -49,8 +47,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
-import java.util.List;
 import java.util.Locale;
 
 import static android.content.Context.MODE_PRIVATE;
@@ -58,28 +54,31 @@ import static android.content.Context.MODE_PRIVATE;
 /**
  * Created by Administrador on 09/09/2017.
  */
-@SuppressLint("ValidFragment")
-public class FragmentTariff extends Fragment implements OnMapReadyCallback, TariffView {
+public class FragmentTariff extends Fragment implements OnMapReadyCallback, TariffView, GoogleMap.CancelableCallback {
 
     static private String TAG = FragmentTariff.class.getSimpleName();
 
-    private boolean isFirstIdle = false;
+    private static boolean isFirstIdle = false;
 
-    private Context ctx;
-    private GoogleMap mMap;
-    private Geocoder geocode;
-    private double LatTemp =0, LonTemp =0, CurrentLat =0, CurrentLon =0, latStart, lonStart, latFinish, lonFinish;;
+    private static int STATUS = 0;
 
-    private Button btnFinishStep1, btnCalcPrice;
-    private ConstraintLayout btnRestart;
-    private TextView tViewAddress,txt_mensaje;
-    private Marker markerStart =null, markerFinish =null;
+    private static Context ctx;
+    private static GoogleMap mMap;
+    private static Geocoder geocode;
+    private static double LatTemp =0, LonTemp =0, CurrentLat =0, CurrentLon =0, latStart, lonStart, latFinish, lonFinish;;
 
-    private String direccion, number;
+    private static Button btnSetStart, btnSetFinish, btnCalcular;
+    private static ConstraintLayout btnRestart;
+    private static TextView tViewAddressStart, tViewAddressFinish, tViewMensaje;
+    private static Marker markerStart =null, markerFinish =null;
 
-    private SharedPreferences pref;
+    private static String direccion, number;
+
+    private static SharedPreferences pref;
 
     private final Handler handler = new Handler();
+
+    private static LottieAnimationView lottieMarker;
 
     private ActivityMain activityMain;
 
@@ -110,22 +109,32 @@ public class FragmentTariff extends Fragment implements OnMapReadyCallback, Tari
     @Override
     public void enableInputs() {
         if(markerStart ==null) {
-            btnFinishStep1.setVisibility(View.VISIBLE);
-            btnFinishStep1.setClickable(true);
-            btnFinishStep1.setFocusable(true);
+            btnSetStart.setVisibility(View.VISIBLE);
+            btnSetStart.setClickable(true);
+            btnSetStart.setFocusable(true);
         }else{
-            btnCalcPrice.setClickable(true);
-            btnCalcPrice.setFocusable(true);
-            btnCalcPrice.setVisibility(View.VISIBLE);
+            btnSetFinish.setClickable(true);
+            btnSetFinish.setFocusable(true);
+            btnSetFinish.setVisibility(View.VISIBLE);
         }
     }
 
     @Override
     public void disableInputs() {
-        btnFinishStep1.setClickable(false);
-        btnFinishStep1.setFocusable(false);
-        btnCalcPrice.setClickable(false);
-        btnCalcPrice.setFocusable(false);
+        btnSetStart.setClickable(false);
+        btnSetStart.setFocusable(false);
+        btnSetFinish.setClickable(false);
+        btnSetFinish.setFocusable(false);
+    }
+
+    @Override
+    public void onFinish() {
+
+    }
+
+    @Override
+    public void onCancel() {
+
     }
 
 
@@ -136,7 +145,7 @@ public class FragmentTariff extends Fragment implements OnMapReadyCallback, Tari
 
     public FragmentTariff(ActivityMain activityMain) {
         this.activityMain = activityMain;
-        activityMain.setTitle("Tarifario");
+        activityMain.setTitle("FastBici");
     }
 
     @Override
@@ -145,37 +154,41 @@ public class FragmentTariff extends Fragment implements OnMapReadyCallback, Tari
 
     }
     private void declaration(){
-
         ctx = getContext();
         pref = this.getActivity().getSharedPreferences(Utils.nameSesion, MODE_PRIVATE);
         geocode = new Geocoder(ctx, Locale.getDefault());
-        btnFinishStep1 = (Button)getView().findViewById(R.id.btnFinishStep1);
-        btnCalcPrice = (Button)getView().findViewById(R.id.btn2);
+        btnSetStart = (Button)getView().findViewById(R.id.btnSetStart);
+        btnSetFinish = (Button)getView().findViewById(R.id.btnSetFinish);
+        btnCalcular = (Button)getView().findViewById(R.id.btnCalcular);
         btnRestart = getView().findViewById(R.id.btnRestart);
-        tViewAddress = (TextView)getView().findViewById(R.id.txt_direccion);
-        txt_mensaje = (TextView)getView().findViewById(R.id.txt_mensaje);
-
-        txt_mensaje.setText("Arrastra el mapa y marca el punto de origen");
-
+        tViewAddressStart = (TextView)getView().findViewById(R.id.tViewAddressStart);
+        tViewAddressFinish = (TextView)getView().findViewById(R.id.tViewAddressFinish);
+        tViewMensaje = (TextView)getView().findViewById(R.id.tViewMensaje);
+        lottieMarker = getView().findViewById(R.id.lottieMarker);
     }
+
     private void defaultAttributes(){
         handler.post(
                 () -> {
+                    tViewMensaje.setText("Arrastra el mapa y marca el punto de origen");
+                    STATUS=0;
+                    tViewAddressStart.setText(getString(R.string.lugar_de_partida));
+                    tViewAddressFinish.setText(getString(R.string.lugar_de_llegada));
                     mMap.clear();
-                    btnFinishStep1.setVisibility(View.INVISIBLE);
-                    btnCalcPrice.setVisibility(View.INVISIBLE);
+                    btnSetStart.setVisibility(View.INVISIBLE);
+                    btnSetFinish.setVisibility(View.INVISIBLE);
+                    btnCalcular.setVisibility(View.INVISIBLE);
                     btnRestart.setVisibility(View.INVISIBLE);
-
+                    lottieMarker.setVisibility(View.VISIBLE);
                     markerStart = null;
                     markerFinish = null;
-
-                    txt_mensaje.setText("Arrastra el mapa y marca el punto de origen");
+                    tViewMensaje.setText("Arrastra el mapa y marca el punto de origen");
                 }
         );
     }
 
     private void declareEvents(){
-        btnFinishStep1.setOnClickListener(v -> {
+        btnSetStart.setOnClickListener(v -> {
             if(markerStart !=null) {
                 markerStart.remove();
             }
@@ -187,16 +200,17 @@ public class FragmentTariff extends Fragment implements OnMapReadyCallback, Tari
             markerStart = mMap.addMarker(new MarkerOptions()
                     .position(LatLng)
                     .title("Marker")
-                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.marker_cliente)));
+                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.marker_start)));
 
-            btnFinishStep1.setVisibility(View.INVISIBLE);
+            btnSetStart.setVisibility(View.INVISIBLE);
 
             btnRestart.setVisibility(View.VISIBLE);
 
-            txt_mensaje.setText("Arrastra el mapa y marca el punto de Destino");
+            tViewMensaje.setText("Arrastra el mapa y marca el punto de Destino");
             Toast.makeText(ctx,"AHORA ARRASTRA EL MAPA Y UBICA EL DESTINO",Toast.LENGTH_SHORT).show();
+            STATUS=1;
         });
-        btnCalcPrice.setOnClickListener(v -> {
+        btnSetFinish.setOnClickListener(v -> {
             if(markerFinish !=null) {
                 markerFinish.remove();
             }
@@ -207,7 +221,17 @@ public class FragmentTariff extends Fragment implements OnMapReadyCallback, Tari
             markerFinish = mMap.addMarker(new MarkerOptions()
                     .position(LatLngFinish)
                     .title("Marker")
-                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.marker_conductor)));
+                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.marker_finish)));
+            btnSetFinish.setVisibility(View.INVISIBLE);
+            btnCalcular.setVisibility(View.VISIBLE);
+            lottieMarker.setVisibility(View.INVISIBLE);
+            STATUS=2;
+            vistaPeriferica();
+        });
+
+        btnCalcular.setOnClickListener(v -> {
+
+            btnCalcular.setVisibility(View.INVISIBLE);
 
             openTariffResult();
 
@@ -225,6 +249,28 @@ public class FragmentTariff extends Fragment implements OnMapReadyCallback, Tari
         declaration();
         declareEvents();
         defaultAttributes();
+    }
+
+    public void vistaPeriferica(){
+
+        float bearing = mMap.getCameraPosition().bearing;
+        float tilt = mMap.getCameraPosition().tilt;
+        Double latMiddle= (latStart+latFinish)/2.0d;
+        Double lonMiddle= (lonStart+lonFinish)/2.0d;
+
+
+        Double distanceLat = (latFinish-latStart)>0?latFinish-latStart:latStart-latFinish;
+        Double distanceLon = (lonFinish-lonStart)>0?lonFinish-lonStart:lonStart-lonFinish;
+
+        Double distance = Math.sqrt(Math.pow(distanceLon,2)+Math.pow(distanceLat,2));
+
+        LatLng posicion = new LatLng(latMiddle, lonMiddle);
+
+
+        Toast.makeText(ctx,"ZOOM="+mMap.getCameraPosition().zoom+"\n"+"DIST="+distance,Toast.LENGTH_LONG).show();
+        CameraPosition cameraPosition = new CameraPosition.Builder().target(posicion).zoom(14).bearing(bearing).tilt(tilt).build();
+        CameraUpdate cameraUpdate = CameraUpdateFactory.newCameraPosition(cameraPosition);
+        mMap.animateCamera(cameraUpdate, 500, this);
     }
 
 
@@ -305,8 +351,8 @@ public class FragmentTariff extends Fragment implements OnMapReadyCallback, Tari
         mMap.setOnCameraMoveStartedListener(i -> {
             // btn_pedir.setVisibility(View.INVISIBLE);
             
-            btnFinishStep1.setVisibility(View.INVISIBLE);
-            btnCalcPrice.setVisibility(View.INVISIBLE);
+            btnSetStart.setVisibility(View.INVISIBLE);
+            btnSetFinish.setVisibility(View.INVISIBLE);
             Log.d(TAG,"INCIANDO CAMARA MOVE");
         });
 
@@ -316,8 +362,8 @@ public class FragmentTariff extends Fragment implements OnMapReadyCallback, Tari
                         isFirstIdle=true;
                     }else {//si ya se inicio el mapa hace rato
 
-                        //tViewAddress.setText(direccion);
-                        tViewAddress.setVisibility(View.VISIBLE);
+                        //tViewAddressStart.setText(direccion);
+                        tViewAddressStart.setVisibility(View.VISIBLE);
                         enableInputs();
                     }
 
@@ -339,7 +385,14 @@ public class FragmentTariff extends Fragment implements OnMapReadyCallback, Tari
     }
 
     private void updateLocInView(Location loc){
-        tViewAddress.setText("Buscando tu dirección");
+        String text = ("Buscando tu dirección");
+        if(STATUS==0){
+            tViewAddressStart.setText(text);
+        }else {
+            if(STATUS==1){
+                tViewAddressFinish.setText(text);
+            }
+        }
         LatTemp = loc.getLatitude();
         LonTemp = loc.getLongitude();
         new AsyncSearchAddress().execute();
@@ -391,7 +444,14 @@ public class FragmentTariff extends Fragment implements OnMapReadyCallback, Tari
                                     }
                                 }
 
-                                tViewAddress.setText(direccion + " " + number);
+                                if(STATUS==0){
+                                    tViewAddressStart.setText(direccion + " " + number);
+                                }else {
+                                    if(STATUS==1){
+                                        tViewAddressFinish.setText(direccion + " " + number);
+                                    }
+                                }
+
                                 if (procede == 1) {
                                     //   btn_pedir.setVisibility(View.VISIBLE);
                                     //    CargarUnidades();
@@ -407,7 +467,14 @@ public class FragmentTariff extends Fragment implements OnMapReadyCallback, Tari
                         }, new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        tViewAddress.setText("Utils.NoPrecisa");
+
+                        if(STATUS==0){
+                            tViewAddressStart.setText("No se pudo Obtener");
+                        }else {
+                            if(STATUS==1){
+                                tViewAddressFinish.setText("No se pudo Obtener");
+                            }
+                        }
                         Log.d(TAG,"voleyE "+error.toString());
                         Toast.makeText(getContext(),"jsonE: "+error.toString(),Toast.LENGTH_LONG).show();
                     }

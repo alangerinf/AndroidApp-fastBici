@@ -2,13 +2,52 @@ query AllUsersQuery {
     allUsers {
         id
         email
+        password
     }
 }
 
-query LoginQuery($email:String,$pass:String) {
-    login(email:$email,password: $pass) {
+mutation Register($email:String!,$pass:String!,$phone:String!){
+    register(email: $email,password: $pass,phoneNumber: $phone){
+        id
+        volskayaResponse{
+            message
+            responseCode
+            responseMessage
+        }
+    }
+}
+
+
+query CheckCode($id:String!,$code:String!){
+    checkCode(id: $id,code: $code){
+        message
         responseCode
         responseMessage
+    }
+}
+
+query LoginQuery($email:String!,$pass:String!) {
+    login(email:$email,password: $pass) {
+        volskayaResponse{
+            message,
+            responseCode,
+            responseMessage
+        },
+        id
+    }
+}
+query getUser($_id:String!){
+    getUser(id: $_id){
+        user{
+            id,
+            email,
+            password
+        }
+        ,volskayaResponse{
+            message,
+            responseCode,
+            responseMessage
+        }
     }
 }
 

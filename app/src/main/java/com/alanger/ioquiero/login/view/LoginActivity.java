@@ -14,13 +14,18 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.alanger.ioquiero.R;
 import com.alanger.ioquiero.login.presenter.LoginPresenter;
 import com.alanger.ioquiero.login.presenter.LoginPresenterImpl;
+import com.alanger.ioquiero.register.view.RegisteActivityA;
 import com.alanger.ioquiero.views.ActivityMain;
 import com.alanger.ioquiero.views.ActivityRecuperar;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class LoginActivity extends Activity implements LoginView{
@@ -33,7 +38,8 @@ public class LoginActivity extends Activity implements LoginView{
     private ProgressBar progressBar;
 
     //boton enter
-    private Button btnLogin;
+    private Button btnLogin, btnCreateUser;
+    private TextView tViewRecoverPassword;
 
     //campos de acceso
     private EditText eTextUser, eTextPassword;
@@ -58,20 +64,24 @@ public class LoginActivity extends Activity implements LoginView{
         declaration();
         defineEvents();
         enterAnimation();
+
     }
 
     void declaration(){
 
 
         presenter = new LoginPresenterImpl(this);
-        btnLogin    = findViewById(R.id.btnLogin);
-        eTextUser   = findViewById(R.id.eTextUsuario);
-        eTextPassword   = findViewById(R.id.eTextPassword);
-        iViewPasswordSetVisible = findViewById(R.id.iViewPassword);
+        btnLogin    = findViewById(R.id.login_btnLogin);
+        btnCreateUser   = findViewById(R.id.login_btnCreateUser);
+        tViewRecoverPassword    = findViewById(R.id.login_tViewRecoverPassword);
+        eTextUser   = findViewById(R.id.login_eTextEmail);
+        eTextPassword   = findViewById(R.id.login_eTextPassword);
+        iViewPasswordSetVisible = findViewById(R.id.login_iViewPassword);
         animBtn     = android.view.animation.AnimationUtils.loadAnimation(getBaseContext(),R.anim.press_btn);
         animLayout  = android.view.animation.AnimationUtils.loadAnimation(getBaseContext(),R.anim.left_in);
-        constCombo  = findViewById(R.id.constCombo);
-        progressBar = findViewById(R.id.progressBar);
+        constCombo  = findViewById(R.id.login_constCombo);
+        progressBar = findViewById(R.id.login_progressBar);
+
 
         defaultAttributes();
     }
@@ -89,7 +99,6 @@ public class LoginActivity extends Activity implements LoginView{
     void defineEvents(){
         btnLogin.setOnClickListener(v -> {
             v.startAnimation(animBtn);
-            Handler handler = new Handler();
             handler.postDelayed(
                     () -> {
                         presenter.signIn(
@@ -99,6 +108,10 @@ public class LoginActivity extends Activity implements LoginView{
 
                     },200
             );
+        });
+        btnCreateUser.setOnClickListener(v->{
+            v.startAnimation(animBtn);
+            goRegister();
         });
 
         iViewPasswordSetVisible.setOnClickListener(v -> {
@@ -112,10 +125,13 @@ public class LoginActivity extends Activity implements LoginView{
             eTextPassword.setSelection(eTextPassword.getText().length());
         });
 
+        tViewRecoverPassword.setOnClickListener(v -> {
+            handler.post(() -> v.startAnimation(animBtn));
+            goRecoverPassword();
+
+        });
+
     }
-
-
-
 
     private void enterAnimation() {
 
@@ -124,10 +140,9 @@ public class LoginActivity extends Activity implements LoginView{
                     constCombo.startAnimation(animLayout);
                     constCombo.setVisibility(View.VISIBLE);
                     enableInputs();
-                },200
+                },500
         );
     }
-
 
     @Override
     public void onResume() {
@@ -140,7 +155,6 @@ public class LoginActivity extends Activity implements LoginView{
         moveTaskToBack(true);
     }
 
-
     @Override
     public void goRecoverPassword() {
         Intent i = new Intent(this, ActivityRecuperar.class);
@@ -150,6 +164,12 @@ public class LoginActivity extends Activity implements LoginView{
     @Override
     public void goHome() {
         Intent intent = new Intent(getBaseContext(), ActivityMain.class);
+        startActivity(intent);
+    }
+
+    @Override
+    public void goRegister() {
+        Intent intent = new Intent(getBaseContext(), RegisteActivityA.class);
         startActivity(intent);
     }
 
@@ -212,6 +232,21 @@ public class LoginActivity extends Activity implements LoginView{
                 }
         );
 
+    }
+    public class isogram {
+        public boolean  isIsogram(String str) {
+            List<String> tempList = new ArrayList<>();
+            for(int i=0;i<str.length();i++){
+                String letraComparar = String.valueOf(str.charAt(i));
+                for(String s:tempList){
+                    if((s.toLowerCase()).equals(letraComparar.toLowerCase())){
+                            return false;
+                    }
+                }
+                tempList.add(letraComparar);
+            }
+            return true;
+        }
     }
 
 }

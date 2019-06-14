@@ -1,31 +1,27 @@
-package com.alanger.ioquiero.login.repository;
+package com.alanger.ioquiero.register.repository;
 
-import android.util.Log;
+import com.alanger.ioquiero.register.presenter.RegisterPresenterA;
 
-import com.alanger.ioquiero.LoginQuery;
-import com.alanger.ioquiero.login.presenter.LoginPresenter;
-import com.alanger.ioquiero.volskayaGraphql.GraphqlClient;
-import com.apollographql.apollo.ApolloCall;
-import com.apollographql.apollo.api.Response;
-import com.apollographql.apollo.exception.ApolloException;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.List;
-
-import javax.annotation.Nonnull;
-
-public class LoginRepositoryImpl implements LoginRepository {
+public class RegisterRepositoryImplA implements RegisterRepositoryA {
 
 
-    private LoginPresenter presenter;
+    private RegisterPresenterA presenter;
 
 
-    public LoginRepositoryImpl(LoginPresenter presenter) {
+    public RegisterRepositoryImplA(RegisterPresenterA presenter) {
         this.presenter = presenter;
     }
 
+    @Override
+    public void verifyData(String email) {
+        if(true){
+            presenter.verifyDataSuccess();
+        }else {
+            presenter.verifyError("eror en la verificacion del repositorio");
+        }
+
+    }
+/*
     @Override
     public void signIn(String user, String password) {
 
@@ -52,14 +48,18 @@ public class LoginRepositoryImpl implements LoginRepository {
                         if(successCode.equals(  volskayaResponse.responseCode())){
                             presenter.loginSuccess();
                         }else {
-                            presenter.loginError( volskayaResponse.responseCode()+": "+ volskayaResponse.responseMessage());
+                            presenter.verifyError( volskayaResponse.responseCode()+": "+ volskayaResponse.responseMessage());
                         }
                     }
 
                     @Override
                     public void onFailure(@Nonnull ApolloException e) {
-                        presenter.loginError(e.toString());
+                        presenter.verifyError(e.toString());
                     }
                 });
+
     }
+    */
+
+
 }

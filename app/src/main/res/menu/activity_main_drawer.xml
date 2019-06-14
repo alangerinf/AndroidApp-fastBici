@@ -5,13 +5,9 @@
 
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/nav_pedir"
+            android:id="@+id/nav_tarifario"
             android:icon="@drawable/ic_directions_bike_white_24dp"
             android:title="Realizar Pedido" />
-        <item
-            android:id="@+id/nav_tarifario"
-            android:icon="@drawable/ic_monetization_on_black_24dp"
-            android:title="Tarifario" />
         <item
             android:id="@+id/nav_mispedidos"
             android:icon="@drawable/ic_shopping_cart_black_24dp"

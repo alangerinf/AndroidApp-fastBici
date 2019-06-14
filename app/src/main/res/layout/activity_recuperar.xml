@@ -78,7 +78,7 @@
             ETEXT USUARIO
             -->
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/constETextUsuario"
+                android:id="@+id/clETextEmail"
                 android:layout_width="250dp"
                 android:layout_height="40dp"
                 android:layout_marginStart="24dp"
@@ -94,16 +94,16 @@
                     android:layout_height="0dp"
                     android:alpha="0.5"
                     android:background="@drawable/shape_materialgrey600_br15"
-                    app:layout_constraintBottom_toBottomOf="@+id/eTextUsuario"
-                    app:layout_constraintEnd_toEndOf="@+id/eTextUsuario"
-                    app:layout_constraintStart_toStartOf="@+id/eTextUsuario"
-                    app:layout_constraintTop_toTopOf="@+id/eTextUsuario">
+                    app:layout_constraintBottom_toBottomOf="@+id/createB_eTextEmail"
+                    app:layout_constraintEnd_toEndOf="@+id/createB_eTextEmail"
+                    app:layout_constraintStart_toStartOf="@+id/createB_eTextEmail"
+                    app:layout_constraintTop_toTopOf="@+id/createB_eTextEmail">
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
 
                 <EditText
-                    android:id="@+id/eTextUsuario"
+                    android:id="@+id/createB_eTextEmail"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:background="@android:color/transparent"
@@ -126,13 +126,13 @@
             ETEXT USUARIO
             -->
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/constETextContrasena"
+                android:id="@+id/clETextPassword"
                 android:layout_width="250dp"
                 android:layout_height="40dp"
                 android:layout_marginTop="16dp"
-                app:layout_constraintEnd_toEndOf="@+id/constETextUsuario"
-                app:layout_constraintStart_toStartOf="@+id/constETextUsuario"
-                app:layout_constraintTop_toBottomOf="@+id/constETextUsuario">
+                app:layout_constraintEnd_toEndOf="@+id/clETextEmail"
+                app:layout_constraintStart_toStartOf="@+id/clETextEmail"
+                app:layout_constraintTop_toBottomOf="@+id/clETextEmail">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="0dp"
@@ -166,7 +166,7 @@
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <Button
+            <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btnLogin"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -179,13 +179,12 @@
                 android:paddingRight="16dp"
                 android:text="@string/recuperar_pass"
                 android:textAllCaps="false"
-                android:onClick="pruebaApi"
                 android:textColor="@color/black"
                 android:textSize="@dimen/textsize_tertiary"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="@+id/constETextContrasena"
-                app:layout_constraintStart_toStartOf="@+id/constETextContrasena"
-                app:layout_constraintTop_toBottomOf="@+id/constETextContrasena" />
+                app:layout_constraintEnd_toEndOf="@+id/clETextPassword"
+                app:layout_constraintStart_toStartOf="@+id/clETextPassword"
+                app:layout_constraintTop_toBottomOf="@+id/clETextPassword" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="wrap_content"

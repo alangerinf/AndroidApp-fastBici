@@ -31,7 +31,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:ignore="MissingConstraints" />
+        tools:ignore="MissingConstraints"
+        android:contentDescription="TODO" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
 
@@ -105,6 +106,8 @@
                 android:scaleX="0.6"
                 android:scaleY="0.6"
                 android:src="@drawable/ic_edit_white_24dp"
+                app:tint="@color/white"
+                style="@style/Widget.MaterialComponents.FloatingActionButton"
                 app:layout_constraintBottom_toBottomOf="@+id/constraintLayout"
                 app:layout_constraintEnd_toEndOf="@+id/constraintLayout"
                 app:layout_constraintStart_toEndOf="@+id/constraintLayout"
@@ -144,7 +147,9 @@
                 android:clickable="true"
                 android:scaleX="0.6"
                 android:scaleY="0.6"
+                style="@style/Widget.MaterialComponents.FloatingActionButton"
                 app:backgroundTint="@color/customGreen"
+                app:tint="@color/white"
                 app:layout_constraintBottom_toBottomOf="@+id/constraintLayout2"
                 app:layout_constraintEnd_toEndOf="@+id/constraintLayout2"
                 app:layout_constraintStart_toEndOf="@+id/constraintLayout2"
@@ -160,6 +165,7 @@
                 android:layout_marginEnd="32dp"
                 android:layout_marginBottom="16dp"
                 android:background="@drawable/shape_green_button"
+                app:tint="@color/white"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -227,7 +233,7 @@
                     android:text="A"
                     android:textAlignment="center"
                     android:textColor="#BBBBBB"
-                    android:textSize="18sp"
+                    android:textSize="@dimen/textsize_secondary"
                     android:textStyle="bold" />
             </LinearLayout>
 
@@ -250,10 +256,10 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_weight="1"
-                    android:text="B"
+                    android:text="@string/b"
                     android:textAlignment="center"
                     android:textColor="#BBBBBB"
-                    android:textSize="18sp"
+                    android:textSize="@dimen/textsize_secondary"
                     android:textStyle="bold" />
             </LinearLayout>
 
@@ -331,6 +337,7 @@
         android:layout_marginStart="24dp"
         android:layout_marginTop="32dp"
         android:layout_marginEnd="24dp"
+        android:visibility="invisible"
         android:background="@drawable/shape_shadow_bottom"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

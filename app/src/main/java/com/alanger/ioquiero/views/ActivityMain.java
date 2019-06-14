@@ -25,7 +25,6 @@ import com.alanger.ioquiero.R;
 
 public class ActivityMain extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
-        FragmentSelectFinishMap.OnFragmentInteractionListener,
         FragmentTariff.OnFragmentInteractionListener,
         FragmentPedidos.OnFragmentInteractionListener,
         FragmentCambiarContrasenha.OnFragmentInteractionListener
@@ -44,7 +43,7 @@ public class ActivityMain extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        myFragment = new FragmentSelectFinishMap(this);
+        myFragment = new FragmentTariff(this);
 
 
         getSupportFragmentManager().beginTransaction().replace(R.id.content_main, myFragment).commit();
@@ -108,11 +107,8 @@ public class ActivityMain extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_pedir) {
-            myFragment = new FragmentSelectFinishMap(this);
-            getSupportFragmentManager().beginTransaction().replace(R.id.content_main, myFragment).commit();
-            // Handle the camera action
-        } else if (id == R.id.nav_tarifario) {
+
+        if (id == R.id.nav_tarifario) {
             myFragment = new FragmentTariff(this);
             getSupportFragmentManager().beginTransaction().replace(R.id.content_main, myFragment).commit();
         } else if (id == R.id.nav_mispedidos) {

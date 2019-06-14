@@ -1,10 +1,9 @@
-package com.alanger.ioquiero.login.view;
+package com.alanger.ioquiero.register.view;
 
-public interface LoginView {
+public interface RegisterViewA {
 
      void goRecoverPassword();
-     void goHome();
-     void goRegister();
+     void goRegisterB();
 
      void enableInputs();
      void disableInputs();

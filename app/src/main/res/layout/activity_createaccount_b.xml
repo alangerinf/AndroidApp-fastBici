@@ -5,11 +5,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:descendantFocusability="beforeDescendants"
-    android:focusableInTouchMode="true"
-    tools:context=".login.view.LoginActivity">
+    android:focusableInTouchMode="true">
 
     <ImageView
-        android:id="@+id/login_background"
+        android:id="@+id/createB_background"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:adjustViewBounds="true"
@@ -19,11 +18,10 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         android:src="@drawable/bg3"
-
         android:contentDescription="sdfsdf" />
 <!--
     <com.airbnb.lottie.LottieAnimationView
-        android:id="@+id/login_lottieMarker"
+        android:id="@+id/lottieMarker"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:lottie_scale="4"
@@ -39,7 +37,7 @@
         tools:ignore="MissingConstraints" />
 -->
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/login_constCombo"
+        android:id="@+id/createB_constCombo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -48,7 +46,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/login_constComboBackground"
+            android:id="@+id/createB_constComboBackground"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:alpha="1"
@@ -59,7 +57,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/login_constComboContenido"
+            android:id="@+id/createB_constComboContenido"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
 
@@ -70,7 +68,7 @@
 
 
             <ImageView
-                android:id="@+id/login_iViewLogoIncavo"
+                android:id="@+id/createB_iViewLogoIncavo"
                 android:layout_width="126dp"
                 android:layout_height="106dp"
                 android:layout_marginStart="16dp"
@@ -84,15 +82,15 @@
 
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/login_clETextEmail"
+                android:id="@+id/createB_clETextPhone"
                 android:layout_width="0dp"
                 android:layout_height="35dp"
                 android:layout_marginStart="16dp"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
-                app:layout_constraintEnd_toEndOf="@+id/login_btnLogin"
-                app:layout_constraintStart_toStartOf="@+id/login_btnLogin"
-                app:layout_constraintTop_toBottomOf="@+id/login_iViewLogoIncavo"
+                app:layout_constraintEnd_toEndOf="@+id/createB_btnCreateUser"
+                app:layout_constraintStart_toStartOf="@+id/createB_btnCreateUser"
+                app:layout_constraintTop_toBottomOf="@+id/createB_iViewLogoIncavo"
                 tools:ignore="MissingConstraints">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
@@ -100,21 +98,20 @@
                     android:layout_height="0dp"
                     android:alpha="0.3"
                     android:background="@drawable/shape_materialgrey600_br15"
-                    app:layout_constraintBottom_toBottomOf="@+id/login_eTextEmail"
-                    app:layout_constraintEnd_toEndOf="@+id/login_eTextEmail"
-                    app:layout_constraintStart_toStartOf="@+id/login_eTextEmail"
-                    app:layout_constraintTop_toTopOf="@+id/login_eTextEmail">
+                    app:layout_constraintBottom_toBottomOf="@+id/createB_eTextEmail"
+                    app:layout_constraintEnd_toEndOf="@+id/createB_eTextEmail"
+                    app:layout_constraintStart_toStartOf="@+id/createB_eTextEmail"
+                    app:layout_constraintTop_toTopOf="@+id/createB_eTextEmail">
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
-
                 <androidx.appcompat.widget.AppCompatEditText
-                    android:id="@+id/login_eTextEmail"
+                    android:id="@+id/createB_eTextPhone"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:background="@drawable/shape_white_br15"
-                    android:hint="@string/email"
-                    android:inputType="textEmailAddress"
+                    android:hint="Teléfono"
+                    android:inputType="phone"
                     android:paddingLeft="15dp"
                     android:paddingRight="15dp"
                     android:textSize="@dimen/textsize_secondary"
@@ -130,116 +127,56 @@
             <!--
             ETEXT USUARIO
             -->
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/login_clETextPassword"
-                android:layout_width="0dp"
-                android:layout_height="35dp"
-                android:layout_marginTop="8dp"
-                app:layout_constraintEnd_toEndOf="@+id/login_clETextEmail"
-                app:layout_constraintStart_toStartOf="@+id/login_clETextEmail"
-                app:layout_constraintTop_toBottomOf="@+id/login_clETextEmail">
 
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:layout_width="0dp"
-                    android:layout_height="0dp"
-                    android:alpha="0.3"
-                    android:background="@drawable/shape_materialgrey600_br15"
-                    app:layout_constraintBottom_toBottomOf="@+id/login_eTextPassword"
-                    app:layout_constraintEnd_toEndOf="@+id/login_eTextPassword"
-                    app:layout_constraintStart_toStartOf="@+id/login_eTextPassword"
-                    app:layout_constraintTop_toTopOf="@+id/login_eTextPassword">
+            <!--
+            ETEXT USUARIO
+            -->
 
-                </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-                <EditText
-                    android:id="@+id/login_eTextPassword"
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:background="@drawable/shape_white_br15"
-                    android:hint="Contraseña"
-                    android:inputType="textPassword"
-                    android:paddingStart="15dp"
-                    android:paddingEnd="40dp"
-                    android:textSize="@dimen/textsize_secondary"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    tools:ignore="Autofill,MissingConstraints" />
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
 
             <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/login_btnLogin"
+                android:id="@+id/createB_btnCreateUser"
                 android:layout_width="0dp"
                 android:layout_height="35dp"
                 android:layout_marginStart="24dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="24dp"
-                android:background="@drawable/shape_white_br15"
-                android:text="@string/ingresar"
-                android:textColor="@color/customGreen"
-                android:textSize="@dimen/textsize_tertiary"
-                android:textStyle="bold"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/login_clETextPassword" />
-
-
-            <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/login_btnCreateUser"
-                android:layout_width="0dp"
-                android:layout_height="35dp"
-                android:layout_marginStart="24dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="24dp"
                 android:background="@drawable/shape_green_button"
-                android:text="Crear Cuenta"
+                android:text="Registrarme"
+                android:textAllCaps="false"
                 android:textColor="@color/white"
                 android:textSize="@dimen/textsize_tertiary"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/login_btnLogin" />
-
-
-            <androidx.appcompat.widget.AppCompatImageView
-                android:id="@+id/login_iViewPassword"
-                android:layout_width="wrap_content"
-                android:layout_height="0dp"
-                android:layout_marginEnd="8dp"
-                android:contentDescription="password"
-                android:src="@drawable/ic_remove_red_eye_black_24dp"
-                android:tint="@color/customGreen"
-                app:layout_constraintBottom_toBottomOf="@+id/login_clETextPassword"
-                app:layout_constraintEnd_toEndOf="@+id/login_clETextPassword"
-                app:layout_constraintTop_toTopOf="@+id/login_clETextPassword" />
+                app:layout_constraintTop_toBottomOf="@id/createB_clETextPhone" />
 
             <TextView
-                android:id="@+id/login_tViewRecoverPassword"
+                android:id="@+id/createB_tViewRecoverPassword"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
                 android:layout_marginTop="16dp"
+                android:layout_marginEnd="8dp"
                 android:layout_marginBottom="24dp"
                 android:text="Recuperar Contraseña"
                 android:textColor="@color/colorPrimaryDark"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="@+id/login_btnLogin"
-                app:layout_constraintStart_toStartOf="@+id/login_btnLogin"
-                app:layout_constraintTop_toBottomOf="@+id/login_btnCreateUser" />
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/createB_btnCreateUser"
+                tools:ignore="MissingConstraints" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="24dp"
-                app:layout_constraintBottom_toBottomOf="@+id/login_iViewLogoIncavo"
+                app:layout_constraintBottom_toBottomOf="@+id/createB_iViewLogoIncavo"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/login_iViewLogoIncavo"
-                app:layout_constraintTop_toTopOf="@+id/login_iViewLogoIncavo">
+                app:layout_constraintStart_toEndOf="@+id/createB_iViewLogoIncavo"
+                app:layout_constraintTop_toTopOf="@+id/createB_iViewLogoIncavo">
 
                 <androidx.appcompat.widget.AppCompatTextView
-                    android:id="@+id/login_textView19"
+                    android:id="@+id/createB_NameEnterprise"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="2dp"
@@ -258,8 +195,8 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <TextView
-        android:id="@+id/login_tViewCompanyMark"
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/createB_tViewCompanyMark"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/mark_margin_bottom"
@@ -272,27 +209,27 @@
         app:layout_constraintEnd_toEndOf="parent" />
 
     <androidx.appcompat.widget.AppCompatImageView
-        android:id="@+id/login_imageView7"
+        android:id="@+id/createB_imageView7"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
         android:src="@drawable/ic_directions_bike_black_24dp"
         android:tint="@color/white"
-        app:layout_constraintBottom_toBottomOf="@+id/login_background"
+        app:layout_constraintBottom_toBottomOf="@+id/createB_background"
         app:layout_constraintEnd_toEndOf="parent" />
 
     <ProgressBar
-        android:id="@+id/login_progressBar"
+        android:id="@+id/createB_progressBar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
-        app:layout_constraintBottom_toBottomOf="@+id/login_background"
+        app:layout_constraintBottom_toBottomOf="@+id/createB_background"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/login_constCombo" />
+        app:layout_constraintTop_toBottomOf="@+id/createB_constCombo" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

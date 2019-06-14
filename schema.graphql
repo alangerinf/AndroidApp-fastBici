@@ -22,6 +22,12 @@ type Device {
     token: String
 }
 
+type FavoriteSite {
+    address: String!
+    coordinate: Coordinate!
+    name: String!
+}
+
 type Goal {
     goalCanceled: GoalCanceled
     goalCoordinate: Coordinate
@@ -36,10 +42,10 @@ type GoalCanceled {
 }
 
 type Mutation {
-    addUser(device: DeviceFieldsInput, email: String, id: String, isAuthenticated: Boolean, orders: [OrderFieldsInput!], password: String, userCyclist: UserCyclistFieldsInput, userProducer: UserProducerFieldsInput): UserDomain!
-    updateEmail(device: DeviceFieldsInput, email: String, id: String, isAuthenticated: Boolean, orders: [OrderFieldsInput!], password: String, userCyclist: UserCyclistFieldsInput, userProducer: UserProducerFieldsInput): volskayaMessageOutputType!
+    addFavoriteSite(favoriteSite: FavoriteSiteFieldsInput!, id: String!): volskayaMessageOutputType!
+    addUser(confirmationCode: String, device: DeviceFieldsInput, email: String, favoriteSites: [FavoriteSiteFieldsInput!], id: String, isAuthenticated: Boolean, orders: [OrderFieldsInput!], password: String, personalInformation: PersonalInformationFieldsInput): UserDomain!
+    register(email: String!, password: String!, phoneNumber: String!): volskayaMessageRegisterOutputType!
     updatePassword(id: String!, newPassword: String!, oldPassword: String!): volskayaMessageOutputType!
-    updateUserType(device: DeviceFieldsInput, email: String, id: String, isAuthenticated: Boolean, orders: [OrderFieldsInput!], password: String, userCyclist: UserCyclistFieldsInput, userProducer: UserProducerFieldsInput): volskayaMessageOutputType!
 }
 
 type Order {
@@ -53,6 +59,12 @@ type Order {
     statusOrderTypeName: String
 }
 
+type PersonalInformation {
+    dni: String!
+    firstName: String!
+    lastName: String!
+}
+
 type Product {
     description: String!
     isSpecial: Boolean
@@ -63,35 +75,31 @@ type Product {
 type Query {
     "Returns a list of all available users."
     allUsers: [UserDomain!]!
+    checkCode(code: String!, id: String!): volskayaMessageOutputType!
     "Return a price of one Route"
     getPrice(coordinateFinish: CoordinateFieldsInput!, coordinateStart: CoordinateFieldsInput!): volskayaMessagePriceOutputType!
     "Return a specific User by ID"
     getUser(id: String!): volskayaMessageUserOutputType!
-    login(email: String, password: String): volskayaMessageOutputType!
-}
-
-type UserCyclist {
-    dni: String!
-    firstName: String!
-    lastName: String!
+    login(email: String!, password: String!): volskayaMessageLoginOutputType!
+    sendCode(code: String!, phoneNumber: String!): volskayaMessageOutputType!
 }
 
 type UserDomain {
+    confirmationCode: String
     device: Device
     email: String
+    favoriteSites: [FavoriteSite!]
     id: String
     isAuthenticated: Boolean
     orders: [Order!]
     password: String
-    userCyclist: UserCyclist
-    userProducer: UserProducer
+    personalInformation: PersonalInformation
 }
 
-type UserProducer {
-    address: String!
-    nameCompany: String!
-    phone: String!
-    ruc: String!
+"Format to return login request"
+type volskayaMessageLoginOutputType {
+    id: String
+    volskayaResponse: volskayaMessageOutputType!
 }
 
 "Format to return some request"
@@ -103,13 +111,19 @@ type volskayaMessageOutputType implements volskayaMessageInterface {
 
 "Format to return getPrice request"
 type volskayaMessagePriceOutputType {
-    price: Float!
+    price: Float
+    volskayaResponse: volskayaMessageOutputType!
+}
+
+"Format to return register request"
+type volskayaMessageRegisterOutputType {
+    id: String
     volskayaResponse: volskayaMessageOutputType!
 }
 
 "Format to return getUser request"
 type volskayaMessageUserOutputType {
-    user: UserDomain!
+    user: UserDomain
     volskayaResponse: volskayaMessageOutputType!
 }
 
@@ -123,6 +137,12 @@ input DeviceFieldsInput {
     name: String!
     number: String!
     token: String
+}
+
+input FavoriteSiteFieldsInput {
+    address: String!
+    coordinate: CoordinateFieldsInput!
+    name: String!
 }
 
 input GoalCanceledFieldsInput {
@@ -149,22 +169,15 @@ input OrderFieldsInput {
     statusOrderTypeName: String
 }
 
-input ProductFieldsInput {
-    description: String!
-    isSpecial: Boolean
-    name: String!
-    photo: String
-}
-
-input UserCyclistFieldsInput {
+input PersonalInformationFieldsInput {
     dni: String!
     firstName: String!
     lastName: String!
 }
 
-input UserProducerFieldsInput {
-    address: String!
-    nameCompany: String!
-    phone: String!
-    ruc: String!
+input ProductFieldsInput {
+    description: String!
+    isSpecial: Boolean
+    name: String!
+    photo: String
 }

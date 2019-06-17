@@ -337,6 +337,7 @@ public class FragmentTariff extends Fragment implements OnMapReadyCallback, Tari
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
+
         mMap.setOnCameraChangeListener(new GoogleMap.OnCameraChangeListener() {
             @Override
             public void onCameraChange(CameraPosition loc) {

@@ -266,7 +266,6 @@ public class FragmentTariff extends Fragment implements OnMapReadyCallback, Tari
 
         LatLng posicion = new LatLng(latMiddle, lonMiddle);
 
-
         Toast.makeText(ctx,"ZOOM="+mMap.getCameraPosition().zoom+"\n"+"DIST="+distance,Toast.LENGTH_LONG).show();
         CameraPosition cameraPosition = new CameraPosition.Builder().target(posicion).zoom(14).bearing(bearing).tilt(tilt).build();
         CameraUpdate cameraUpdate = CameraUpdateFactory.newCameraPosition(cameraPosition);
@@ -333,22 +332,22 @@ public class FragmentTariff extends Fragment implements OnMapReadyCallback, Tari
         super.onDestroy();
         handler.removeCallbacks(runnable);
     }
-    
+    private void posicionarMarker() {
+        LatLng posicion = new LatLng(lat, lng);
+        CameraPosition cameraPosition = new CameraPosition.Builder().target(posicion).zoom(16.0f).build();
+        CameraUpdate cameraUpdate = CameraUpdateFactory.newCameraPosition(cameraPosition);
+        mMap.animateCamera(cameraUpdate, 500, this);
+    }
+    Double lat, lng ;
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
+        lat = -8.1190123;
+        lng = -79.0362434;
+        posicionarMarker();
+        verifyPermission();
 
-        mMap.setOnCameraChangeListener(new GoogleMap.OnCameraChangeListener() {
-            @Override
-            public void onCameraChange(CameraPosition loc) {
-                if(loc!=null) {
-                    Location location = new Location("googleProvider");
-                    location.setLatitude(loc.target.latitude);
-                    location.setLongitude(loc.target.longitude);
-                    updateLocInView(location);
-                }
-            }
-        });
+
         mMap.setOnCameraMoveStartedListener(i -> {
             // btn_pedir.setVisibility(View.INVISIBLE);
             
@@ -366,12 +365,21 @@ public class FragmentTariff extends Fragment implements OnMapReadyCallback, Tari
                         //tViewAddressStart.setText(direccion);
                         tViewAddressStart.setVisibility(View.VISIBLE);
                         enableInputs();
+                        Location loc = mMap.getMyLocation();
+                        loc.setLongitude(mMap.getCameraPosition().target.longitude);
+                        loc.setLatitude(mMap.getCameraPosition().target.latitude);
+                        updateLocInView(loc);
+
                     }
 
                     Log.d(TAG,"setOnCameraIdleListener");
                 }
                 );
-        verifyPermission();
+        mMap.setOnCameraMoveCanceledListener(() -> {
+
+            Log.d(TAG,"INCIANDO CAMARA CANCEL");
+        });
+
     }
     private OnFragmentInteractionListener mListener;
     @Override

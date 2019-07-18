@@ -33,4 +33,5 @@
     <string name="lugar_de_partida">Lugar de Partida ...</string>
     <string name="lugar_de_llegada">Lugar de Llegada ...</string>
     <string name="phone_invalid">Número de Telefono invalido</string>
+    <string name="bandeja_vacia">Bandeja de Pedidos Vacia</string>
 </resources>

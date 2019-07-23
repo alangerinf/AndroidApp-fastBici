@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.net.Uri;
 import android.os.Bundle;
 
+import com.alanger.ioquiero.directionhelpers.TaskLoadedCallback;
 import com.alanger.ioquiero.views.fragments.FragmentCambiarContrasenha;
 import com.alanger.ioquiero.views.fragments.FragmentPedidos;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -27,7 +28,8 @@ public class ActivityMain extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
         FragmentTariff.OnFragmentInteractionListener,
         FragmentPedidos.OnFragmentInteractionListener,
-        FragmentCambiarContrasenha.OnFragmentInteractionListener
+        FragmentCambiarContrasenha.OnFragmentInteractionListener,
+        TaskLoadedCallback
         {
 
     private Fragment myFragment = null;
@@ -138,5 +140,11 @@ public class ActivityMain extends AppCompatActivity
     @Override
     public void onFragmentInteraction(Uri uri) {
 
+    }
+
+
+    @Override
+    public void onTaskDone(Object... values) {
+        FragmentTariff.drawRoute(values);
     }
 }

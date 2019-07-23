@@ -1,4 +1,4 @@
-# This file was generated based on "schema.json". Do not edit manually.
+# This file was generated based on ".graphqlconfig". Do not edit manually.
 
 schema {
     query: Query
@@ -111,6 +111,7 @@ type volskayaMessageOutputType implements volskayaMessageInterface {
 
 "Format to return getPrice request"
 type volskayaMessagePriceOutputType {
+    distance: Int
     price: Float
     volskayaResponse: volskayaMessageOutputType!
 }

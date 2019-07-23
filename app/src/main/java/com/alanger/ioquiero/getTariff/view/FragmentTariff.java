@@ -1,5 +1,6 @@
 package com.alanger.ioquiero.getTariff.view;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -13,6 +14,7 @@ import android.os.Handler;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import android.util.Log;
@@ -24,14 +26,22 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.airbnb.lottie.LottieAnimationView;
+import com.alanger.ioquiero.GetPriceQuery;
 import com.alanger.ioquiero.R;
+import com.alanger.ioquiero.RegisterMutation;
 import com.alanger.ioquiero.app.AppController;
+import com.alanger.ioquiero.directionhelpers.FetchURL;
+import com.alanger.ioquiero.directionhelpers.TaskLoadedCallback;
 import com.alanger.ioquiero.views.ActivityMain;
 import com.alanger.ioquiero.views.Configuracion;
 import com.alanger.ioquiero.views.Utils;
+import com.alanger.ioquiero.volskayaGraphql.GraphqlClient;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.apollographql.apollo.ApolloCall;
+import com.apollographql.apollo.api.*;
+import com.apollographql.apollo.exception.ApolloException;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -42,12 +52,16 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.Polyline;
+import com.google.android.gms.maps.model.PolylineOptions;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.Locale;
+
+import javax.annotation.Nonnull;
 
 import static android.content.Context.MODE_PRIVATE;
 
@@ -56,7 +70,10 @@ import static android.content.Context.MODE_PRIVATE;
  */
 public class FragmentTariff extends Fragment implements OnMapReadyCallback, TariffView, GoogleMap.CancelableCallback {
 
-    static private String TAG = FragmentTariff.class.getSimpleName();
+    private static String TAG = FragmentTariff.class.getSimpleName();
+    private static Polyline currentPolyline;
+
+    private static final int PERMISION_REQUEST_GPS=100;
 
     private static boolean isFirstIdle = false;
 
@@ -76,23 +93,35 @@ public class FragmentTariff extends Fragment implements OnMapReadyCallback, Tari
 
     private static SharedPreferences pref;
 
-    private final Handler handler = new Handler();
+    private static final Handler handler = new Handler();
 
     private static LottieAnimationView lottieMarker;
 
-    private ActivityMain activityMain;
+    private static ActivityMain activityMain;
 
     @Override
     public void verifyPermission() {
-        if (ActivityCompat.checkSelfPermission(getContext(), android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            //si el permiso no está habilitado, solicitamos el permiso
-            ActivityCompat.requestPermissions(activityMain,
-                    new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, 1);
-            return;
+        String[] PERMISSIONS = {
+                android.Manifest.permission.ACCESS_FINE_LOCATION,
+                android.Manifest.permission.ACCESS_COARSE_LOCATION
+        };
+        if(
+                ContextCompat.checkSelfPermission(ctx,
+                Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED
+                ||
+                ContextCompat.checkSelfPermission(ctx,
+                Manifest.permission.ACCESS_COARSE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED
+          ){
+                requestPermissions(
+                        PERMISSIONS,
+                        PERMISION_REQUEST_GPS);
+                return;
         }
 
+        mMap.getUiSettings().setMyLocationButtonEnabled(true);
         mMap.setMyLocationEnabled(true);
-
         runnable.run();
     }
 
@@ -232,9 +261,7 @@ public class FragmentTariff extends Fragment implements OnMapReadyCallback, Tari
         btnCalcular.setOnClickListener(v -> {
 
             btnCalcular.setVisibility(View.INVISIBLE);
-
-            openTariffResult();
-
+            new FetchURL(getActivity()).execute(getUrl(markerStart.getPosition(), markerFinish.getPosition(), "walking"), "walking");
         });
 
         btnRestart.setOnClickListener(v -> {
@@ -250,7 +277,34 @@ public class FragmentTariff extends Fragment implements OnMapReadyCallback, Tari
         declareEvents();
         defaultAttributes();
     }
-
+    private String getUrl(LatLng origin, LatLng dest, String directionMode) {
+        // Origin of route
+        String str_origin = "origin=" + origin.latitude + "," + origin.longitude;
+        // Destination of route
+        String str_dest = "destination=" + dest.latitude + "," + dest.longitude;
+        // Mode
+        String mode = "mode=" + directionMode;
+        // Building the parameters to the web service
+        String parameters = str_origin + "&" + str_dest + "&" + mode;
+        // Output format
+        String output = "json";
+        // Building the url to the web service
+        String url = "https://maps.googleapis.com/maps/api/directions/" + output + "?" + parameters + "&key=" + getString(R.string.google_maps_key);
+        return url;
+    }
+/*
+    @Override
+    public void onTaskDone(Object... values) {
+        if (currentPolyline != null)
+            currentPolyline.remove();
+        currentPolyline = mMap.addPolyline((PolylineOptions) values[0]);
+    }
+  */
+    public static void drawRoute(Object... values){
+        if (currentPolyline != null)
+            currentPolyline.remove();
+        currentPolyline = mMap.addPolyline((PolylineOptions) values[0]);
+    }
     public void vistaPeriferica(){
 
         float bearing = mMap.getCameraPosition().bearing;
@@ -344,8 +398,10 @@ public class FragmentTariff extends Fragment implements OnMapReadyCallback, Tari
         mMap = googleMap;
         lat = -8.1190123;
         lng = -79.0362434;
-        posicionarMarker();
         verifyPermission();
+
+        posicionarMarker();
+
 
 
         mMap.setOnCameraMoveStartedListener(i -> {
@@ -357,7 +413,14 @@ public class FragmentTariff extends Fragment implements OnMapReadyCallback, Tari
         });
 
         mMap.setOnCameraIdleListener(() ->{
+                    try {
+                        Location loc = mMap.getMyLocation();
+                        loc.setLongitude(mMap.getCameraPosition().target.longitude);
+                        loc.setLatitude(mMap.getCameraPosition().target.latitude);
+                        updateLocInView(loc);
+                    }catch (Exception e){
 
+                    }
                     if(!isFirstIdle){//si es la primera  ves q se inicia el mapa
                         isFirstIdle=true;
                     }else {//si ya se inicio el mapa hace rato
@@ -365,22 +428,40 @@ public class FragmentTariff extends Fragment implements OnMapReadyCallback, Tari
                         //tViewAddressStart.setText(direccion);
                         tViewAddressStart.setVisibility(View.VISIBLE);
                         enableInputs();
-                        Location loc = mMap.getMyLocation();
-                        loc.setLongitude(mMap.getCameraPosition().target.longitude);
-                        loc.setLatitude(mMap.getCameraPosition().target.latitude);
-                        updateLocInView(loc);
+
 
                     }
 
                     Log.d(TAG,"setOnCameraIdleListener");
                 }
                 );
-        mMap.setOnCameraMoveCanceledListener(() -> {
 
-            Log.d(TAG,"INCIANDO CAMARA CANCEL");
-        });
 
     }
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case PERMISION_REQUEST_GPS: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                   Log.d(TAG,"permision request ok");
+                    mMap.getUiSettings().setMyLocationButtonEnabled(true);
+                    mMap.setMyLocationEnabled(true);
+                    runnable.run();
+                } else {
+                    Log.d(TAG,"permision request noooo ok");
+                   verifyPermission();
+                }
+                return;
+            }
+
+            // other 'case' lines to check for other
+            // permissions this app might request
+        }
+    }
+
     private OnFragmentInteractionListener mListener;
     @Override
     public void onAttach(Context context) {
@@ -407,7 +488,41 @@ public class FragmentTariff extends Fragment implements OnMapReadyCallback, Tari
         new AsyncSearchAddress().execute();
     }
 
+    public void getPrice(double latStart,double lonStart, double latFinish, double lonFinish) {
 
+        GraphqlClient.getMyApolloClient()
+
+                .query(
+                        GetPriceQuery.builder()
+                                .latStart(latStart)
+                                .lonStart(lonStart)
+                                .latFinish(latFinish)
+                                .lonFinish(lonFinish)
+                        .build()
+                )
+                .enqueue(
+                        new ApolloCall.Callback<GetPriceQuery.Data>() {
+                            @Override
+                            public void onResponse(@Nonnull com.apollographql.apollo.api.Response<GetPriceQuery.Data> response) {
+                                GetPriceQuery.Data data = response.data();
+                                String successCode = "00";
+                                double price = data.getPrice().price();
+                                GetPriceQuery.VolskayaResponse volskayaResponse = data.getPrice().volskayaResponse();
+
+//                                Toast.makeText(ctx,"precio:"pri)
+
+                            }
+
+                            @Override
+                            public void onFailure(@Nonnull ApolloException e) {
+
+
+                            }
+                        }
+
+
+                );
+    }
 
 
     class AsyncSearchAddress extends AsyncTask<String, String, String> {

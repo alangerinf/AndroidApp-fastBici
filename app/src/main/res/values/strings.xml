@@ -33,5 +33,11 @@
     <string name="lugar_de_partida">Lugar de Partida ...</string>
     <string name="lugar_de_llegada">Lugar de Llegada ...</string>
     <string name="phone_invalid">Número de Telefono invalido</string>
-    <string name="bandeja_vacia">Bandeja de Pedidos Vacia</string>
+    <string name="bandeja_de_pedidos_vacia">Bandeja de Pedidos Vacia</string>
+    <string name="title_activity_pedido">PedidoActivity</string>
+    <string name="tab_text_1">Tab 1</string>
+    <string name="tab_text_2">Tab 2</string>
+    <string name="referencia_a">Referencia A</string>
+    <string name="lista_de_productos">Lista de Productos</string>
+    <string name="a_n_sin_productos">Aún sin Productos</string>
 </resources>

@@ -18,4 +18,5 @@ public class LoginInteractorImpl implements LoginInteractor {
     public void signIn(String user, String password) {
         repository.signIn(user,password);
     }
+
 }

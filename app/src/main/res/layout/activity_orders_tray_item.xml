@@ -11,7 +11,7 @@
     app:cardElevation="2dp"
     app:cardUseCompatPadding="true"
     app:cardPreventCornerOverlap="false"
-    android:layout_margin="@dimen/margin_starndar"
+    android:layout_margin="8dp"
     android:layout_gravity="center"
     android:layout_height="wrap_content">
 
@@ -97,7 +97,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="@dimen/space_floating_button"
+                android:layout_marginEnd="8dp"
 
 
                 >
@@ -150,9 +150,12 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Cobrar al Recoger"
+                    android:text="Cobrar al Cliente"
                     android:textSize="12sp" />
-
+                <!--
+                1. cobrar al cliente
+                2. cobrar al dejar
+                -->
 
             </LinearLayout>
 
@@ -198,7 +201,7 @@
                         android:text="Calle tal a la  altura  de la webada tanto" />
 
                     <View
-                        android:id="@+id/divider5"
+                        android:id="@+id/dividerA"
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
                         android:layout_weight="1"

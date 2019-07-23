@@ -22,8 +22,20 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".views.OrdersTrayActivity"></activity>
-        <activity android:name=".register.view.VerifyTokenActivity"></activity>
+        <activity
+            android:name=".pedido.PedidoActivity"
+            android:label="@string/title_activity_pedido"
+            android:theme="@style/AppTheme.NoActionBar">
+
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+
+        </activity>
+        <activity android:name=".views.OrdersTrayActivity" />
+        <activity android:name=".register.view.VerifyTokenActivity" />
         <activity
             android:name=".views.ActivitySugerencias"
             android:screenOrientation="portrait" />
@@ -31,11 +43,7 @@
             android:name=".login.view.LoginActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme2.NoActionBar">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity
             android:name=".register.view.RegisteActivityA"

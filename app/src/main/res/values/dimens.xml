@@ -22,7 +22,7 @@
     <dimen name="tViewPtimsryText">18dp</dimen>
     <dimen name="tViewSecondaryText">16dp</dimen>
     <dimen name="tViewTertearyText">14dp</dimen>
-    <dimen name="margin_starndar">8dp</dimen>
+    <dimen name="margin_standar">8dp</dimen>
     <dimen name="margin_min">4dp</dimen>
     <dimen name="space_floating_button">70dp</dimen>
     <dimen name="appbar_padding">16dp</dimen>

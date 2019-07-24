@@ -6,10 +6,7 @@ import android.net.Uri;
 import android.os.Bundle;
 
 import com.alanger.ioquiero.R;
-import com.alanger.ioquiero.pedido.main.BlankFragment;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
-import com.google.android.material.tabs.TabLayout;
+import com.alanger.ioquiero.pedido.main.Paso1Fragment;
 
 import androidx.viewpager.widget.ViewPager;
 import androidx.appcompat.app.AppCompatActivity;
@@ -19,9 +16,13 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 
+import com.alanger.ioquiero.pedido.main.Paso2Fragment;
 import com.alanger.ioquiero.pedido.main.SectionsPagerAdapter;
 
-public class PedidoActivity extends AppCompatActivity implements BlankFragment.OnFragmentInteractionListener {
+public class PedidoActivity extends AppCompatActivity implements
+        Paso1Fragment.OnFragmentInteractionListener ,
+        Paso2Fragment.OnFragmentInteractionListener
+{
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

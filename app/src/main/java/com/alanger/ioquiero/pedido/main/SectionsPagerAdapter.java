@@ -33,17 +33,17 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
         switch (position){
             case 0:
-                fragment= BlankFragment.newInstance("","");
+                fragment= Paso1Fragment.newInstance("","");
 
                 break;
             case 1:
-                fragment= BlankFragment.newInstance("","");
+                fragment= Paso2Fragment.newInstance("","");
                 break;
             case 2:
-                fragment= BlankFragment.newInstance("","");
+                fragment= Paso1Fragment.newInstance("","");
                 break;
             case 3:
-                fragment= BlankFragment.newInstance("","");
+                fragment= Paso1Fragment.newInstance("","");
                 break;
 
         }

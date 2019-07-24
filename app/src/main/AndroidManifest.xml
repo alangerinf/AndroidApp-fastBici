@@ -25,7 +25,7 @@
         <activity
             android:name=".pedido.PedidoActivity"
             android:label="@string/title_activity_pedido"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/AppTheme2.NoActionBar">
 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

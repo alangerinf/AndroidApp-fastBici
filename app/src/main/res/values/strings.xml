@@ -35,8 +35,9 @@
     <string name="phone_invalid">Número de Telefono invalido</string>
     <string name="bandeja_de_pedidos_vacia">Bandeja de Pedidos Vacia</string>
     <string name="title_activity_pedido">PedidoActivity</string>
-    <string name="tab_text_1">Tab 1</string>
-    <string name="tab_text_2">Tab 2</string>
+    <string name="tab_text_1">Productos</string>
+    <string name="tab_text_2">Cliente</string>
+    <string name="tab_text_3">Resumen</string>
     <string name="referencia_a">Referencia A</string>
     <string name="lista_de_productos">Lista de Productos</string>
     <string name="a_n_sin_productos">Aún sin Productos</string>
@@ -46,4 +47,7 @@
     <string name="datos_adicionales_de_la_entrega">Datos Adicionales de la Entrega</string>
     <string name="descripci_n">Descripción</string>
     <string name="nombre">Nombre</string>
+    <string name="referencia_b">Referencia B</string>
+    <string name="cantidad">Cantidad</string>
+    <string name="producto">Producto</string>
 </resources>

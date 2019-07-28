@@ -6,11 +6,14 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.alanger.ioquiero.R;
+import com.google.android.material.textfield.TextInputEditText;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -31,6 +34,13 @@ public class Paso2Fragment extends Fragment {
     private String mParam2;
 
     private OnFragmentInteractionListener mListener;
+
+
+    TextInputEditText fp2_tietNombre;
+    TextInputEditText fp2_tietTelefono;
+    TextInputEditText fp2_tietDescripcion;
+
+
 
     public Paso2Fragment() {
         // Required empty public constructor
@@ -62,6 +72,84 @@ public class Paso2Fragment extends Fragment {
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
     }
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        declare();
+        events();
+    }
+
+    private void events() {
+        fp2_tietNombre.addTextChangedListener(new TextWatcher() {
+
+            public void onTextChanged(CharSequence s, int start, int before,
+                                      int count) {
+                if(!s.equals("") ) {
+                    onButtonPressed();
+                }
+            }
+
+
+
+            public void beforeTextChanged(CharSequence s, int start, int count,
+                                          int after) {
+
+            }
+
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+        fp2_tietTelefono.addTextChangedListener(new TextWatcher() {
+
+            public void onTextChanged(CharSequence s, int start, int before,
+                                      int count) {
+                if(!s.equals("") ) {
+                    onButtonPressed();
+                }
+            }
+
+
+
+            public void beforeTextChanged(CharSequence s, int start, int count,
+                                          int after) {
+
+            }
+
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+        fp2_tietDescripcion.addTextChangedListener(new TextWatcher() {
+
+            public void onTextChanged(CharSequence s, int start, int before,
+                                      int count) {
+                if(!s.equals("") ) {
+                    onButtonPressed();
+                }
+            }
+
+
+
+            public void beforeTextChanged(CharSequence s, int start, int count,
+                                          int after) {
+
+            }
+
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+    }
+
+    private void declare() {
+        fp2_tietNombre = getView().findViewById(R.id.fp2_tietNombre);
+        fp2_tietTelefono = getView().findViewById(R.id.fp2_tietTelefono);
+        fp2_tietDescripcion = getView().findViewById(R.id.fp2_tietDescripcion);
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -71,9 +159,17 @@ public class Paso2Fragment extends Fragment {
     }
 
     // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
+    public void onButtonPressed() {
         if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
+            String nombre = fp2_tietNombre.getText().toString();
+            String telefono = fp2_tietTelefono.getText().toString();
+            String descripcion = fp2_tietDescripcion.getText().toString();
+
+            boolean flag = true;
+            if(nombre.equals("")||telefono.equals("")||descripcion.equals("")){
+                flag= false;
+            }
+            mListener.onFragmentInteractionPaso2(flag,nombre,telefono,descripcion);
         }
     }
 
@@ -106,6 +202,6 @@ public class Paso2Fragment extends Fragment {
      */
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
+        void onFragmentInteractionPaso2(boolean flag, String nombre,String telefono, String descripcion);
     }
 }

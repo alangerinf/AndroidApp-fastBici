@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     android:descendantFocusability="beforeDescendants"
     android:focusableInTouchMode="true"
+    android:id="@+id/fp1_rootView"
     tools:context=".pedido.main.Paso1Fragment">
 
     <LinearLayout
@@ -93,6 +94,9 @@
                 app:hintTextColor="@color/colorPrimaryDark">
 
                 <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/fp1_tietRefA"
+                    android:theme="@style/customTextInputLayout"
+                    android:textCursorDrawable="@drawable/custom_edit_text_cursor"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     />
@@ -167,12 +171,15 @@
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="100dp"
-                android:hint="@string/referencia_a"
+                android:hint="@string/referencia_b"
                 android:textColorHint="@color/colorPrimaryDark"
                 app:boxStrokeColor="@color/colorPrimaryDark"
                 app:hintTextColor="@color/colorPrimaryDark">
 
                 <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/fp1_tietRefB"
+                    android:theme="@style/customTextInputLayout"
+                    android:textCursorDrawable="@drawable/custom_edit_text_cursor"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
 
@@ -200,16 +207,16 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="19dp"
-                    android:layout_marginTop="24dp"
-                    android:layout_marginBottom="24dp"
+                    android:layout_marginTop="8dp"
                     android:text="@string/a_n_sin_productos"
-                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/recyclerView2"
+                    android:id="@+id/fp1_rViewProductos"
+                    app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+                    app:spanCount="1"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
@@ -224,8 +231,9 @@
 
     </LinearLayout>
 
+
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fmaini_fabEdit"
+        android:id="@+id/fp1_fabAddProducts"
         style="@style/Widget.MaterialComponents.FloatingActionButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

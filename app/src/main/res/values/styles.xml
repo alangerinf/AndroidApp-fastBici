@@ -5,6 +5,7 @@
         <item name="colorPrimary">@color/white</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+
     </style>
 
 
@@ -12,6 +13,7 @@
         <item name="colorPrimary">@color/white</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+
     </style>
 
     <style name="AppTheme.NoActionBar">
@@ -38,5 +40,10 @@
     <style name="AppTheme2.PopupOverlay" parent="ThemeOverlay.MaterialComponents.Light" />
 
     <style name="UnelevatedButton" parent="Widget.MaterialComponents.Button.UnelevatedButton"></style>
+
+    <style name="customTextInputLayout" parent="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <item name="colorPrimary">@color/colorPrimary</item>
+    </style>
+
 
 </resources>

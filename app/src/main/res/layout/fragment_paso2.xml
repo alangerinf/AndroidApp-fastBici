@@ -41,6 +41,10 @@
                 app:hintTextColor="@color/colorPrimaryDark">
 
                 <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/fp2_tietNombre"
+                    android:theme="@style/customTextInputLayout"
+                    android:textCursorDrawable="@drawable/custom_edit_text_cursor"
+                    android:singleLine="true"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     />
@@ -52,10 +56,15 @@
                 android:padding="0dp"
                 android:layout_height="wrap_content"
                 android:hint="Telefono"
+                app:counterMaxLength="9"
                 app:boxStrokeColor="@color/colorPrimaryDark"
                 app:hintTextColor="@color/colorPrimaryDark">
 
                 <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/fp2_tietTelefono"
+                    android:theme="@style/customTextInputLayout"
+                    android:textCursorDrawable="@drawable/custom_edit_text_cursor"
+                    android:singleLine="true"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     />
@@ -89,6 +98,9 @@
                 app:hintTextColor="@color/colorPrimaryDark">
 
                 <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/fp2_tietDescripcion"
+                    android:theme="@style/customTextInputLayout"
+                    android:textCursorDrawable="@drawable/custom_edit_text_cursor"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:minLines="5"

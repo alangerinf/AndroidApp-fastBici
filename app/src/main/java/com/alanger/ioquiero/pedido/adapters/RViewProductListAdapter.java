@@ -25,8 +25,8 @@ public class RViewProductListAdapter
 
     private View.OnClickListener onClickListener;
 
-    private Context ctx;
-    private List<Product> productList;
+    private static Context ctx;
+    private static List<Product> productList;
 
     public RViewProductListAdapter(Context ctx, List<Product> productList) {
         this.productList = productList;

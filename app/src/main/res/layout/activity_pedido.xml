@@ -254,6 +254,26 @@
             app:layout_constraintTop_toTopOf="parent"
             tools:ignore="MissingConstraints" />
 
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnDone"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
+            android:layout_width="100dp"
+            android:layout_height="50dp"
+            android:layout_gravity="end|bottom"
+            android:layout_marginTop="4dp"
+            android:layout_marginEnd="@dimen/activity_horizontal_margin"
+            android:layout_marginBottom="4dp"
+            android:text="Confirmar"
+            android:visibility="invisible"
+            android:textAllCaps="false"
+            app:backgroundTint="@color/gray"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="MissingConstraints" />
+
+
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnNext"
             style="@style/Widget.MaterialComponents.Button.TextButton"
@@ -270,6 +290,8 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:ignore="MissingConstraints" />
+
+
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

@@ -4,12 +4,13 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Rect;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 
 import com.alanger.ioquiero.R;
+import com.alanger.ioquiero.models.Pedido;
 import com.alanger.ioquiero.models.Product;
 import com.alanger.ioquiero.pedido.main.CustomViewPager;
+import com.alanger.ioquiero.pedido.main.PageViewModel;
 import com.alanger.ioquiero.pedido.main.Paso1Fragment;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -25,6 +26,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.alanger.ioquiero.pedido.main.Paso2Fragment;
+import com.alanger.ioquiero.pedido.main.ResumenFragment;
 import com.alanger.ioquiero.pedido.main.SectionsPagerAdapter;
 import com.google.android.material.button.MaterialButton;
 
@@ -32,28 +34,26 @@ import java.util.List;
 
 public class PedidoActivity extends AppCompatActivity implements
         Paso1Fragment.OnFragmentInteractionListener ,
-        Paso2Fragment.OnFragmentInteractionListener
+        Paso2Fragment.OnFragmentInteractionListener,
+        ResumenFragment.OnFragmentInteractionListener
 {
 
     private static String TAG = PedidoActivity.class.getSimpleName();
 
+
+    private Pedido PEDIDO;
+
     private boolean flag1;
     private boolean flag2;
-    private String refA;
-    private String regB;
 
 
-    private String nombre;
-    private String telefono;
-    private String descripcion;
 
 
+    MaterialButton btnDone;
     MaterialButton btnNext;
     MaterialButton btnBack;
 
 
-
-    private List<Product> productos;
 
     static CustomViewPager viewPager;
     static SectionsPagerAdapter sectionsPagerAdapter;
@@ -83,6 +83,9 @@ public class PedidoActivity extends AppCompatActivity implements
     }
 
     private void declare() {
+        PEDIDO = new Pedido();
+        PageViewModel.init();
+        PageViewModel.set(PEDIDO);
 
         sectionsPagerAdapter = new SectionsPagerAdapter(this, getSupportFragmentManager());
         viewPager = findViewById(R.id.view_pager);
@@ -106,6 +109,8 @@ public class PedidoActivity extends AppCompatActivity implements
                         tViewPaso1.setTextColor(Color.parseColor(colorActive));
                         tViewPaso2.setTextColor(Color.parseColor(colorNoActive));
                         tViewPaso3.setTextColor(Color.parseColor(colorNoActive));
+
+                        disableBtnDone();
                         if(flag1){
                             viewPager.setAllowedSwipeDirection(CustomViewPager.SwipeDirection.right);
                             progressBar1.setVisibility(View.INVISIBLE);
@@ -124,6 +129,7 @@ public class PedidoActivity extends AppCompatActivity implements
                         tViewPaso1.setTextColor(Color.parseColor(colorNoActive));
                         tViewPaso2.setTextColor(Color.parseColor(colorActive));
                         tViewPaso3.setTextColor(Color.parseColor(colorNoActive));
+                        disableBtnDone();
                         if(flag2){
                             viewPager.setAllowedSwipeDirection(CustomViewPager.SwipeDirection.all);
                             progressBar2.setVisibility(View.INVISIBLE);
@@ -149,6 +155,7 @@ public class PedidoActivity extends AppCompatActivity implements
                             iViewOk3.setVisibility(View.INVISIBLE);
                             enableBtnBack();
                             disableBtnNext();
+                            enableBtnDone();
                         /*}else {
                             viewPager.setPagingEnabled(false);
                             progressBar2.setVisibility(View.VISIBLE);
@@ -184,6 +191,7 @@ public class PedidoActivity extends AppCompatActivity implements
         progressBar3 = findViewById(R.id.progressBar3);
 
         btnNext = findViewById(R.id.btnNext);
+        btnDone = findViewById(R.id.btnDone);
         btnBack = findViewById(R.id.btnBack);
 
 
@@ -274,11 +282,12 @@ public class PedidoActivity extends AppCompatActivity implements
 
 
     @Override
-    public void onFragmentInteractionPaso1(boolean flag1, String refA, String regB, List<Product> productos) {
+    public void onFragmentInteractionPaso1(boolean flag1, String refA, String refB, List<Product> productos) {
         this.flag1 = flag1;
-        this.refA = refA;
-        this.regB = regB;
-        this.productos = productos;
+        PEDIDO.setRefA(refA);
+        PEDIDO.setRefB(refB);
+        PEDIDO.setProductList(productos);
+        PageViewModel.set(PEDIDO);
         if(flag1){
             progressBar1.setVisibility(View.INVISIBLE);
             iViewOk1.setVisibility(View.VISIBLE);
@@ -300,9 +309,24 @@ public class PedidoActivity extends AppCompatActivity implements
         btnNext.setFocusable(true);
         btnNext.setClickable(true);
         btnNext.setVisibility(View.VISIBLE);
-
-
     }
+
+    void enableBtnDone(){
+        btnDone.setBackgroundColor(getResources().getColor(R.color.colorAccent));
+        btnDone.setFocusable(true);
+        btnDone.setClickable(true);
+        btnDone.setVisibility(View.VISIBLE);
+    }
+
+    void disableBtnDone(){
+        btnDone.setBackgroundColor(getResources().getColor(R.color.colorAccent));
+        btnDone.setFocusable(true);
+        btnDone.setClickable(true);
+        btnDone.setVisibility(View.INVISIBLE);
+    }
+
+
+
     void enableBtnBack(){
         btnBack.setBackgroundColor(getResources().getColor(R.color.colorAccent));
         btnBack.setVisibility(View.VISIBLE);
@@ -355,9 +379,10 @@ public class PedidoActivity extends AppCompatActivity implements
     @Override
     public void onFragmentInteractionPaso2(boolean flag, String nombre, String telefono, String descripcion) {
         this.flag2 = flag;
-        this.nombre = nombre;
-        this.telefono = telefono;
-        this.descripcion = descripcion;
+        PEDIDO.setNameCliente(nombre);
+        PEDIDO.setTelefono(telefono);
+        PEDIDO.setDescripcion(descripcion);
+        PageViewModel.set(PEDIDO);
         enableBtnBack();
         if(flag2){
             progressBar2.setVisibility(View.INVISIBLE);
@@ -373,5 +398,10 @@ public class PedidoActivity extends AppCompatActivity implements
             iViewOk2.setVisibility(View.INVISIBLE);
             viewPager.setAllowedSwipeDirection(CustomViewPager.SwipeDirection.left);
         }
+    }
+
+    @Override
+    public void onFragmentInteraction(Uri uri) {
+
     }
 }

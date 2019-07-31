@@ -40,7 +40,7 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
                 fragment= Paso2Fragment.newInstance("","");
                 break;
             case 2:
-                fragment= Paso1Fragment.newInstance("","");
+                fragment= ResumenFragment.newInstance("","");
                 break;
 
         }

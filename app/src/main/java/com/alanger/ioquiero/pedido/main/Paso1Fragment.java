@@ -48,13 +48,18 @@ public class Paso1Fragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    private  Context ctx;
-    private RecyclerView rView;
-    private RViewProductListAdapter adapter;
-    private View fp1_rootView;
+    private static Context ctx;
+    private static RecyclerView rView;
+    private static RViewProductListAdapter adapter;
+    private static View fp1_rootView;
 
+    private  static FloatingActionButton fp1_addProducts;
+    private  static TextInputEditText fp1_tietRefA;
+    private  static TextInputEditText fp1_tietRefB;
 
-    private OnFragmentInteractionListener mListener;
+    private static List<Product> productList  = new ArrayList<>();
+
+    private static OnFragmentInteractionListener mListener;
 
     public Paso1Fragment() {
         // Required empty public constructor
@@ -75,6 +80,7 @@ public class Paso1Fragment extends Fragment {
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
+        productList =new ArrayList<>();
         return fragment;
     }
 
@@ -88,17 +94,13 @@ public class Paso1Fragment extends Fragment {
     }
 
 
-    private  FloatingActionButton fp1_addProducts;
-    private  TextInputEditText fp1_tietRefA;
-    private  TextInputEditText fp1_tietRefB;
 
 
     @Override
     public void onStart() {
         super.onStart();
         this.ctx = getContext();
-        declare();
-        events();
+
     }
 
     private void events() {
@@ -118,15 +120,13 @@ public class Paso1Fragment extends Fragment {
     }
 
     private void declare() {
-        productList = new ArrayList<>();
+        //productList = new ArrayList<>();
         fp1_rootView = getView().findViewById(R.id.fp1_rootView);
         rView = getView().findViewById(R.id.fp1_rViewProductos);
         adapter = new RViewProductListAdapter(getContext(),productList);
 
         new ItemTouchHelper(itemTouchHelperCallBack).attachToRecyclerView(rView);
         rView.setAdapter(adapter);
-
-
 
         fp1_addProducts = getView().findViewById(R.id.fp1_fabAddProducts);
         fp1_tietRefA = getView().findViewById(R.id.fp1_tietRefA);
@@ -138,9 +138,16 @@ public class Paso1Fragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_paso1, container, false);
+        View view = inflater.inflate(R.layout.fragment_paso1, container, false);
+        return view;
     }
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
 
+        //Toast.makeText(getContext(),"onViewCreated",Toast.LENGTH_SHORT).show();
+        declare();
+        events();
+    }
     // TODO: Rename method, update argument and hook method into UI event
     public void enviar(String refA, String refB, List<Product> productos) {
         if (mListener != null) {
@@ -261,7 +268,6 @@ public class Paso1Fragment extends Fragment {
         dialogClose.show();
     }
 
-    private List<Product> productList;
 
     ItemTouchHelper.SimpleCallback itemTouchHelperCallBack = new ItemTouchHelper.SimpleCallback(0,ItemTouchHelper.RIGHT) {
         @Override
@@ -281,6 +287,7 @@ public class Paso1Fragment extends Fragment {
                 public void onClick(View v) {
                     productList.add(index,item);
                     adapter.notifyDataSetChanged();
+                    enviar(fp1_tietRefA.getText().toString(),fp1_tietRefB.getText().toString(),productList);
                 }
             });
             snackbar.show();

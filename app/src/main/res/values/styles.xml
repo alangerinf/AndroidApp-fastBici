@@ -8,11 +8,15 @@
 
     </style>
 
+    <style name="AppTheme.Fullscreen">
+        <item name="android:windowFullscreen">true</item>
+    </style>
 
     <style name="AppTheme2" parent="Theme.MaterialComponents.Light">
         <item name="colorPrimary">@color/white</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:actionMenuTextColor">@color/gray</item>
 
     </style>
 

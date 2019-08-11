@@ -7,6 +7,8 @@ import android.net.Uri;
 import android.os.Bundle;
 
 import com.alanger.ioquiero.R;
+import com.alanger.ioquiero.RegisterMutation;
+import com.alanger.ioquiero.RegisterOrderMutation;
 import com.alanger.ioquiero.models.Pedido;
 import com.alanger.ioquiero.models.Product;
 import com.alanger.ioquiero.pedido.main.CustomViewPager;
@@ -28,9 +30,21 @@ import android.widget.TextView;
 import com.alanger.ioquiero.pedido.main.Paso2Fragment;
 import com.alanger.ioquiero.pedido.main.ResumenFragment;
 import com.alanger.ioquiero.pedido.main.SectionsPagerAdapter;
+import com.alanger.ioquiero.type.AddressFieldsInput;
+import com.alanger.ioquiero.type.CoordinateFieldsInput;
+import com.alanger.ioquiero.type.FinalClientFieldsInput;
+import com.alanger.ioquiero.type.ProductFieldsInput;
+import com.alanger.ioquiero.type.RouteFieldsInput;
+import com.alanger.ioquiero.volskayaGraphql.GraphqlClient;
+import com.apollographql.apollo.ApolloCall;
+import com.apollographql.apollo.api.Response;
+import com.apollographql.apollo.exception.ApolloException;
 import com.google.android.material.button.MaterialButton;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import javax.annotation.Nonnull;
 
 public class PedidoActivity extends AppCompatActivity implements
         Paso1Fragment.OnFragmentInteractionListener ,
@@ -215,8 +229,78 @@ public class PedidoActivity extends AppCompatActivity implements
                 }
             }
         });
+/*
+        btnDone.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Pedido pedido = PageViewModel.getPedido();
+
+                CoordinateFieldsInput corA = new CoordinateFieldsInput(pedido.getLatA(),pedido.getLonA());
+                AddressFieldsInput adrA = new AddressFieldsInput(pedido.getNameAddressA(),pedido.getRefA(),corA);
+
+                CoordinateFieldsInput corB = new CoordinateFieldsInput(pedido.getLatB(),pedido.getLonB());
+                AddressFieldsInput adrB = new AddressFieldsInput(pedido.getNameAddressB(),pedido.getRefB(),corB);
+
+                RouteFieldsInput route = new RouteFieldsInput(adrA,adrB);
 
 
+                FinalClientFieldsInput finalClientFieldsInput = new FinalClientFieldsInput(pedido.getNameCliente(),pedido.getTelefono());
+
+
+                List<ProductFieldsInput> productFieldsInputList = new ArrayList<>();
+
+                for(Product p : pedido.getProductList()){
+                    ProductFieldsInput temp = new ProductFieldsInput(p.getName(),p.getCant());
+                    productFieldsInputList.add(temp);
+                }
+
+                GraphqlClient.getMyApolloClient()
+
+                        .mutate(
+                                RegisterOrderMutation.builder()
+                                        .route(route)
+                                        .clientId(pedido.getClientID())
+                                        .finalClient(finalClientFieldsInput)
+                                        .distance(pedido.getDistance())
+                                        .price(pedido.getPrice())
+                                        .generalDescription(pedido.getDescripcion())
+                                        .products(productFieldsInputList)
+                                        .build()
+                        )
+                        .enqueue(
+                                new ApolloCall.Callback<RegisterOrderMutation.Data>() {
+                                    @Override
+                                    public void onResponse(@Nonnull Response<RegisterOrderMutation.Data> response) {
+                                        RegisterOrderMutation.Data data = response.data();
+                                        String successCode = "00";
+
+                                        RegisterOrderMutation.VolskayaResponse volskayaResponse = data.registerOrder().volskayaResponse();
+
+                                        if(volskayaResponse.responseCode().equals(successCode)){
+                                            Log.d("asdas","1");
+                                       //     presenter.verifyDataSuccess(data.register().user().id());
+
+                                        }else {
+                                            Log.d("asdas","2");
+                                            //     presenter.verifyDataSuccess(data.register().user().id());
+                                            //                                            presenter.registerError(volskayaResponse.responseMessage());
+                                        }
+
+                                    }
+
+                                    @Override
+                                    public void onFailure(@Nonnull ApolloException e) {
+
+
+                                    }
+                                }
+
+
+                        );
+            }
+        });
+
+*/
         defaultAtributtes();
 
     }

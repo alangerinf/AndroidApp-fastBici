@@ -5,6 +5,7 @@ import java.util.List;
 
 public class Pedido {
 
+    private String clientID;
     private List<Product> productList;
     private String refA;
     private String refB;
@@ -12,8 +13,29 @@ public class Pedido {
     private String nameCliente;
     private String descripcion;
 
+    private double LatA;
+    private double LonA;
+    private String nameAddressA;
+
+    private double LatB;
+    private double LonB;
+    private String nameAddressB;
+
+    private double distance;
+    private double price;
+
     public Pedido() {
         this.productList = new ArrayList<>();
+        clientID = "";
+        LatA=0;
+        LonA=0;
+        nameAddressA="";
+
+        LatB=0;
+        LonB=0;
+        nameAddressB="";
+
+
         this.refA="";
         this.refB="";
         this.telefono="";
@@ -67,5 +89,77 @@ public class Pedido {
 
     public void setDescripcion(String descripcion) {
         this.descripcion = descripcion;
+    }
+
+    public double getLatA() {
+        return LatA;
+    }
+
+    public void setLatA(double latA) {
+        LatA = latA;
+    }
+
+    public double getLonA() {
+        return LonA;
+    }
+
+    public void setLonA(double lonA) {
+        LonA = lonA;
+    }
+
+    public String getNameAddressA() {
+        return nameAddressA;
+    }
+
+    public void setNameAddressA(String nameAddressA) {
+        this.nameAddressA = nameAddressA;
+    }
+
+    public double getLatB() {
+        return LatB;
+    }
+
+    public void setLatB(double latB) {
+        LatB = latB;
+    }
+
+    public double getLonB() {
+        return LonB;
+    }
+
+    public void setLonB(double lonB) {
+        LonB = lonB;
+    }
+
+    public String getNameAddressB() {
+        return nameAddressB;
+    }
+
+    public void setNameAddressB(String nameAddressB) {
+        this.nameAddressB = nameAddressB;
+    }
+
+    public String getClientID() {
+        return clientID;
+    }
+
+    public void setClientID(String clientID) {
+        this.clientID = clientID;
+    }
+
+    public double getDistance() {
+        return distance;
+    }
+
+    public void setDistance(double distance) {
+        this.distance = distance;
+    }
+
+    public double getPrice() {
+        return price;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
     }
 }

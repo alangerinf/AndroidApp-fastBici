@@ -50,4 +50,5 @@
     <string name="referencia_b">Referencia B</string>
     <string name="cantidad">Cantidad</string>
     <string name="producto">Producto</string>
+    <string name="cancelar">Cancelar</string>
 </resources>

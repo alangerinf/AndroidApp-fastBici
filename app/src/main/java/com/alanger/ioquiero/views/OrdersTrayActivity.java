@@ -10,6 +10,6 @@ public class OrdersTrayActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_orders_tray);
+        setContentView(R.layout.activity_orders_detail);
     }
 }

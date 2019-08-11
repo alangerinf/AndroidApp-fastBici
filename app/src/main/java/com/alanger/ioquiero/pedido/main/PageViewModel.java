@@ -34,6 +34,12 @@ public class PageViewModel extends ViewModel {
         return pedidoLiveData;
     }
 
+
+    public static Pedido getPedido() {
+        return _pedido.getValue();
+    }
+
+
     public static void init(){
         _pedido = new MutableLiveData<>();
     }

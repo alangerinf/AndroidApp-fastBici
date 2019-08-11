@@ -42,7 +42,7 @@ public class RegisterRepositoryImplB implements RegisterRepositoryB {
                                 RegisterMutation.VolskayaResponse volskayaResponse = data.register().volskayaResponse();
 
                                 if(volskayaResponse.responseCode().equals(successCode)){
-                                    presenter.verifyDataSuccess(data.register().id());
+                                    presenter.verifyDataSuccess(data.register().user().id());
 
                                 }else {
                                     presenter.registerError(volskayaResponse.responseMessage());

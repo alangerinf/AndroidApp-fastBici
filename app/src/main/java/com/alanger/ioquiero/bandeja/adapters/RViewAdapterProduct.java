@@ -1,16 +1,13 @@
-package com.alanger.ioquiero.pedido.adapters;
+package com.alanger.ioquiero.bandeja.adapters;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.widget.AppCompatTextView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.alanger.ioquiero.R;
@@ -19,8 +16,8 @@ import com.alanger.ioquiero.models.Product;
 import java.util.List;
 
 
-public class RViewProductListAdapter
-        extends RecyclerView.Adapter<RViewProductListAdapter.ViewHolder>
+public class RViewAdapterProduct
+        extends RecyclerView.Adapter<RViewAdapterProduct.ViewHolder>
         implements View.OnClickListener{
 
     private View.OnClickListener onClickListener;
@@ -28,9 +25,8 @@ public class RViewProductListAdapter
     private static Context ctx;
     private static List<Product> productList;
 
-    public RViewProductListAdapter(Context ctx, List<Product> productList) {
+    public RViewAdapterProduct( List<Product> productList) {
         this.productList = productList;
-        this.ctx = ctx;
     }
 
 
@@ -38,7 +34,7 @@ public class RViewProductListAdapter
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.fragment_paso1_product_item,null,false);
+                .inflate(R.layout.order_detail_activity_item,null,false);
         view.setOnClickListener(this);
         return new ViewHolder(view);
     }
@@ -54,29 +50,6 @@ public class RViewProductListAdapter
 
     }
 
-    private void showDialogMenu(){
-        AlertDialog.Builder builderSingle = new AlertDialog.Builder(ctx);
-        builderSingle.setIcon(R.mipmap.ic_launcher_round);
-        builderSingle.setTitle("Opciones");
-
-        final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(ctx, android.R.layout.simple_list_item_1);
-
-        arrayAdapter.add("Editar");
-        arrayAdapter.add("Eliminar");
-
-
-
-
-        builderSingle.setAdapter(arrayAdapter, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                String strName = arrayAdapter.getItem(which);
-
-            }
-        });
-        builderSingle.show();
-
-    }
 
     @Override
     public int getItemCount() {
@@ -96,17 +69,13 @@ public class RViewProductListAdapter
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        AppCompatTextView tViewCantidad;
-        AppCompatTextView tViewName;
-
-
+        TextView tViewCantidad;
+        TextView tViewName;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            tViewCantidad = itemView.findViewById(R.id.fp1pi_cant);
-            tViewName = itemView.findViewById(R.id.fp1pi_name);
-
-
+            tViewCantidad = itemView.findViewById(R.id.odai_cant);
+            tViewName = itemView.findViewById(R.id.odai_name);
         }
     }
 }

@@ -23,12 +23,27 @@
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
         <activity
+            android:name=".bandeja.OrderDetailActivity"
+            android:theme="@style/AppTheme2"
+            >
+        </activity>
+
+        <activity
+            android:name=".views.ActivityPreloader"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.Fullscreen">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+
+        <activity
             android:name=".pedido.PedidoActivity"
             android:label="@string/title_activity_pedido"
             android:theme="@style/AppTheme2.NoActionBar">
-
-
-
         </activity>
         <activity android:name=".views.OrdersTrayActivity" />
         <activity android:name=".register.view.VerifyTokenActivity" />
@@ -67,13 +82,8 @@
             android:name=".views.ActivityMain"
             android:label="@string/title_activity_main"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar"
-            >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+            android:theme="@style/AppTheme.NoActionBar">
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.

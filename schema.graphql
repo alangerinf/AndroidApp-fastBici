@@ -1,4 +1,4 @@
-# This file was generated based on ".graphqlconfig". Do not edit manually.
+# This file was generated based on "schema.json". Do not edit manually.
 
 schema {
     query: Query
@@ -8,6 +8,12 @@ schema {
 "volskaya Message Interface Description"
 interface volskayaMessageInterface {
     message: String!
+}
+
+type Address {
+    coordinate: Coordinate!
+    nameAddress: String!
+    reference: String!
 }
 
 type Coordinate {
@@ -28,35 +34,41 @@ type FavoriteSite {
     name: String!
 }
 
-type Goal {
-    goalCanceled: GoalCanceled
-    goalCoordinate: Coordinate
-    goalTypeName: String
-    products: [Product!]
-    userCyclistId: String
-}
-
-type GoalCanceled {
-    reason: String
-    time: String
+type FinalClient {
+    name: String!
+    phoneNumber: String!
 }
 
 type Mutation {
     addFavoriteSite(favoriteSite: FavoriteSiteFieldsInput!, id: String!): volskayaMessageOutputType!
-    addUser(confirmationCode: String, device: DeviceFieldsInput, email: String, favoriteSites: [FavoriteSiteFieldsInput!], id: String, isAuthenticated: Boolean, orders: [OrderFieldsInput!], password: String, personalInformation: PersonalInformationFieldsInput): UserDomain!
-    register(email: String!, password: String!, phoneNumber: String!): volskayaMessageRegisterOutputType!
+    register(email: String!, password: String!, phoneNumber: String!): volskayaMessageUserOutputType!
+    registerOrder(clientId: String!, distance: Float!, finalClient: FinalClientFieldsInput!, generalDescription: String!, price: Float!, products: [ProductFieldsInput!]!, route: RouteFieldsInput!): volskayaMessageRegisterOutputType!
     updatePassword(id: String!, newPassword: String!, oldPassword: String!): volskayaMessageOutputType!
 }
 
-type Order {
-    finalPrice: Float
-    goals: [Goal!]
+type OrderDomain {
+    clientId: String
+    created: String
+    cyclistId: String
+    distance: Float
+    finalClient: FinalClient
+    generalDescription: String
+    id: String
     isPaid: Boolean
-    kilometers: Float
-    orderTypeName: String
-    paymentDateTime: String
-    paymentMethod: String
-    statusOrderTypeName: String
+    lastState: OrderState
+    orderStates: [OrderState!]!
+    payMethod: String
+    price: Float
+    products: [Product!]!
+    route: Route
+}
+
+type OrderState {
+    description: String
+    endTime: String
+    isFinished: Boolean!
+    nameState: String!
+    startTime: String
 }
 
 type PersonalInformation {
@@ -66,22 +78,28 @@ type PersonalInformation {
 }
 
 type Product {
-    description: String!
-    isSpecial: Boolean
     name: String!
-    photo: String
+    quantity: Int!
 }
 
 type Query {
+    "Returns a list of all available orders."
+    allOrders(limit: Int = 20, offset: Int = 0): [OrderDomain!]!
     "Returns a list of all available users."
-    allUsers: [UserDomain!]!
+    allUsers(limit: Int = 20, offset: Int = 0): [UserDomain!]!
     checkCode(code: String!, id: String!): volskayaMessageOutputType!
+    "Return a specific User by ID"
+    getOrder(id: String!): volskayaMessageOrderOutputType!
     "Return a price of one Route"
     getPrice(coordinateFinish: CoordinateFieldsInput!, coordinateStart: CoordinateFieldsInput!): volskayaMessagePriceOutputType!
     "Return a specific User by ID"
     getUser(id: String!): volskayaMessageUserOutputType!
-    login(email: String!, password: String!): volskayaMessageLoginOutputType!
-    sendCode(code: String!, phoneNumber: String!): volskayaMessageOutputType!
+    login(email: String!, password: String!): volskayaMessageUserOutputType!
+}
+
+type Route {
+    endAddress: Address!
+    startAddress: Address!
 }
 
 type UserDomain {
@@ -91,14 +109,14 @@ type UserDomain {
     favoriteSites: [FavoriteSite!]
     id: String
     isAuthenticated: Boolean
-    orders: [Order!]
     password: String
     personalInformation: PersonalInformation
+    role: String
 }
 
-"Format to return login request"
-type volskayaMessageLoginOutputType {
-    id: String
+"Format to return getORder request"
+type volskayaMessageOrderOutputType {
+    order: OrderDomain
     volskayaResponse: volskayaMessageOutputType!
 }
 
@@ -128,16 +146,15 @@ type volskayaMessageUserOutputType {
     volskayaResponse: volskayaMessageOutputType!
 }
 
+input AddressFieldsInput {
+    coordinate: CoordinateFieldsInput!
+    nameAddress: String!
+    reference: String!
+}
+
 input CoordinateFieldsInput {
     latitude: Float!
     longitude: Float!
-}
-
-input DeviceFieldsInput {
-    imei: String!
-    name: String!
-    number: String!
-    token: String
 }
 
 input FavoriteSiteFieldsInput {
@@ -146,39 +163,17 @@ input FavoriteSiteFieldsInput {
     name: String!
 }
 
-input GoalCanceledFieldsInput {
-    reason: String
-    time: String
-}
-
-input GoalFieldsInput {
-    goalCanceled: GoalCanceledFieldsInput
-    goalCoordinate: CoordinateFieldsInput
-    goalTypeName: String
-    products: [ProductFieldsInput!]
-    userCyclistId: String
-}
-
-input OrderFieldsInput {
-    finalPrice: Float
-    goals: [GoalFieldsInput!]
-    isPaid: Boolean
-    kilometers: Float
-    orderTypeName: String
-    paymentDateTime: String
-    paymentMethod: String
-    statusOrderTypeName: String
-}
-
-input PersonalInformationFieldsInput {
-    dni: String!
-    firstName: String!
-    lastName: String!
+input FinalClientFieldsInput {
+    name: String!
+    phoneNumber: String!
 }
 
 input ProductFieldsInput {
-    description: String!
-    isSpecial: Boolean
     name: String!
-    photo: String
+    quantity: Int!
+}
+
+input RouteFieldsInput {
+    endAddress: AddressFieldsInput!
+    startAddress: AddressFieldsInput!
 }

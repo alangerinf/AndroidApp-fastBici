@@ -85,12 +85,12 @@ public class ActivityPreloader extends Activity {
         Handler handler4 = new Handler();
         handler4.postDelayed(()->
             {
-                User user = SharedPreferencesManager.getUser(ctx);
-                if(user!=null){
+           //     User user = SharedPreferencesManager.getUser(ctx);
+            //    if(user!=null){
                     startActivity(new Intent(this, ActivityMain.class));
-                }else {
-                    startActivity(new Intent(this, LoginActivity.class));
-                }
+            //    }else {
+            //        startActivity(new Intent(this, LoginActivity.class));
+            //    }
             },2000);
     }
 

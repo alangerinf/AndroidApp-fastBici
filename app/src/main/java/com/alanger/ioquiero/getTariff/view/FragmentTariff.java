@@ -26,12 +26,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.airbnb.lottie.LottieAnimationView;
-import com.alanger.ioquiero.GetPriceQuery;
+import com.alanger.ioquiero.GetPrice_Query;
 import com.alanger.ioquiero.R;
-import com.alanger.ioquiero.RegisterMutation;
 import com.alanger.ioquiero.app.AppController;
 import com.alanger.ioquiero.directionhelpers.FetchURL;
-import com.alanger.ioquiero.directionhelpers.TaskLoadedCallback;
 import com.alanger.ioquiero.views.ActivityMain;
 import com.alanger.ioquiero.views.Configuracion;
 import com.alanger.ioquiero.views.Utils;
@@ -40,7 +38,6 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.apollographql.apollo.ApolloCall;
-import com.apollographql.apollo.api.*;
 import com.apollographql.apollo.exception.ApolloException;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -84,9 +81,16 @@ public class FragmentTariff extends Fragment implements OnMapReadyCallback, Tari
     private static Geocoder geocode;
     private static double LatTemp =0, LonTemp =0, CurrentLat =0, CurrentLon =0, latStart, lonStart, latFinish, lonFinish;;
 
-    private static Button btnSetStart, btnSetFinish, btnCalcular;
+    private static Button btnSetStart, btnSetFinish, btPedir;
     private static ConstraintLayout btnRestart;
     private static TextView tViewAddressStart, tViewAddressFinish, tViewMensaje;
+    private static TextView tViewKilometers,tViewPriceEntero,tViewPriceDecimal;
+
+
+
+
+    private static ConstraintLayout clViewKm,clPrecio;
+
     private static Marker markerStart =null, markerFinish =null;
 
     private static String direccion, number;
@@ -188,17 +192,27 @@ public class FragmentTariff extends Fragment implements OnMapReadyCallback, Tari
         geocode = new Geocoder(ctx, Locale.getDefault());
         btnSetStart = (Button)getView().findViewById(R.id.btnSetStart);
         btnSetFinish = (Button)getView().findViewById(R.id.btnSetFinish);
-        btnCalcular = (Button)getView().findViewById(R.id.btnCalcular);
+        btPedir = (Button)getView().findViewById(R.id.btnPedir);
         btnRestart = getView().findViewById(R.id.btnRestart);
         tViewAddressStart = (TextView)getView().findViewById(R.id.tViewAddressStart);
         tViewAddressFinish = (TextView)getView().findViewById(R.id.tViewAddressFinish);
         tViewMensaje = (TextView)getView().findViewById(R.id.tViewMensaje);
         lottieMarker = getView().findViewById(R.id.lottieMarker);
+
+        clViewKm = getView().findViewById(R.id.clViewKm);
+        tViewKilometers = getView().findViewById(R.id.tViewKilometers);
+        tViewPriceEntero = getView().findViewById(R.id.tViewPriceEntero);
+        tViewPriceDecimal = getView().findViewById(R.id.tViewPriceDecimal);
+        clPrecio = getView().findViewById(R.id.clPrecio);
     }
 
     private void defaultAttributes(){
+
+        clViewKm.setVisibility(View.INVISIBLE);
+        clPrecio.setVisibility(View.GONE);
         handler.post(
                 () -> {
+                    tViewMensaje.setVisibility(View.VISIBLE);
                     tViewMensaje.setText("Arrastra el mapa y marca el punto de origen");
                     STATUS=0;
                     tViewAddressStart.setText(getString(R.string.lugar_de_partida));
@@ -206,7 +220,7 @@ public class FragmentTariff extends Fragment implements OnMapReadyCallback, Tari
                     mMap.clear();
                     btnSetStart.setVisibility(View.INVISIBLE);
                     btnSetFinish.setVisibility(View.INVISIBLE);
-                    btnCalcular.setVisibility(View.INVISIBLE);
+                    btPedir.setVisibility(View.INVISIBLE);
                     btnRestart.setVisibility(View.INVISIBLE);
                     lottieMarker.setVisibility(View.VISIBLE);
                     markerStart = null;
@@ -240,6 +254,7 @@ public class FragmentTariff extends Fragment implements OnMapReadyCallback, Tari
             STATUS=1;
         });
         btnSetFinish.setOnClickListener(v -> {
+            tViewMensaje.setVisibility(View.GONE);
             if(markerFinish !=null) {
                 markerFinish.remove();
             }
@@ -252,16 +267,22 @@ public class FragmentTariff extends Fragment implements OnMapReadyCallback, Tari
                     .title("Marker")
                     .icon(BitmapDescriptorFactory.fromResource(R.drawable.marker_finish)));
             btnSetFinish.setVisibility(View.INVISIBLE);
-            btnCalcular.setVisibility(View.VISIBLE);
+            //btPedir.setVisibility(View.VISIBLE);
             lottieMarker.setVisibility(View.INVISIBLE);
             STATUS=2;
             vistaPeriferica();
+            new FetchURL(getActivity()).execute(getUrl(markerStart.getPosition(), markerFinish.getPosition(), "walking"), "walking");
+
+
+            getPriceFromServer(latStart,lonStart,latFinish,lonFinish);
+
         });
 
-        btnCalcular.setOnClickListener(v -> {
+        btPedir.setOnClickListener(v -> {
 
-            btnCalcular.setVisibility(View.INVISIBLE);
-            new FetchURL(getActivity()).execute(getUrl(markerStart.getPosition(), markerFinish.getPosition(), "walking"), "walking");
+
+         //   btPedir.setVisibility(View.INVISIBLE);
+
         });
 
         btnRestart.setOnClickListener(v -> {
@@ -270,6 +291,80 @@ public class FragmentTariff extends Fragment implements OnMapReadyCallback, Tari
         });
 
     }
+
+
+    private static Handler h = new Handler();
+
+    private void getPriceFromServer(double latStart, double lonStart, double latFinish, double lonFinish) {
+
+
+        GraphqlClient.getMyApolloClient()
+                .query(
+                        GetPrice_Query
+                                .builder()
+                                .latStart(latStart)
+                                .lonStart(lonStart)
+                                .latEnd(latFinish)
+                                .lonEnd(lonFinish)
+                                .build()
+                )
+                .enqueue(new ApolloCall.Callback<GetPrice_Query.Data>() {
+
+                    @Override
+                    public void onResponse(@Nonnull com.apollographql.apollo.api.Response<GetPrice_Query.Data> response) {
+                        GetPrice_Query.Data data = response.data();
+
+                        String successCode = "00";
+
+                        GetPrice_Query.GetPrice resp =  data.getPrice();
+
+                        GetPrice_Query.VolskayaResponse volskayaResponse = resp.volskayaResponse();
+
+                        if(successCode.equals(  volskayaResponse.responseCode())){
+
+
+                            h.post(
+                                    new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            clViewKm.setVisibility(View.VISIBLE);
+                                            tViewKilometers.setText(""+(float)(resp.distance()/1000.0)+" km");
+                                            //  tViewKilometers.setText(resp.);
+                                            //tViewKilometers.setText(""+data.getPrice().);
+                                            btPedir.setVisibility(View.VISIBLE);
+
+                                            clPrecio.setVisibility(View.VISIBLE);
+                                            tViewPriceEntero.setText(""+resp.price().intValue());
+
+                                        }
+                                    }
+                            );
+
+
+                        }else {
+                            Toast.makeText(ctx,"Conexion Fallida Intente denuevo",Toast.LENGTH_LONG).show();
+                            btnSetFinish.setVisibility(View.VISIBLE);
+                        }
+
+
+
+                    }
+
+                    @Override
+                    public void onFailure(@Nonnull ApolloException e) {
+
+
+
+                    }
+                });
+
+
+
+
+
+
+    }
+
     @Override
     public void onStart() {
         super.onStart();
@@ -316,11 +411,11 @@ public class FragmentTariff extends Fragment implements OnMapReadyCallback, Tari
         Double distanceLat = (latFinish-latStart)>0?latFinish-latStart:latStart-latFinish;
         Double distanceLon = (lonFinish-lonStart)>0?lonFinish-lonStart:lonStart-lonFinish;
 
-        Double distance = Math.sqrt(Math.pow(distanceLon,2)+Math.pow(distanceLat,2));
+       // Double distance = Math.sqrt(Math.pow(distanceLon,2)+Math.pow(distanceLat,2));
 
         LatLng posicion = new LatLng(latMiddle, lonMiddle);
 
-        Toast.makeText(ctx,"ZOOM="+mMap.getCameraPosition().zoom+"\n"+"DIST="+distance,Toast.LENGTH_LONG).show();
+      //  Toast.makeText(ctx,"ZOOM="+mMap.getCameraPosition().zoom+"\n"+"DIST="+distance,Toast.LENGTH_LONG).show();
         CameraPosition cameraPosition = new CameraPosition.Builder().target(posicion).zoom(14).bearing(bearing).tilt(tilt).build();
         CameraUpdate cameraUpdate = CameraUpdateFactory.newCameraPosition(cameraPosition);
         mMap.animateCamera(cameraUpdate, 500, this);
@@ -488,41 +583,6 @@ public class FragmentTariff extends Fragment implements OnMapReadyCallback, Tari
         new AsyncSearchAddress().execute();
     }
 
-    public void getPrice(double latStart,double lonStart, double latFinish, double lonFinish) {
-
-        GraphqlClient.getMyApolloClient()
-
-                .query(
-                        GetPriceQuery.builder()
-                                .latStart(latStart)
-                                .lonStart(lonStart)
-                                .latFinish(latFinish)
-                                .lonFinish(lonFinish)
-                        .build()
-                )
-                .enqueue(
-                        new ApolloCall.Callback<GetPriceQuery.Data>() {
-                            @Override
-                            public void onResponse(@Nonnull com.apollographql.apollo.api.Response<GetPriceQuery.Data> response) {
-                                GetPriceQuery.Data data = response.data();
-                                String successCode = "00";
-                                double price = data.getPrice().price();
-                                GetPriceQuery.VolskayaResponse volskayaResponse = data.getPrice().volskayaResponse();
-
-//                                Toast.makeText(ctx,"precio:"pri)
-
-                            }
-
-                            @Override
-                            public void onFailure(@Nonnull ApolloException e) {
-
-
-                            }
-                        }
-
-
-                );
-    }
 
 
     class AsyncSearchAddress extends AsyncTask<String, String, String> {

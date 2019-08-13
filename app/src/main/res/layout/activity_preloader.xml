@@ -22,15 +22,14 @@
         android:id="@+id/lottie"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:lottie_fileName="lottie/loco.json"
         android:alpha="0.5"
-        android:visibility="invisible"
         android:scaleType="centerCrop"
+        android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
         app:lottie_autoPlay="true"
+        app:lottie_fileName="lottie/animation_preloader.json"
         app:lottie_loop="true"
         tools:ignore="MissingConstraints" />
 
@@ -64,7 +63,7 @@
         app:layout_constraintStart_toStartOf="@+id/tViewlogo_p1"
         app:layout_constraintTop_toBottomOf="@+id/tViewlogo_p1" />
 
-
+<!--
     <com.airbnb.lottie.LottieAnimationView
         android:id="@+id/ltWorld"
         android:layout_width="500dp"
@@ -83,4 +82,5 @@
         app:lottie_fileName="lottie/world_2.json"
         app:lottie_loop="true"
         tools:ignore="MissingConstraints" />
+        -->
 </androidx.constraintlayout.widget.ConstraintLayout>

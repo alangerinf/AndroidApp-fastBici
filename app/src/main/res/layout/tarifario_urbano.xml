@@ -21,6 +21,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
+
             <fragment
                 android:id="@+id/map"
                 android:name="com.google.android.gms.maps.SupportMapFragment"
@@ -108,13 +109,13 @@
                         android:visibility="invisible" />
 
                     <androidx.appcompat.widget.AppCompatButton
-                        android:id="@+id/btnCalcular"
+                        android:id="@+id/btnPedir"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_alignParentRight="true"
                         android:layout_gravity="center"
                         android:backgroundTint="@color/colorPrimaryDark"
-                        android:text="CALCULAR PRECIO"
+                        android:text="PEDIR AHORA"
                         android:textColor="@color/white"
                         android:textSize="@dimen/textsize_primary"
                         android:visibility="invisible" />
@@ -161,13 +162,13 @@
                 android:gravity="center"
                 android:padding="10dp"
                 tools:ignore="MissingConstraints"
-                app:layout_constraintStart_toStartOf="@id/txt2"
-                app:layout_constraintEnd_toEndOf="@id/txt2"
-                app:layout_constraintBottom_toBottomOf="@id/txt2"
-                app:layout_constraintTop_toTopOf="@id/txt2" />
+                app:layout_constraintStart_toStartOf="@id/tViewKilometers"
+                app:layout_constraintEnd_toEndOf="@id/tViewKilometers"
+                app:layout_constraintBottom_toBottomOf="@id/tViewKilometers"
+                app:layout_constraintTop_toTopOf="@id/tViewKilometers" />
 
             <TextView
-                android:id="@+id/txt2"
+                android:id="@+id/tViewKilometers"
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
@@ -284,7 +285,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@color/white"
-                android:visibility="invisible">
+                android:visibility="invisible"
+                tools:layout_editor_absoluteX="0dp"
+                tools:layout_editor_absoluteY="0dp">
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -372,6 +375,63 @@
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/clPrecio"
+                android:visibility="visible"
+                android:alpha="0.8"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:background="@drawable/shape_shadow_center"
+                app:layout_constraintBottom_toTopOf="@+id/lLayoutPrecio"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent">
+
+                <TextView
+                    android:id="@+id/tViewPriceEntero"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="10"
+                    android:textSize="32sp"
+                    app:layout_constraintBottom_toBottomOf="@+id/textView31"
+                    app:layout_constraintEnd_toStartOf="@+id/tViewPriceDecimal"
+                    app:layout_constraintStart_toEndOf="@+id/textView31" />
+
+                <TextView
+                    android:id="@+id/textView31"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:text="S/."
+                    android:textSize="32sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/tViewPriceEntero"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/tViewPriceDecimal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginEnd="16dp"
+                    android:text="00"
+                    android:textSize="18sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/tViewPriceEntero" />
+
+                <View
+                    android:id="@+id/divider5"
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:background="@color/grayDark"
+                    app:layout_constraintEnd_toEndOf="@+id/tViewPriceDecimal"
+                    app:layout_constraintStart_toStartOf="@+id/tViewPriceDecimal"
+                    app:layout_constraintTop_toBottomOf="@+id/tViewPriceDecimal" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>

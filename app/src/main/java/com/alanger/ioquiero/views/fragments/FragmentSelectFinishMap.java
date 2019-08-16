@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
+import com.alanger.ioquiero.Configurations;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
@@ -32,7 +33,6 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.alanger.ioquiero.app.AppController;
 import com.alanger.ioquiero.views.ActivityGoalDetail;
 import com.alanger.ioquiero.views.ActivityMain;
-import com.alanger.ioquiero.views.Configuracion;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -448,7 +448,7 @@ public class FragmentSelectFinishMap extends Fragment implements OnMapReadyCallb
 
     private void BuscarDireccion() {
 
-        String apiKey = Configuracion.API_KEY;
+        String apiKey = Configurations.API_KEY;
 
         String url = "https://maps.googleapis.com/maps/api/geocode/json?latlng=" + lat + "," + lng + "&key=" + apiKey;
         Log.d(TAG,"buscando: "+url);

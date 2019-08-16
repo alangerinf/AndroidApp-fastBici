@@ -5,8 +5,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.location.Geocoder;
 import android.location.Location;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -26,12 +29,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.airbnb.lottie.LottieAnimationView;
+import com.alanger.ioquiero.Configurations;
 import com.alanger.ioquiero.GetPrice_Query;
 import com.alanger.ioquiero.R;
 import com.alanger.ioquiero.app.AppController;
 import com.alanger.ioquiero.directionhelpers.FetchURL;
 import com.alanger.ioquiero.views.ActivityMain;
-import com.alanger.ioquiero.views.Configuracion;
 import com.alanger.ioquiero.views.Utils;
 import com.alanger.ioquiero.volskayaGraphql.GraphqlClient;
 import com.android.volley.Response;
@@ -51,6 +54,7 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.google.android.material.snackbar.Snackbar;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -100,6 +104,7 @@ public class FragmentTariff extends Fragment implements OnMapReadyCallback, Tari
     private static final Handler handler = new Handler();
 
     private static LottieAnimationView lottieMarker;
+    private static ConstraintLayout red_pointer;
 
     private static ActivityMain activityMain;
 
@@ -122,11 +127,12 @@ public class FragmentTariff extends Fragment implements OnMapReadyCallback, Tari
                         PERMISSIONS,
                         PERMISION_REQUEST_GPS);
                 return;
+        }else {
+            mMap.getUiSettings().setMyLocationButtonEnabled(true);
+            mMap.setMyLocationEnabled(true);
+            runnable.run();
         }
 
-        mMap.getUiSettings().setMyLocationButtonEnabled(true);
-        mMap.setMyLocationEnabled(true);
-        runnable.run();
     }
 
     @Override
@@ -186,25 +192,6 @@ public class FragmentTariff extends Fragment implements OnMapReadyCallback, Tari
         super.onCreate(savedInstanceState);
 
     }
-    private void declaration(){
-        ctx = getContext();
-        pref = this.getActivity().getSharedPreferences(Utils.nameSesion, MODE_PRIVATE);
-        geocode = new Geocoder(ctx, Locale.getDefault());
-        btnSetStart = (Button)getView().findViewById(R.id.btnSetStart);
-        btnSetFinish = (Button)getView().findViewById(R.id.btnSetFinish);
-        btPedir = (Button)getView().findViewById(R.id.btnPedir);
-        btnRestart = getView().findViewById(R.id.btnRestart);
-        tViewAddressStart = (TextView)getView().findViewById(R.id.tViewAddressStart);
-        tViewAddressFinish = (TextView)getView().findViewById(R.id.tViewAddressFinish);
-        tViewMensaje = (TextView)getView().findViewById(R.id.tViewMensaje);
-        lottieMarker = getView().findViewById(R.id.lottieMarker);
-
-        clViewKm = getView().findViewById(R.id.clViewKm);
-        tViewKilometers = getView().findViewById(R.id.tViewKilometers);
-        tViewPriceEntero = getView().findViewById(R.id.tViewPriceEntero);
-        tViewPriceDecimal = getView().findViewById(R.id.tViewPriceDecimal);
-        clPrecio = getView().findViewById(R.id.clPrecio);
-    }
 
     private void defaultAttributes(){
 
@@ -222,12 +209,55 @@ public class FragmentTariff extends Fragment implements OnMapReadyCallback, Tari
                     btnSetFinish.setVisibility(View.INVISIBLE);
                     btPedir.setVisibility(View.INVISIBLE);
                     btnRestart.setVisibility(View.INVISIBLE);
-                    lottieMarker.setVisibility(View.VISIBLE);
+                    setVisibleMarker(View.VISIBLE);
+
                     markerStart = null;
                     markerFinish = null;
                     tViewMensaje.setText("Arrastra el mapa y marca el punto de origen");
                 }
         );
+    }
+
+
+    void setVisibleMarker(int opVisible){
+        lottieMarker.setVisibility(opVisible);
+        red_pointer.setVisibility(opVisible);
+    }
+
+
+    void returnToSetFinish(){
+        mMap.clear();
+
+        LatLng posicion = new LatLng(latStart, lonStart);
+
+        CameraPosition cameraPosition = new CameraPosition.Builder().target(posicion).zoom(14).bearing(0).tilt(0).build();
+        CameraUpdate cameraUpdate = CameraUpdateFactory.newCameraPosition(cameraPosition);
+        mMap.animateCamera(cameraUpdate, 500, this);
+
+        tViewMensaje.setVisibility(View.VISIBLE);
+        if(markerFinish !=null) {
+            markerFinish.remove();
+        }
+
+        setVisibleMarker(View.VISIBLE);
+
+
+        if(markerStart !=null) {
+            markerStart.remove();
+        }
+
+        LatLng LatLng = new LatLng(latStart, lonStart);
+
+        markerStart = mMap.addMarker(new MarkerOptions()
+                .position(LatLng)
+                .title("Marker")
+                .icon(BitmapDescriptorFactory.fromResource(R.drawable.marker_start)));
+
+
+        tViewMensaje.setText("Arrastra el mapa y marca el punto de Destino");
+      //  Toast.makeText(ctx,"AHORA ARRASTRA EL MAPA Y UBICA EL DESTINO",Toast.LENGTH_SHORT).show();
+        STATUS=1;
+
     }
 
     private void declareEvents(){
@@ -250,39 +280,76 @@ public class FragmentTariff extends Fragment implements OnMapReadyCallback, Tari
             btnRestart.setVisibility(View.VISIBLE);
 
             tViewMensaje.setText("Arrastra el mapa y marca el punto de Destino");
-            Toast.makeText(ctx,"AHORA ARRASTRA EL MAPA Y UBICA EL DESTINO",Toast.LENGTH_SHORT).show();
+         //   Toast.makeText(ctx,"AHORA ARRASTRA EL MAPA Y UBICA EL DESTINO",Toast.LENGTH_SHORT).show();
             STATUS=1;
         });
         btnSetFinish.setOnClickListener(v -> {
-            tViewMensaje.setVisibility(View.GONE);
-            if(markerFinish !=null) {
-                markerFinish.remove();
-            }
+
             latFinish = mMap.getCameraPosition().target.latitude;
             lonFinish = mMap.getCameraPosition().target.longitude;
+/*
+            if(latStart==latFinish && lonStart==lonFinish){
 
-            LatLng LatLngFinish = new LatLng(latFinish, lonFinish);
-            markerFinish = mMap.addMarker(new MarkerOptions()
-                    .position(LatLngFinish)
-                    .title("Marker")
-                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.marker_finish)));
-            btnSetFinish.setVisibility(View.INVISIBLE);
-            //btPedir.setVisibility(View.VISIBLE);
-            lottieMarker.setVisibility(View.INVISIBLE);
-            STATUS=2;
-            vistaPeriferica();
-            new FetchURL(getActivity()).execute(getUrl(markerStart.getPosition(), markerFinish.getPosition(), "walking"), "walking");
+                Snackbar snackbar = Snackbar.make(root, "Las ubicaciones no pueden ser las mismas", Snackbar.LENGTH_LONG);
+                snackbar.show();
+
+                returnToSetFinish();
+            }else {
+  */
+              //  Toast.makeText(ctx,""+(latStart-latFinish)+" "+(lonStart==lonFinish) , Toast.LENGTH_LONG).show();
 
 
-            getPriceFromServer(latStart,lonStart,latFinish,lonFinish);
+                returnToSetFinish();
+
+                tViewMensaje.setVisibility(View.GONE);
+                if(markerFinish !=null) {
+                    markerFinish.remove();
+                }
+
+                LatLng LatLngFinish = new LatLng(latFinish, lonFinish);
+                markerFinish = mMap.addMarker(new MarkerOptions()
+                        .position(LatLngFinish)
+                        .title("Marker")
+                        .icon(BitmapDescriptorFactory.fromResource(R.drawable.marker_finish)));
+                btnSetFinish.setVisibility(View.INVISIBLE);
+                //btPedir.setVisibility(View.VISIBLE);
+            setVisibleMarker(View.INVISIBLE);
+                STATUS=2;
+                vistaPeriferica();
+
+                if(isConnectedToInternetToUpdate()){
+                    new FetchURL(getActivity()).execute(getUrl(markerStart.getPosition(), markerFinish.getPosition(), "walking"), "walking");
+                    getPriceFromServer(latStart,lonStart,latFinish,lonFinish);
+                }else{
+                    Snackbar snackbar2 = Snackbar.make(root, "No se pudo Conectar", Snackbar.LENGTH_INDEFINITE);
+                    snackbar2.setAction("Reintentar", new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            getPriceFromServer(latStart, lonStart, latFinish, lonFinish);
+                        }
+                    });
+                    snackbar2.show();
+                }
+            //}
+
 
         });
 
+
+
         btPedir.setOnClickListener(v -> {
 
+            String uriGoogleMaps = "http://maps.google.com/?mode=walking%26saddr="+latStart+","+lonStart+"%26daddr="+latFinish+","+lonFinish;
+            //String uriGoogleMaps = "http://maps.google.com/?mode=walking%26saddr=-8.1158903,-79.0356704%26daddr=-8.1179977,-79.0358920";
+            String phone = "51973446468";
 
-         //   btPedir.setVisibility(View.INVISIBLE);
-
+            Uri uri = Uri.parse("https://api.whatsapp.com/send?phone="+phone+"&text=" + uriGoogleMaps +
+                    "\n\nHola FastBici,quiero%20un%20delivery%20con%20este%20recorrido"
+            );
+            //    uri = Uri.parse("smsto:" + "98*********7");
+            Log.d(TAG, "" + uri.toString());
+                  Intent myIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri.toString()));
+                   startActivity(myIntent);
         });
 
         btnRestart.setOnClickListener(v -> {
@@ -292,11 +359,36 @@ public class FragmentTariff extends Fragment implements OnMapReadyCallback, Tari
 
     }
 
+    void showSnackBackError(String txt){
+        Snackbar snackbar = Snackbar.make(root, txt, Snackbar.LENGTH_LONG);
+        View snackBarView = snackbar.getView();
+        snackBarView.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.redLight));
+        TextView tv = (TextView)snackBarView.findViewById(R.id.snackbar_text);
+        tv.setTextSize(18f);
+        tv.setTextColor(Color.WHITE);
+        snackbar.show();
+    }
+
+
+    boolean isConnectedToInternetToUpdate() {
+        //verificamos si tenemos internet
+        ConnectivityManager connectivityManager = (ConnectivityManager) ctx.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+
+        if (networkInfo != null && networkInfo.isConnected()) {
+            // Si hay conexión a Internet en este momento
+            //Toast.makeText(getBaseContext(),"Conectando...",Toast.LENGTH_SHORT).show();
+            return true;
+        } else {
+            return false;
+        }
+    }
 
     private static Handler h = new Handler();
 
     private void getPriceFromServer(double latStart, double lonStart, double latFinish, double lonFinish) {
 
+        showProgressDialog();
 
         GraphqlClient.getMyApolloClient()
                 .query(
@@ -312,38 +404,92 @@ public class FragmentTariff extends Fragment implements OnMapReadyCallback, Tari
 
                     @Override
                     public void onResponse(@Nonnull com.apollographql.apollo.api.Response<GetPrice_Query.Data> response) {
+                        hideProgressDialog();
                         GetPrice_Query.Data data = response.data();
 
-                        String successCode = "00";
+                        final String successCode = "00";
+                        final String errorCommonCode="01";//error comun
+                        final String errorSinCoverturaCode="02";//cuadno no se puede llegar al lugar
+                        final String errorLimitDistanceCode="03"; //cuando se exede el limite de  distancia
+                        final String errorDistanceZeroCode="04"; //cuando se exede el limite de  distancia
 
                         GetPrice_Query.GetPrice resp =  data.getPrice();
 
                         GetPrice_Query.VolskayaResponse volskayaResponse = resp.volskayaResponse();
 
-                        if(successCode.equals(  volskayaResponse.responseCode())){
-
-
-                            h.post(
-                                    new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            clViewKm.setVisibility(View.VISIBLE);
-                                            tViewKilometers.setText(""+(float)(resp.distance()/1000.0)+" km");
-                                            //  tViewKilometers.setText(resp.);
-                                            //tViewKilometers.setText(""+data.getPrice().);
-                                            btPedir.setVisibility(View.VISIBLE);
-
-                                            clPrecio.setVisibility(View.VISIBLE);
-                                            tViewPriceEntero.setText(""+resp.price().intValue());
-
+                        switch (volskayaResponse.responseCode()) {
+                            case successCode:
+                                h.post(
+                                        new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                clViewKm.setVisibility(View.VISIBLE);
+                                                tViewKilometers.setText("" + (float) (resp.distance() / 1000.0) + " km");
+                                                //  tViewKilometers.setText(resp.);
+                                                //tViewKilometers.setText(""+data.getPrice().);
+                                                btPedir.setVisibility(View.VISIBLE);
+                                                clPrecio.setVisibility(View.VISIBLE);
+                                                tViewPriceEntero.setText("" + resp.price().intValue());
+                                            }
                                         }
-                                    }
-                            );
+                                );
+                                break;
 
+                            case errorCommonCode:
+                                h.post(
+                                        new Runnable() {
+                                            @Override
+                                            public void run() {
 
-                        }else {
-                            Toast.makeText(ctx,"Conexion Fallida Intente denuevo",Toast.LENGTH_LONG).show();
-                            btnSetFinish.setVisibility(View.VISIBLE);
+                                                Snackbar snackbar = Snackbar.make(root, "Ocurrio un Error Desconocido", Snackbar.LENGTH_LONG);
+                                                snackbar.show();
+                                            }
+                                        }
+                                );
+                                break;
+                            case errorSinCoverturaCode:
+                                h.post(
+                                        new Runnable() {
+                                            @Override
+                                            public void run() {
+
+                                                showSnackBackError("Delivery Fuera de la Covertura");
+
+                                                returnToSetFinish();
+                                            }
+                                        }
+                                );
+                                break;
+                            case errorLimitDistanceCode:
+                                h.post(
+                                        new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                showSnackBackError("Distancia Maxima Superada");
+
+                                                returnToSetFinish();
+                                            }
+                                        }
+                                );
+                                break;
+                            case errorDistanceZeroCode:
+                                h.post(
+                                        new Runnable() {
+                                            @Override
+                                            public void run() {
+
+                                                showSnackBackError("No se supero la distancia minima");
+
+                                                returnToSetFinish();
+                                            }
+                                        }
+                                );
+                                break;
+                            default:
+
+                                Toast.makeText(ctx,"errorCode:"+volskayaResponse.responseCode(),Toast.LENGTH_LONG).show();
+                                break;
+
                         }
 
 
@@ -352,26 +498,44 @@ public class FragmentTariff extends Fragment implements OnMapReadyCallback, Tari
 
                     @Override
                     public void onFailure(@Nonnull ApolloException e) {
+                      hideProgressDialog();
+                        h.post(
+                                new Runnable() {
+                                    @Override
+                                    public void run() {
+
+                                        showSnackBackError("No se pudo Conectar",
+                                                new View.OnClickListener() {
+                                                    @Override
+                                                    public void onClick(View v) {
+                                                        getPriceFromServer(latStart, lonStart, latFinish, lonFinish);
+                                                    }
+                                                },
+                                                "Reintentar"
+                                                );
 
 
+                                    }
+                                }
+                        );
 
                     }
                 });
 
-
-
-
-
-
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-        declaration();
-        declareEvents();
-        defaultAttributes();
+
+    void showSnackBackError(String txt,View.OnClickListener funcion,String action){
+        Snackbar snackbar = Snackbar.make(root, txt, Snackbar.LENGTH_LONG);
+        View snackBarView = snackbar.getView();
+        snackBarView.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.redLight));
+        TextView tv = (TextView)snackBarView.findViewById(R.id.snackbar_text);
+        tv.setTextSize(18f);
+        tv.setTextColor(Color.WHITE);
+        snackbar.setAction(action,funcion);
+        snackbar.show();
     }
+
     private String getUrl(LatLng origin, LatLng dest, String directionMode) {
         // Origin of route
         String str_origin = "origin=" + origin.latitude + "," + origin.longitude;
@@ -415,18 +579,17 @@ public class FragmentTariff extends Fragment implements OnMapReadyCallback, Tari
 
         LatLng posicion = new LatLng(latMiddle, lonMiddle);
 
-      //  Toast.makeText(ctx,"ZOOM="+mMap.getCameraPosition().zoom+"\n"+"DIST="+distance,Toast.LENGTH_LONG).show();
         CameraPosition cameraPosition = new CameraPosition.Builder().target(posicion).zoom(14).bearing(bearing).tilt(tilt).build();
         CameraUpdate cameraUpdate = CameraUpdateFactory.newCameraPosition(cameraPosition);
         mMap.animateCamera(cameraUpdate, 500, this);
     }
 
-
+    static View root;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View rootView = inflater.inflate(R.layout.tarifario_urbano, container, false);
+        root = inflater.inflate(R.layout.tarifario_urbano, container, false);
 
         //Si usas getActivity estas suponiendo que la vista se buscara en el layout cargado por la Activity.
         //SupportMapFragment mapFragment = (SupportMapFragment) getActivity().getSupportFragmentManager().findFragmentById(R.id.map);
@@ -435,10 +598,38 @@ public class FragmentTariff extends Fragment implements OnMapReadyCallback, Tari
 
         mapFragment.getMapAsync(this);
 
-        return rootView;
+
+
+        return root;
     }
 
 
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        ctx = getContext();
+        pref = this.getActivity().getSharedPreferences(Utils.nameSesion, MODE_PRIVATE);
+        geocode = new Geocoder(ctx, Locale.getDefault());
+        btnSetStart = (Button)getView().findViewById(R.id.btnSetStart);
+        btnSetFinish = (Button)getView().findViewById(R.id.btnSetFinish);
+        btPedir = (Button)getView().findViewById(R.id.btnPedir);
+        btnRestart = getView().findViewById(R.id.btnRestart);
+        tViewAddressStart = (TextView)getView().findViewById(R.id.tViewAddressStart);
+        tViewAddressFinish = (TextView)getView().findViewById(R.id.tViewAddressFinish);
+        tViewMensaje = (TextView)getView().findViewById(R.id.tViewMensaje);
+        lottieMarker = getView().findViewById(R.id.lottieMarker);
+        red_pointer = getView().findViewById(R.id.red_pointer);
+
+        clViewKm = getView().findViewById(R.id.clViewKm);
+        tViewKilometers = getView().findViewById(R.id.tViewKilometers);
+        tViewPriceEntero = getView().findViewById(R.id.tViewPriceEntero);
+        tViewPriceDecimal = getView().findViewById(R.id.tViewPriceDecimal);
+        clPrecio = getView().findViewById(R.id.clPrecio);
+        declareEvents();
+        defaultAttributes();
+       // verifyPermission();
+
+    }
     private void positionLastLoc(){
         LatLng center = new LatLng(CurrentLat, CurrentLon);
         CameraPosition cameraPosition;
@@ -536,19 +727,22 @@ public class FragmentTariff extends Fragment implements OnMapReadyCallback, Tari
     @Override
     public void onRequestPermissionsResult(int requestCode,
                                            String permissions[], int[] grantResults) {
+
+        Toast.makeText(ctx,"PERMISION_REQUEST_GPS:"+requestCode,Toast.LENGTH_LONG).show();
         switch (requestCode) {
             case PERMISION_REQUEST_GPS: {
                 // If request is cancelled, the result arrays are empty.
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                   Log.d(TAG,"permision request ok");
-                    mMap.getUiSettings().setMyLocationButtonEnabled(true);
-                    mMap.setMyLocationEnabled(true);
-                    runnable.run();
+
                 } else {
                     Log.d(TAG,"permision request noooo ok");
                    verifyPermission();
                 }
+                Log.d(TAG,"permision request ok");
+                defaultAttributes();
+                verifyPermission();
+
                 return;
             }
 
@@ -583,6 +777,33 @@ public class FragmentTariff extends Fragment implements OnMapReadyCallback, Tari
         new AsyncSearchAddress().execute();
     }
 
+    private void showProgressDialog(){
+        ConstraintLayout cl  = getView().findViewById(R.id.progress_dialog );
+        h.post(new Runnable() {
+            @Override
+            public void run() {
+
+                cl.setVisibility(View.VISIBLE);
+                cl.setClickable(true);
+                cl.setFocusable(true);
+            }
+        });
+
+    }
+    private void hideProgressDialog(){
+        ConstraintLayout cl  = getView().findViewById(R.id.progress_dialog );
+
+
+        h.post(new Runnable() {
+            @Override
+            public void run() {
+                cl.setVisibility(View.INVISIBLE);
+                cl.setClickable(false);
+                cl.setFocusable(false);
+            }
+        });
+
+    }
 
 
     class AsyncSearchAddress extends AsyncTask<String, String, String> {
@@ -598,7 +819,7 @@ public class FragmentTariff extends Fragment implements OnMapReadyCallback, Tari
 
                 CurrentLat = LatTemp;
                 CurrentLon = LonTemp;
-                String apiKey = Configuracion.API_KEY;
+                String apiKey = Configurations.API_KEY;
                 String url = "https://maps.googleapis.com/maps/api/geocode/json?latlng=" + LatTemp + "," + LonTemp + "&key=" + apiKey;
                 Log.d(TAG,"buscando: "+url);
 
@@ -645,7 +866,7 @@ public class FragmentTariff extends Fragment implements OnMapReadyCallback, Tari
                             } catch (JSONException e) {
                                 e.printStackTrace();
                                 Log.d(TAG,"jsonE: "+e.toString());
-                                Toast.makeText(getContext(),"jsonE: "+e.toString(),Toast.LENGTH_LONG).show();
+                          //      Toast.makeText(getContext(),"jsonE: "+e.toString(),Toast.LENGTH_LONG).show();
                             }
 
                         }, new Response.ErrorListener() {
@@ -660,7 +881,7 @@ public class FragmentTariff extends Fragment implements OnMapReadyCallback, Tari
                             }
                         }
                         Log.d(TAG,"voleyE "+error.toString());
-                        Toast.makeText(getContext(),"jsonE: "+error.toString(),Toast.LENGTH_LONG).show();
+                    //    Toast.makeText(getContext(),"jsonE: "+error.toString(),Toast.LENGTH_LONG).show();
                     }
                 });
 

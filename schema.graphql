@@ -95,6 +95,8 @@ type Query {
     "Return a specific User by ID"
     getUser(id: String!): volskayaMessageUserOutputType!
     login(email: String!, password: String!): volskayaMessageUserOutputType!
+    "lets wake up heroku"
+    wakeUpHeroku: String!
 }
 
 type Route {
@@ -129,6 +131,8 @@ type volskayaMessageOutputType implements volskayaMessageInterface {
 
 "Format to return getPrice request"
 type volskayaMessagePriceOutputType {
+    approximateTime: Float
+    co2Saved: Float
     distance: Int
     price: Float
     volskayaResponse: volskayaMessageOutputType!

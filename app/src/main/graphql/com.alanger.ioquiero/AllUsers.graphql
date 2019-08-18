@@ -20,6 +20,8 @@ query GetPrice_Query($latStart:Float!,$lonStart:Float!,$latEnd:Float!,$lonEnd:Fl
     ){
         distance,
         price,
+        co2Saved,
+        approximateTime,
         volskayaResponse{
             message,
             responseCode,

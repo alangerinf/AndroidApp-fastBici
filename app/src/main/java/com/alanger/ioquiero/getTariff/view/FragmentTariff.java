@@ -20,6 +20,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
+import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -60,6 +61,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.UnsupportedEncodingException;
 import java.util.Locale;
 
 import javax.annotation.Nonnull;
@@ -88,12 +90,13 @@ public class FragmentTariff extends Fragment implements OnMapReadyCallback, Tari
     private static Button btnSetStart, btnSetFinish, btPedir;
     private static ConstraintLayout btnRestart;
     private static TextView tViewAddressStart, tViewAddressFinish, tViewMensaje;
-    private static TextView tViewKilometers,tViewPriceEntero,tViewPriceDecimal;
+    private static TextView tViewPriceEntero,tViewPriceDecimal;
 
 
 
+    private static TextView tViewKilometers, tViewMin, tViewCo2;
 
-    private static ConstraintLayout clViewKm,clPrecio;
+    private static ConstraintLayout clResultado, clPrecio;
 
     private static Marker markerStart =null, markerFinish =null;
 
@@ -195,7 +198,8 @@ public class FragmentTariff extends Fragment implements OnMapReadyCallback, Tari
 
     private void defaultAttributes(){
 
-        clViewKm.setVisibility(View.INVISIBLE);
+        clResultado.setVisibility(View.INVISIBLE);
+
         clPrecio.setVisibility(View.GONE);
         handler.post(
                 () -> {
@@ -288,7 +292,7 @@ public class FragmentTariff extends Fragment implements OnMapReadyCallback, Tari
             latFinish = mMap.getCameraPosition().target.latitude;
             lonFinish = mMap.getCameraPosition().target.longitude;
 /*
-            if(latStart==latFinish && lonStart==lonFinish){
+            if(latStart==latFinish && lonStart==tlonFinish){
 
                 Snackbar snackbar = Snackbar.make(root, "Las ubicaciones no pueden ser las mismas", Snackbar.LENGTH_LONG);
                 snackbar.show();
@@ -337,14 +341,20 @@ public class FragmentTariff extends Fragment implements OnMapReadyCallback, Tari
 
 
 
+
         btPedir.setOnClickListener(v -> {
+
 
             String uriGoogleMaps = "http://maps.google.com/?mode=walking%26saddr="+latStart+","+lonStart+"%26daddr="+latFinish+","+lonFinish;
             //String uriGoogleMaps = "http://maps.google.com/?mode=walking%26saddr=-8.1158903,-79.0356704%26daddr=-8.1179977,-79.0358920";
             String phone = "51973446468";
 
             Uri uri = Uri.parse("https://api.whatsapp.com/send?phone="+phone+"&text=" + uriGoogleMaps +
-                    "\n\nHola FastBici,quiero%20un%20delivery%20con%20este%20recorrido"
+                    "\nHola, FastBici. Quiero un delivery con este recorrido"+
+                    "\n*Precio:*"+" "+PRECIO+
+                    "\n*Co2:*"+" "+CO2+
+                    "\n*Tiempo Aprox:*"+" "+timeAproximate+
+                    ""
             );
             //    uri = Uri.parse("smsto:" + "98*********7");
             Log.d(TAG, "" + uri.toString());
@@ -385,6 +395,9 @@ public class FragmentTariff extends Fragment implements OnMapReadyCallback, Tari
     }
 
     private static Handler h = new Handler();
+    Double PRECIO;
+    Double CO2;
+    Double timeAproximate;
 
     private void getPriceFromServer(double latStart, double lonStart, double latFinish, double lonFinish) {
 
@@ -423,10 +436,19 @@ public class FragmentTariff extends Fragment implements OnMapReadyCallback, Tari
                                         new Runnable() {
                                             @Override
                                             public void run() {
-                                                clViewKm.setVisibility(View.VISIBLE);
+
+                                                clResultado.setVisibility(View.VISIBLE);
+
                                                 tViewKilometers.setText("" + (float) (resp.distance() / 1000.0) + " km");
+                                                tViewCo2.setText(""+ (float) (resp.co2Saved()/1) + " CO2");
+                                                tViewMin.setText(""+ (int)(float) (resp.approximateTime() / 1) + " min");
+
+                                                CO2 = resp.co2Saved();
+                                                timeAproximate = resp.approximateTime();
+
                                                 //  tViewKilometers.setText(resp.);
                                                 //tViewKilometers.setText(""+data.getPrice().);
+                                                PRECIO = resp.price();
                                                 btPedir.setVisibility(View.VISIBLE);
                                                 clPrecio.setVisibility(View.VISIBLE);
                                                 tViewPriceEntero.setText("" + resp.price().intValue());
@@ -579,7 +601,7 @@ public class FragmentTariff extends Fragment implements OnMapReadyCallback, Tari
 
         LatLng posicion = new LatLng(latMiddle, lonMiddle);
 
-        CameraPosition cameraPosition = new CameraPosition.Builder().target(posicion).zoom(14).bearing(bearing).tilt(tilt).build();
+        CameraPosition cameraPosition = new CameraPosition.Builder().target(posicion).zoom(13).bearing(bearing).tilt(tilt).build();
         CameraUpdate cameraUpdate = CameraUpdateFactory.newCameraPosition(cameraPosition);
         mMap.animateCamera(cameraUpdate, 500, this);
     }
@@ -597,8 +619,6 @@ public class FragmentTariff extends Fragment implements OnMapReadyCallback, Tari
         SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
 
         mapFragment.getMapAsync(this);
-
-
 
         return root;
     }
@@ -620,8 +640,11 @@ public class FragmentTariff extends Fragment implements OnMapReadyCallback, Tari
         lottieMarker = getView().findViewById(R.id.lottieMarker);
         red_pointer = getView().findViewById(R.id.red_pointer);
 
-        clViewKm = getView().findViewById(R.id.clViewKm);
+        clResultado = getView().findViewById(R.id.clResultados);
         tViewKilometers = getView().findViewById(R.id.tViewKilometers);
+        tViewMin = getView().findViewById(R.id.tViewMin);
+        tViewCo2 = getView().findViewById(R.id.tViewco2);
+
         tViewPriceEntero = getView().findViewById(R.id.tViewPriceEntero);
         tViewPriceDecimal = getView().findViewById(R.id.tViewPriceDecimal);
         clPrecio = getView().findViewById(R.id.clPrecio);
@@ -630,6 +653,7 @@ public class FragmentTariff extends Fragment implements OnMapReadyCallback, Tari
        // verifyPermission();
 
     }
+
     private void positionLastLoc(){
         LatLng center = new LatLng(CurrentLat, CurrentLon);
         CameraPosition cameraPosition;
@@ -714,14 +738,11 @@ public class FragmentTariff extends Fragment implements OnMapReadyCallback, Tari
                         //tViewAddressStart.setText(direccion);
                         tViewAddressStart.setVisibility(View.VISIBLE);
                         enableInputs();
-
-
                     }
 
                     Log.d(TAG,"setOnCameraIdleListener");
                 }
                 );
-
 
     }
     @Override
@@ -774,7 +795,8 @@ public class FragmentTariff extends Fragment implements OnMapReadyCallback, Tari
         }
         LatTemp = loc.getLatitude();
         LonTemp = loc.getLongitude();
-        new AsyncSearchAddress().execute();
+        //new AsyncSearchAddress().execute();
+        handler.post(runnableSerchAddress);
     }
 
     private void showProgressDialog(){
@@ -790,6 +812,8 @@ public class FragmentTariff extends Fragment implements OnMapReadyCallback, Tari
         });
 
     }
+
+
     private void hideProgressDialog(){
         ConstraintLayout cl  = getView().findViewById(R.id.progress_dialog );
 
@@ -803,7 +827,97 @@ public class FragmentTariff extends Fragment implements OnMapReadyCallback, Tari
             }
         });
 
-    }
+                            }
+
+
+                            Runnable runnableSerchAddress = new Runnable() {
+                                @Override
+                                public void run() {
+
+                                    int statusTemp = STATUS;
+
+                                    if(LatTemp !=0 && LonTemp != 0) {
+
+                                        CurrentLat = LatTemp;
+                                        CurrentLon = LonTemp;
+                                        String apiKey = Configurations.API_KEY;
+                                        String url = "https://maps.googleapis.com/maps/api/geocode/json?latlng=" + LatTemp + "," + LonTemp + "&key=" + apiKey;
+                                        Log.d(TAG,"buscando: "+url);
+
+                                        JsonObjectRequest sr = new JsonObjectRequest(url, null,
+                                                response -> {
+                                                    try {
+                                                        JSONArray results = response.getJSONArray("results");
+                                                        JSONObject zero = results.getJSONObject(0);
+                                                        JSONArray address_components = zero.getJSONArray("address_components");
+
+                                                        // direccion = Utils.NoPrecisa;
+                                                        int procede = 0;
+
+                                                        for (int i = 0; i < address_components.length(); i++) {
+                                                            JSONObject zero2 = address_components.getJSONObject(i);
+                                                            String long_name = zero2.getString("long_name");
+                                                            JSONArray mtypes = zero2.getJSONArray("types");
+                                                            String Type = mtypes.getString(0);
+
+                                                            if (Type.equalsIgnoreCase("street_number")) {
+                                                                number = long_name;
+                                                            }
+
+                                                            if (Type.equalsIgnoreCase("route")) {
+                                                                direccion = long_name;
+                                                                procede = 1;
+                                                            }
+                                                        }
+
+                                                        if(statusTemp==0){
+                                                            tViewAddressStart.setText(direccion + " " + number);
+                                                        }else {
+                                                            if(statusTemp==1){
+                                                                tViewAddressFinish.setText(direccion + " " + number);
+                                                            }
+                                                        }
+
+                                if (procede == 1) {
+                                    //   btn_pedir.setVisibility(View.VISIBLE);
+                                    //    CargarUnidades();
+
+                                }
+
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                                Log.d(TAG,"jsonE: "+e.toString());
+                                //      Toast.makeText(getContext(),"jsonE: "+e.toString(),Toast.LENGTH_LONG).show();
+                            }
+
+                        }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+                        if(statusTemp==0){
+                            tViewAddressStart.setText("Reintentando");
+                        }else {
+                            if(statusTemp==1){
+                                tViewAddressFinish.setText("Reintentando");
+                            }
+                        }
+                        try {
+                            Thread.sleep(500);
+                            run();
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+
+                        Log.d(TAG,"voleyE "+error.toString());
+                        //    Toast.makeText(getContext(),"jsonE: "+error.toString(),Toast.LENGTH_LONG).show();
+                    }
+                });
+
+                AppController.getInstance().addToRequestQueue(sr);
+                // }
+            }
+        }
+    };
 
 
     class AsyncSearchAddress extends AsyncTask<String, String, String> {
@@ -866,7 +980,7 @@ public class FragmentTariff extends Fragment implements OnMapReadyCallback, Tari
                             } catch (JSONException e) {
                                 e.printStackTrace();
                                 Log.d(TAG,"jsonE: "+e.toString());
-                          //      Toast.makeText(getContext(),"jsonE: "+e.toString(),Toast.LENGTH_LONG).show();
+                                //      Toast.makeText(getContext(),"jsonE: "+e.toString(),Toast.LENGTH_LONG).show();
                             }
 
                         }, new Response.ErrorListener() {
@@ -881,12 +995,12 @@ public class FragmentTariff extends Fragment implements OnMapReadyCallback, Tari
                             }
                         }
                         Log.d(TAG,"voleyE "+error.toString());
-                    //    Toast.makeText(getContext(),"jsonE: "+error.toString(),Toast.LENGTH_LONG).show();
+                        //    Toast.makeText(getContext(),"jsonE: "+error.toString(),Toast.LENGTH_LONG).show();
                     }
                 });
 
                 AppController.getInstance().addToRequestQueue(sr);
-               // }
+                // }
             }
             return null;
         }

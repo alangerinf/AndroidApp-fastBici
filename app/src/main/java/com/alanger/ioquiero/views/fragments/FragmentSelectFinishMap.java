@@ -370,11 +370,11 @@ public class FragmentSelectFinishMap extends Fragment implements OnMapReadyCallb
         mMap.setOnCameraMoveStartedListener(i -> {
            // btn_pedir.setVisibility(View.INVISIBLE);
             ocultarDataPicker();
-            txt_direccion.setText("Utils.BuscandoDireccion");
+            txt_direccion.setText("Buscando Direccion");
             Log.d(TAG,"INCIANDO CAMARA MOVE");
         });
         mMap.setOnCameraMoveCanceledListener(() -> {
-            txt_direccion.setText("Utils.termino moverse");
+            txt_direccion.setText("termino moverse");
             Log.d(TAG,"INCIANDO CAMARA CANCEL");
         });
 
@@ -382,7 +382,9 @@ public class FragmentSelectFinishMap extends Fragment implements OnMapReadyCallb
     private void isDrag(double cor_lat, double cor_lng) {
         lat = cor_lat;
         lng = cor_lng;
-        BuscarDireccion();
+        //BuscarDireccion();
+
+        handler.post(runBuscarDireccion);
     }
     private void posicionarMarker() {
         LatLng posicion = new LatLng(lat, lng);
@@ -429,7 +431,8 @@ public class FragmentSelectFinishMap extends Fragment implements OnMapReadyCallb
 
                     txt_direccion.setText("Utils.BuscandoDireccion");
 
-                    BuscarDireccion();
+
+                    handler.post(runBuscarDireccion);//BuscarDireccion();
                //     runnable_coor.run();
 
                     handler.removeCallbacks(runnableMyLocation);
@@ -443,6 +446,78 @@ public class FragmentSelectFinishMap extends Fragment implements OnMapReadyCallb
         }
     };
 
+
+
+    Runnable runBuscarDireccion = new Runnable() {
+        @Override
+        public void run() {
+            String apiKey = Configurations.API_KEY;
+
+            String url = "https://maps.googleapis.com/maps/api/geocode/json?latlng=" + lat + "," + lng + "&key=" + apiKey;
+            Log.d(TAG,"buscando: "+url);
+            mostrarDataPicker();
+            JsonObjectRequest sr = new JsonObjectRequest(url, null,
+                    new Response.Listener<JSONObject>() {
+                        @Override
+                        public void onResponse(JSONObject response) {
+                            try {
+                                JSONArray results = response.getJSONArray("results");
+                                JSONObject zero = results.getJSONObject(0);
+                                JSONArray address_components = zero.getJSONArray("address_components");
+
+                                // direccion = Utils.NoPrecisa;
+                                int procede = 0;
+
+                                for (int i = 0; i < address_components.length(); i++) {
+                                    JSONObject zero2 = address_components.getJSONObject(i);
+                                    String long_name = zero2.getString("long_name");
+                                    JSONArray mtypes = zero2.getJSONArray("types");
+                                    String Type = mtypes.getString(0);
+
+                                    if (Type.equalsIgnoreCase("street_number")) {
+                                        numero = long_name;
+                                    }
+
+                                    if (Type.equalsIgnoreCase("route")) {
+                                        direccion = long_name;
+                                        procede = 1;
+                                    }
+                                }
+
+                                txt_direccion.setText(direccion + " " + numero);
+                                if (procede == 1) {
+                                    //   btn_pedir.setVisibility(View.VISIBLE);
+                                    //    CargarUnidades();
+
+                                }
+
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                                Log.d(TAG,"jsonE: "+e.toString());
+                                Toast.makeText(getContext(),"jsonE: "+e.toString(),Toast.LENGTH_LONG).show();
+                            }
+
+                        }
+                    }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    txt_direccion.setText("Utils.NoPrecisa");
+                    Log.d(TAG,"voleyE "+error.toString());
+                    Toast.makeText(getContext(),"jsonE: "+error.toString(),Toast.LENGTH_LONG).show();
+
+                    try {
+                        Thread.sleep(500);
+                       run();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+
+                }
+            });
+
+            AppController.getInstance().addToRequestQueue(sr);
+        }
+    };
 
 
 
@@ -501,6 +576,14 @@ public class FragmentSelectFinishMap extends Fragment implements OnMapReadyCallb
                 txt_direccion.setText("Utils.NoPrecisa");
                 Log.d(TAG,"voleyE "+error.toString());
                 Toast.makeText(getContext(),"jsonE: "+error.toString(),Toast.LENGTH_LONG).show();
+
+                try {
+                    Thread.sleep(500);
+                    BuscarDireccion();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
             }
         });
 

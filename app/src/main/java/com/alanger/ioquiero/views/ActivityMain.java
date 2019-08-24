@@ -27,13 +27,12 @@ import androidx.appcompat.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.alanger.ioquiero.getTariff.view.FragmentTariff;
-import com.alanger.ioquiero.views.fragments.FragmentSelectFinishMap;
+import com.alanger.ioquiero.getTariff.view.FragmentMain;
 import com.alanger.ioquiero.R;
 
 public class ActivityMain extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
-        FragmentTariff.OnFragmentInteractionListener,
+        FragmentMain.OnFragmentInteractionListener,
         FragmentPedidos.OnFragmentInteractionListener,
         FragmentCambiarContrasenha.OnFragmentInteractionListener,
         TaskLoadedCallback
@@ -52,7 +51,7 @@ public class ActivityMain extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        myFragment = new FragmentTariff(this);
+        myFragment = new FragmentMain(this);
 
 
         getSupportFragmentManager().beginTransaction().replace(R.id.content_main, myFragment).commit();
@@ -167,7 +166,7 @@ public class ActivityMain extends AppCompatActivity
 
 
         if (id == R.id.nav_tarifario) {
-            myFragment = new FragmentTariff(this);
+            myFragment = new FragmentMain(this);
             getSupportFragmentManager().beginTransaction().replace(R.id.content_main, myFragment).commit();
             /*
         } else if (id == R.id.nav_mispedidos) {
@@ -204,7 +203,7 @@ public class ActivityMain extends AppCompatActivity
 
     @Override
     public void onTaskDone(Object... values) {
-        FragmentTariff.drawRoute(values);
+        FragmentMain.drawRoute(values);
     }
 
 

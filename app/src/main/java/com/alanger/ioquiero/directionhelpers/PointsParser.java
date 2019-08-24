@@ -1,7 +1,6 @@
 package com.alanger.ioquiero.directionhelpers;
 
 import android.content.Context;
-import android.content.res.Resources;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.util.Log;
@@ -9,7 +8,6 @@ import android.util.Log;
 import androidx.core.content.ContextCompat;
 
 import com.alanger.ioquiero.R;
-import com.alanger.ioquiero.getTariff.view.FragmentTariff;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.PolylineOptions;
 

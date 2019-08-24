@@ -1,6 +1,7 @@
 package com.alanger.ioquiero.getTariff.view;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -20,12 +21,14 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
-import android.util.Base64;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -38,6 +41,7 @@ import com.alanger.ioquiero.directionhelpers.FetchURL;
 import com.alanger.ioquiero.views.ActivityMain;
 import com.alanger.ioquiero.views.Utils;
 import com.alanger.ioquiero.volskayaGraphql.GraphqlClient;
+import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
@@ -55,13 +59,13 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.UnsupportedEncodingException;
 import java.util.Locale;
 
 import javax.annotation.Nonnull;
@@ -71,9 +75,9 @@ import static android.content.Context.MODE_PRIVATE;
 /**
  * Created by Administrador on 09/09/2017.
  */
-public class FragmentTariff extends Fragment implements OnMapReadyCallback, TariffView, GoogleMap.CancelableCallback {
+public class FragmentMain extends Fragment implements OnMapReadyCallback, TariffView, GoogleMap.CancelableCallback {
 
-    private static String TAG = FragmentTariff.class.getSimpleName();
+    private static String TAG = FragmentMain.class.getSimpleName();
     private static Polyline currentPolyline;
 
     private static final int PERMISION_REQUEST_GPS=100;
@@ -92,7 +96,7 @@ public class FragmentTariff extends Fragment implements OnMapReadyCallback, Tari
     private static TextView tViewAddressStart, tViewAddressFinish, tViewMensaje;
     private static TextView tViewPriceEntero,tViewPriceDecimal;
 
-
+    private static ConstraintLayout clSearch;
 
     private static TextView tViewKilometers, tViewMin, tViewCo2;
 
@@ -108,6 +112,10 @@ public class FragmentTariff extends Fragment implements OnMapReadyCallback, Tari
 
     private static LottieAnimationView lottieMarker;
     private static ConstraintLayout red_pointer;
+
+
+    private static ConstraintLayout clSearchFinish, clSearchStart;//botones de busqueda en google api
+
 
     private static ActivityMain activityMain;
 
@@ -185,7 +193,7 @@ public class FragmentTariff extends Fragment implements OnMapReadyCallback, Tari
         void onFragmentInteraction(Uri uri);
     }
 
-    public FragmentTariff(ActivityMain activityMain) {
+    public FragmentMain(ActivityMain activityMain) {
         this.activityMain = activityMain;
         activityMain.setTitle("FastBici");
     }
@@ -198,6 +206,7 @@ public class FragmentTariff extends Fragment implements OnMapReadyCallback, Tari
 
     private void defaultAttributes(){
 
+        clSearch.setVisibility(View.INVISIBLE);
         clResultado.setVisibility(View.INVISIBLE);
 
         clPrecio.setVisibility(View.GONE);
@@ -264,7 +273,115 @@ public class FragmentTariff extends Fragment implements OnMapReadyCallback, Tari
 
     }
 
+
+    private void showDialogSearch(int mode){
+
+        FloatingActionButton fAButtonClearText= getView().findViewById(R.id.fAButtonClearText);
+        EditText eTextSearch = getView().findViewById(R.id.eTextSearch);
+
+        h.post(new Runnable() {
+            @Override
+            public void run() {
+
+                clSearch.setVisibility(View.VISIBLE);
+                clSearch.setClickable(true);
+                clSearch.setFocusable(true);
+
+
+
+            }
+        });
+
+
+
+        fAButtonClearText.setOnClickListener(new View.OnClickListener() {
+            @SuppressLint("RestrictedApi")
+            @Override
+            public void onClick(View v) {
+                eTextSearch.setText("");
+                fAButtonClearText.setVisibility(View.INVISIBLE);
+            }
+        });
+
+        eTextSearch.addTextChangedListener(new TextWatcher() {
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @SuppressLint("RestrictedApi")
+            @Override
+            public void afterTextChanged(Editable s) {
+                String text = eTextSearch.getText().toString();
+
+
+
+
+                if(text.length()>0){
+                    JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.GET,
+                            Configurations.getUrlSearchPlaces(text,String.valueOf(latStart),String.valueOf(latFinish)), null,
+                            new Response.Listener<JSONObject>() {
+                                @Override
+                                public void onResponse(JSONObject response) {
+                                    Log.d(TAG, response.toString());
+                                    try {
+                                        JSONArray results = response.getJSONArray("results");
+                                        for(int i=0;i<results.length();i++){
+
+                                        }
+
+
+                                    } catch (JSONException e) {
+                                        Toast.makeText(root.getContext(),e.toString(),Toast.LENGTH_SHORT).show();
+                                        e.printStackTrace();
+                                    }
+                                }
+                            }, new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            Toast.makeText(root.getContext(),error.toString(),Toast.LENGTH_SHORT).show();
+                            error.printStackTrace();
+                        }
+                    }
+                    );
+                    AppController.getInstance().addToRequestQueue(jsonObjReq);
+
+                    fAButtonClearText.setVisibility(View.INVISIBLE);
+                }
+
+            }
+
+
+        });
+
+
+
+        getView().findViewById(R.id.iViewClose).setOnClickListener(v->{
+            clSearch.setVisibility(View.GONE);
+        });
+
+
+    }
+
+
     private void declareEvents(){
+
+
+        clSearchStart.setOnClickListener(v->{
+            showDialogSearch(0);
+        });
+
+        clSearchFinish.setOnClickListener(v->{
+            showDialogSearch(1);
+        });
+
+
         btnSetStart.setOnClickListener(v -> {
             if(markerStart !=null) {
                 markerStart.remove();
@@ -611,7 +728,7 @@ public class FragmentTariff extends Fragment implements OnMapReadyCallback, Tari
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        root = inflater.inflate(R.layout.tarifario_urbano, container, false);
+        root = inflater.inflate(R.layout.fragment_main, container, false);
 
         //Si usas getActivity estas suponiendo que la vista se buscara en el layout cargado por la Activity.
         //SupportMapFragment mapFragment = (SupportMapFragment) getActivity().getSupportFragmentManager().findFragmentById(R.id.map);
@@ -628,8 +745,18 @@ public class FragmentTariff extends Fragment implements OnMapReadyCallback, Tari
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         ctx = getContext();
+
+
         pref = this.getActivity().getSharedPreferences(Utils.nameSesion, MODE_PRIVATE);
         geocode = new Geocoder(ctx, Locale.getDefault());
+
+
+        clSearchFinish = getView().findViewById(R.id.clSearchFinish);
+        clSearchStart = getView().findViewById(R.id.clSearchStart);
+
+        clSearch = getView().findViewById(R.id.clSearch);
+
+
         btnSetStart = (Button)getView().findViewById(R.id.btnSetStart);
         btnSetFinish = (Button)getView().findViewById(R.id.btnSetFinish);
         btPedir = (Button)getView().findViewById(R.id.btnPedir);

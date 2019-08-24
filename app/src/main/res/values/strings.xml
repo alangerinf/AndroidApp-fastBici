@@ -52,4 +52,6 @@
     <string name="producto">Producto</string>
     <string name="cancelar">Cancelar</string>
     <string name="contactanos">Contactanos</string>
+    <string name="punto_de_origen">PUNTO DE ORIGEN</string>
+    <string name="punto_de_llegada">PUNTO DE LLEGADA</string>
 </resources>

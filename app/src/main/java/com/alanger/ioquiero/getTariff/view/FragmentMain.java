@@ -18,6 +18,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
@@ -137,24 +138,41 @@ public class FragmentMain extends Fragment implements OnMapReadyCallback, Tariff
                 android.Manifest.permission.ACCESS_FINE_LOCATION,
                 android.Manifest.permission.ACCESS_COARSE_LOCATION
         };
-        if (
-                ContextCompat.checkSelfPermission(ctx,
-                        Manifest.permission.ACCESS_FINE_LOCATION)
-                        != PackageManager.PERMISSION_GRANTED
-                        ||
-                        ContextCompat.checkSelfPermission(ctx,
-                                Manifest.permission.ACCESS_COARSE_LOCATION)
-                                != PackageManager.PERMISSION_GRANTED
-        ) {
-            requestPermissions(
-                    PERMISSIONS,
-                    PERMISION_REQUEST_GPS);
-            return;
+
+
+
+
+        if (ContextCompat.checkSelfPermission(getActivity(),
+                Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED) {
+
+            // Asking user if explanation is needed
+            if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(),
+                    Manifest.permission.ACCESS_FINE_LOCATION)) {
+
+
+                //Prompt the user once explanation has been shown
+                requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                        PERMISION_REQUEST_GPS);
+
+
+            } else {
+                // No explanation needed, we can request the permission.
+                requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                        PERMISION_REQUEST_GPS);
+            }
+
         } else {
+
+
             mMap.getUiSettings().setMyLocationButtonEnabled(true);
             mMap.setMyLocationEnabled(true);
             runnable.run();
         }
+
+
+
+
 
     }
 
@@ -347,23 +365,19 @@ public class FragmentMain extends Fragment implements OnMapReadyCallback, Tariff
                 }
 
             }else {
-                if(mode==0){
-                    tViewAddressStart.setText(item.getFormatted_address());
+                handler.postDelayed(
+                        ()->{
+                            if(mode==0){
+                                setStart();
+                            }else {
+                                setFinish();
+                            }
 
-                    setStart();
+                        },100
 
-                    tViewAddressFinish.setText(item.getFormatted_address());
-
-                }else {
-                    tViewAddressFinish.setText(item.getFormatted_address());
-                    setFinish();
-                }
+                );
 
             }
-
-
-
-
         });
 
 
@@ -716,7 +730,7 @@ public class FragmentMain extends Fragment implements OnMapReadyCallback, Tariff
 
             String uriGoogleMaps = "http://maps.google.com/?mode=walking%26saddr="+latStart+","+lonStart+"%26daddr="+latFinish+","+lonFinish;
             //String uriGoogleMaps = "http://maps.google.com/?mode=walking%26saddr=-8.1158903,-79.0356704%26daddr=-8.1179977,-79.0358920";
-            String phone = "51973446468";
+            String phone = Configurations.phone;
 
             Uri uri = Uri.parse("https://api.whatsapp.com/send?phone="+phone+"&text=" + uriGoogleMaps +
                     "\nHola, FastBici. Quiero un delivery con este recorrido"+
@@ -1125,32 +1139,28 @@ public class FragmentMain extends Fragment implements OnMapReadyCallback, Tariff
                 );
 
     }
+
+
+
+
     @Override
-    public void onRequestPermissionsResult(int requestCode,
-                                           String permissions[], int[] grantResults) {
-
-        Toast.makeText(ctx,"PERMISION_REQUEST_GPS:"+requestCode,Toast.LENGTH_LONG).show();
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+       // Toast.makeText(ctx,"PERMISION_REQUEST_GPS:"+requestCode,Toast.LENGTH_LONG).show();
         switch (requestCode) {
-            case PERMISION_REQUEST_GPS: {
+            case PERMISION_REQUEST_GPS:
                 // If request is cancelled, the result arrays are empty.
-                if (grantResults.length > 0
-                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-
-                } else {
-                    Log.d(TAG,"permision request noooo ok");
-                   verifyPermission();
-                }
-                Log.d(TAG,"permision request ok");
-                defaultAttributes();
                 verifyPermission();
 
                 return;
-            }
 
             // other 'case' lines to check for other
             // permissions this app might request
         }
     }
+
+
+
 
     private OnFragmentInteractionListener mListener;
     @Override
@@ -1393,6 +1403,17 @@ public class FragmentMain extends Fragment implements OnMapReadyCallback, Tariff
         }
 
 
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        if(mMap!=null){
+            verifyPermission();
+        }
 
     }
+
+
+
 }

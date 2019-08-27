@@ -20,6 +20,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import com.google.android.material.navigation.NavigationView;
@@ -181,6 +182,8 @@ public class ActivityMain extends AppCompatActivity
     }
 
 
+
+
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
@@ -240,9 +243,12 @@ public class ActivityMain extends AppCompatActivity
     }
 
 
+    /*
             @Override
             public void onRequestPermissionsResult(int requestCode,
                                                    String permissions[], int[] grantResults) {
+
+                Log.d(TAG,"hola");
                 switch (requestCode) {
                     case 555: {
                         // If request is cancelled, the result arrays are empty.
@@ -266,5 +272,5 @@ public class ActivityMain extends AppCompatActivity
             }
 
 
-
+*/
 }

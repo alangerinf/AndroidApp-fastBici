@@ -2,6 +2,7 @@ package com.alanger.ioquiero.getTariff.view;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -20,6 +21,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -27,6 +29,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -38,6 +41,7 @@ import com.alanger.ioquiero.GetPrice_Query;
 import com.alanger.ioquiero.R;
 import com.alanger.ioquiero.app.AppController;
 import com.alanger.ioquiero.directionhelpers.FetchURL;
+import com.alanger.ioquiero.getTariff.view.adapters.RViewAdapterPlace;
 import com.alanger.ioquiero.views.ActivityMain;
 import com.alanger.ioquiero.views.Utils;
 import com.alanger.ioquiero.volskayaGraphql.GraphqlClient;
@@ -66,6 +70,11 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLEncoder;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
 import javax.annotation.Nonnull;
@@ -80,7 +89,7 @@ public class FragmentMain extends Fragment implements OnMapReadyCallback, Tariff
     private static String TAG = FragmentMain.class.getSimpleName();
     private static Polyline currentPolyline;
 
-    private static final int PERMISION_REQUEST_GPS=100;
+    private static final int PERMISION_REQUEST_GPS = 100;
 
     private static boolean isFirstIdle = false;
 
@@ -89,12 +98,13 @@ public class FragmentMain extends Fragment implements OnMapReadyCallback, Tariff
     private static Context ctx;
     private static GoogleMap mMap;
     private static Geocoder geocode;
-    private static double LatTemp =0, LonTemp =0, CurrentLat =0, CurrentLon =0, latStart, lonStart, latFinish, lonFinish;;
+    private static double LatTemp = 0, LonTemp = 0, CurrentLat = 0, CurrentLon = 0, latStart, lonStart, latFinish, lonFinish;
+    ;
 
     private static Button btnSetStart, btnSetFinish, btPedir;
     private static ConstraintLayout btnRestart;
     private static TextView tViewAddressStart, tViewAddressFinish, tViewMensaje;
-    private static TextView tViewPriceEntero,tViewPriceDecimal;
+    private static TextView tViewPriceEntero, tViewPriceDecimal;
 
     private static ConstraintLayout clSearch;
 
@@ -102,7 +112,7 @@ public class FragmentMain extends Fragment implements OnMapReadyCallback, Tariff
 
     private static ConstraintLayout clResultado, clPrecio;
 
-    private static Marker markerStart =null, markerFinish =null;
+    private static Marker markerStart = null, markerFinish = null;
 
     private static String direccion, number;
 
@@ -125,20 +135,20 @@ public class FragmentMain extends Fragment implements OnMapReadyCallback, Tariff
                 android.Manifest.permission.ACCESS_FINE_LOCATION,
                 android.Manifest.permission.ACCESS_COARSE_LOCATION
         };
-        if(
+        if (
                 ContextCompat.checkSelfPermission(ctx,
-                Manifest.permission.ACCESS_FINE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED
-                ||
-                ContextCompat.checkSelfPermission(ctx,
-                Manifest.permission.ACCESS_COARSE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED
-          ){
-                requestPermissions(
-                        PERMISSIONS,
-                        PERMISION_REQUEST_GPS);
-                return;
-        }else {
+                        Manifest.permission.ACCESS_FINE_LOCATION)
+                        != PackageManager.PERMISSION_GRANTED
+                        ||
+                        ContextCompat.checkSelfPermission(ctx,
+                                Manifest.permission.ACCESS_COARSE_LOCATION)
+                                != PackageManager.PERMISSION_GRANTED
+        ) {
+            requestPermissions(
+                    PERMISSIONS,
+                    PERMISION_REQUEST_GPS);
+            return;
+        } else {
             mMap.getUiSettings().setMyLocationButtonEnabled(true);
             mMap.setMyLocationEnabled(true);
             runnable.run();
@@ -149,20 +159,20 @@ public class FragmentMain extends Fragment implements OnMapReadyCallback, Tariff
     @Override
     public void openTariffResult() {
         Intent i = new Intent(ctx, ActivityShowTariffResult.class);
-        i.putExtra("latStart", String.valueOf(latStart) );
-        i.putExtra("lonStart", String.valueOf(lonStart) );
-        i.putExtra("latFinish", String.valueOf(latFinish) );
-        i.putExtra("lonFinish", String.valueOf(lonFinish) );
+        i.putExtra("latStart", String.valueOf(latStart));
+        i.putExtra("lonStart", String.valueOf(lonStart));
+        i.putExtra("latFinish", String.valueOf(latFinish));
+        i.putExtra("lonFinish", String.valueOf(lonFinish));
         startActivity(i);
     }
 
     @Override
     public void enableInputs() {
-        if(markerStart ==null) {
+        if (markerStart == null) {
             btnSetStart.setVisibility(View.VISIBLE);
             btnSetStart.setClickable(true);
             btnSetStart.setFocusable(true);
-        }else{
+        } else {
             btnSetFinish.setClickable(true);
             btnSetFinish.setFocusable(true);
             btnSetFinish.setVisibility(View.VISIBLE);
@@ -204,7 +214,7 @@ public class FragmentMain extends Fragment implements OnMapReadyCallback, Tariff
 
     }
 
-    private void defaultAttributes(){
+    private void defaultAttributes() {
 
         clSearch.setVisibility(View.INVISIBLE);
         clResultado.setVisibility(View.INVISIBLE);
@@ -214,7 +224,7 @@ public class FragmentMain extends Fragment implements OnMapReadyCallback, Tariff
                 () -> {
                     tViewMensaje.setVisibility(View.VISIBLE);
                     tViewMensaje.setText("Arrastra el mapa y marca el punto de origen");
-                    STATUS=0;
+                    STATUS = 0;
                     tViewAddressStart.setText(getString(R.string.lugar_de_partida));
                     tViewAddressFinish.setText(getString(R.string.lugar_de_llegada));
                     mMap.clear();
@@ -232,13 +242,13 @@ public class FragmentMain extends Fragment implements OnMapReadyCallback, Tariff
     }
 
 
-    void setVisibleMarker(int opVisible){
+    void setVisibleMarker(int opVisible) {
         lottieMarker.setVisibility(opVisible);
         red_pointer.setVisibility(opVisible);
     }
 
 
-    void returnToSetFinish(){
+    void returnToSetFinish() {
         mMap.clear();
 
         LatLng posicion = new LatLng(latStart, lonStart);
@@ -248,14 +258,14 @@ public class FragmentMain extends Fragment implements OnMapReadyCallback, Tariff
         mMap.animateCamera(cameraUpdate, 500, this);
 
         tViewMensaje.setVisibility(View.VISIBLE);
-        if(markerFinish !=null) {
+        if (markerFinish != null) {
             markerFinish.remove();
         }
 
         setVisibleMarker(View.VISIBLE);
 
 
-        if(markerStart !=null) {
+        if (markerStart != null) {
             markerStart.remove();
         }
 
@@ -268,13 +278,41 @@ public class FragmentMain extends Fragment implements OnMapReadyCallback, Tariff
 
 
         tViewMensaje.setText("Arrastra el mapa y marca el punto de Destino");
-      //  Toast.makeText(ctx,"AHORA ARRASTRA EL MAPA Y UBICA EL DESTINO",Toast.LENGTH_SHORT).show();
-        STATUS=1;
+        //  Toast.makeText(ctx,"AHORA ARRASTRA EL MAPA Y UBICA EL DESTINO",Toast.LENGTH_SHORT).show();
+        STATUS = 1;
 
     }
 
 
+    public void hideKeyboard(View view) {
+        InputMethodManager inputMethodManager = (InputMethodManager) ctx.getSystemService(Activity.INPUT_METHOD_SERVICE);
+        inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
+
+
+
+    }
+
+    public void showKeyboard(View view) {
+        ((InputMethodManager)ctx.getSystemService(Context.INPUT_METHOD_SERVICE)).toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
+    }
+
     private void showDialogSearch(int mode){
+
+        List<Place> placeList = new ArrayList<>();
+        RViewAdapterPlace rViewAdapterPlace = new RViewAdapterPlace(placeList);
+        RecyclerView rViewPlaces = getView().findViewById(R.id.rViewPlaces);
+
+        rViewAdapterPlace.setOnClicListener(v -> {
+            int pos = rViewPlaces.getChildAdapterPosition(v);
+            Place item = placeList.get(pos);
+            Toast.makeText(ctx,item.getFormatted_address(),Toast.LENGTH_LONG).show();
+
+            clSearch.setVisibility(View.GONE);
+        });
+
+
+
+        rViewPlaces.setAdapter(rViewAdapterPlace);
 
         FloatingActionButton fAButtonClearText= getView().findViewById(R.id.fAButtonClearText);
         EditText eTextSearch = getView().findViewById(R.id.eTextSearch);
@@ -287,11 +325,26 @@ public class FragmentMain extends Fragment implements OnMapReadyCallback, Tariff
                 clSearch.setClickable(true);
                 clSearch.setFocusable(true);
 
-
-
             }
         });
 
+
+
+        eTextSearch.setText("");
+
+
+
+        eTextSearch.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (!hasFocus) {
+                    hideKeyboard(v);
+                }else {
+                    showKeyboard(v);
+                }
+            }
+        });
+        eTextSearch.requestFocus();
 
 
         fAButtonClearText.setOnClickListener(new View.OnClickListener() {
@@ -300,45 +353,133 @@ public class FragmentMain extends Fragment implements OnMapReadyCallback, Tariff
             public void onClick(View v) {
                 eTextSearch.setText("");
                 fAButtonClearText.setVisibility(View.INVISIBLE);
+                eTextSearch.requestFocus();
+                showKeyboard(eTextSearch);
             }
         });
+
 
         eTextSearch.addTextChangedListener(new TextWatcher() {
 
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
+
+
+
             }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                String text = eTextSearch.getText().toString();
+
+
+                if(text.equals(" ")){ //si tiene espacio adelante
+                    Handler handler = new Handler();
+                    handler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            eTextSearch.setText("");
+                        }
+                    });
+                }
+
 
             }
 
             @SuppressLint("RestrictedApi")
             @Override
             public void afterTextChanged(Editable s) {
-                String text = eTextSearch.getText().toString();
+                AppController.getInstance().cancelPendingRequests(TAG);
+                placeList.clear();
+                rViewAdapterPlace.notifyDataSetChanged();
 
 
+
+                String text = eTextSearch.getText().toString().replaceAll(" ","+");
 
 
                 if(text.length()>0){
+
+                    fAButtonClearText.setVisibility(View.VISIBLE);
+                    fAButtonClearText.setClickable(true);
+                    fAButtonClearText.setFocusable(true);
+
+                    URL myURL = null;
+                    try {
+                        myURL = new URL(Configurations.getUrlSearchPlaces(text,String.valueOf(lat),String.valueOf(lng)));
+
+                    } catch (MalformedURLException e) {
+                        e.printStackTrace();
+                    }
+                    Log.d(TAG,myURL.toString());
                     JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.GET,
-                            Configurations.getUrlSearchPlaces(text,String.valueOf(latStart),String.valueOf(latFinish)), null,
+                            myURL.toString(), null,
                             new Response.Listener<JSONObject>() {
                                 @Override
                                 public void onResponse(JSONObject response) {
                                     Log.d(TAG, response.toString());
+                                    Log.d(TAG, "***************************************");
                                     try {
+
                                         JSONArray results = response.getJSONArray("results");
                                         for(int i=0;i<results.length();i++){
 
-                                        }
+                                            JSONObject jsonTemp = results.getJSONObject(i);
 
+                                            Place placeTemp = new Place(
+                                                    jsonTemp.getJSONObject("geometry").getJSONObject("location").getString("lat"),
+                                                    jsonTemp.getJSONObject("geometry").getJSONObject("location").getString("lng"),
+                                                    jsonTemp.getJSONArray("types"),
+                                                    jsonTemp.getString("formatted_address")
+                                            );
+
+                                            boolean flag = true;
+
+                                            for(int x=0; x< placeTemp.getTypes().length();x++){
+                                                if(placeTemp.getTypes().getString(x).equals("country")){
+                                                   flag = false;
+                                                   break;
+                                                }else {
+                                                    Log.d(TAG,"----->cat:"+placeTemp.getTypes().getString(x));
+                                                }
+                                            }
+
+                                            double maxlat = -7.990756;
+                                            double minlat = -8.224768;
+
+
+                                            double maxlon = -78.896751;
+                                            double minlon = -79.192724;
+
+                                            double lat = Double.parseDouble(placeTemp.getLat());
+                                            double lon = Double.parseDouble(placeTemp.getLon());
+
+                                            if(maxlat<lat || minlat>lat){
+                                                flag = false;
+                                            }else {
+                                                if(maxlon<lon || minlon>lon) {
+                                                    flag = false;
+                                                }
+                                            }
+
+
+                                            Log.d(TAG,"********");
+                                            if(flag){
+                                                placeList.add(placeTemp);
+                                                Log.d(TAG,"\n");
+                                                Log.d(TAG,jsonTemp.toString());
+                                            }
+                                            Log.d(TAG,"********");
+
+
+                                        }
+                                        rViewAdapterPlace.notifyDataSetChanged();
 
                                     } catch (JSONException e) {
                                         Toast.makeText(root.getContext(),e.toString(),Toast.LENGTH_SHORT).show();
+                                        Log.d(TAG,"JSONException "+e.toString());
                                         e.printStackTrace();
                                     }
                                 }
@@ -346,17 +487,19 @@ public class FragmentMain extends Fragment implements OnMapReadyCallback, Tariff
                         @Override
                         public void onErrorResponse(VolleyError error) {
                             Toast.makeText(root.getContext(),error.toString(),Toast.LENGTH_SHORT).show();
+                            Log.d(TAG,"onErrorResponse "+error.toString());
                             error.printStackTrace();
                         }
                     }
                     );
                     AppController.getInstance().addToRequestQueue(jsonObjReq);
 
-                    fAButtonClearText.setVisibility(View.INVISIBLE);
+
+                }else {
+                    fAButtonClearText.setVisibility(View.GONE);
                 }
 
             }
-
 
         });
 
@@ -369,6 +512,80 @@ public class FragmentMain extends Fragment implements OnMapReadyCallback, Tariff
 
     }
 
+
+
+    private void setStart(){
+        if(markerStart !=null) {
+            markerStart.remove();
+        }
+        latStart = mMap.getCameraPosition().target.latitude;
+        lonStart = mMap.getCameraPosition().target.longitude;
+
+        LatLng LatLng = new LatLng(latStart, lonStart);
+
+        markerStart = mMap.addMarker(new MarkerOptions()
+                .position(LatLng)
+                .title("Marker")
+                .icon(BitmapDescriptorFactory.fromResource(R.drawable.marker_start)));
+
+        btnSetStart.setVisibility(View.INVISIBLE);
+
+        btnRestart.setVisibility(View.VISIBLE);
+
+        tViewMensaje.setText("Arrastra el mapa y marca el punto de Destino");
+        //   Toast.makeText(ctx,"AHORA ARRASTRA EL MAPA Y UBICA EL DESTINO",Toast.LENGTH_SHORT).show();
+        STATUS=1;
+    }
+
+
+    void setFinish(){
+        latFinish = mMap.getCameraPosition().target.latitude;
+        lonFinish = mMap.getCameraPosition().target.longitude;
+/*
+            if(latStart==latFinish && lonStart==tlonFinish){
+
+                Snackbar snackbar = Snackbar.make(root, "Las ubicaciones no pueden ser las mismas", Snackbar.LENGTH_LONG);
+                snackbar.show();
+
+                returnToSetFinish();
+            }else {
+  */
+        //  Toast.makeText(ctx,""+(latStart-latFinish)+" "+(lonStart==lonFinish) , Toast.LENGTH_LONG).show();
+
+
+        returnToSetFinish();
+
+        tViewMensaje.setVisibility(View.GONE);
+        if(markerFinish !=null) {
+            markerFinish.remove();
+        }
+
+        LatLng LatLngFinish = new LatLng(latFinish, lonFinish);
+        markerFinish = mMap.addMarker(new MarkerOptions()
+                .position(LatLngFinish)
+                .title("Marker")
+                .icon(BitmapDescriptorFactory.fromResource(R.drawable.marker_finish)));
+        btnSetFinish.setVisibility(View.INVISIBLE);
+        //btPedir.setVisibility(View.VISIBLE);
+        setVisibleMarker(View.INVISIBLE);
+        STATUS=2;
+        vistaPeriferica();
+
+        if(isConnectedToInternetToUpdate()){
+            new FetchURL(getActivity()).execute(getUrl(markerStart.getPosition(), markerFinish.getPosition(), "walking"), "walking");
+            getPriceFromServer(latStart,lonStart,latFinish,lonFinish);
+        }else{
+            Snackbar snackbar2 = Snackbar.make(root, "No se pudo Conectar", Snackbar.LENGTH_INDEFINITE);
+            snackbar2.setAction("Reintentar", new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    getPriceFromServer(latStart, lonStart, latFinish, lonFinish);
+                }
+            });
+            snackbar2.show();
+        }
+        //}
+    }
 
     private void declareEvents(){
 
@@ -383,80 +600,15 @@ public class FragmentMain extends Fragment implements OnMapReadyCallback, Tariff
 
 
         btnSetStart.setOnClickListener(v -> {
-            if(markerStart !=null) {
-                markerStart.remove();
-            }
-            latStart = mMap.getCameraPosition().target.latitude;
-            lonStart = mMap.getCameraPosition().target.longitude;
 
-            LatLng LatLng = new LatLng(latStart, lonStart);
+            setStart();
 
-            markerStart = mMap.addMarker(new MarkerOptions()
-                    .position(LatLng)
-                    .title("Marker")
-                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.marker_start)));
-
-            btnSetStart.setVisibility(View.INVISIBLE);
-
-            btnRestart.setVisibility(View.VISIBLE);
-
-            tViewMensaje.setText("Arrastra el mapa y marca el punto de Destino");
-         //   Toast.makeText(ctx,"AHORA ARRASTRA EL MAPA Y UBICA EL DESTINO",Toast.LENGTH_SHORT).show();
-            STATUS=1;
         });
         btnSetFinish.setOnClickListener(v -> {
 
-            latFinish = mMap.getCameraPosition().target.latitude;
-            lonFinish = mMap.getCameraPosition().target.longitude;
-/*
-            if(latStart==latFinish && lonStart==tlonFinish){
-
-                Snackbar snackbar = Snackbar.make(root, "Las ubicaciones no pueden ser las mismas", Snackbar.LENGTH_LONG);
-                snackbar.show();
-
-                returnToSetFinish();
-            }else {
-  */
-              //  Toast.makeText(ctx,""+(latStart-latFinish)+" "+(lonStart==lonFinish) , Toast.LENGTH_LONG).show();
-
-
-                returnToSetFinish();
-
-                tViewMensaje.setVisibility(View.GONE);
-                if(markerFinish !=null) {
-                    markerFinish.remove();
-                }
-
-                LatLng LatLngFinish = new LatLng(latFinish, lonFinish);
-                markerFinish = mMap.addMarker(new MarkerOptions()
-                        .position(LatLngFinish)
-                        .title("Marker")
-                        .icon(BitmapDescriptorFactory.fromResource(R.drawable.marker_finish)));
-                btnSetFinish.setVisibility(View.INVISIBLE);
-                //btPedir.setVisibility(View.VISIBLE);
-            setVisibleMarker(View.INVISIBLE);
-                STATUS=2;
-                vistaPeriferica();
-
-                if(isConnectedToInternetToUpdate()){
-                    new FetchURL(getActivity()).execute(getUrl(markerStart.getPosition(), markerFinish.getPosition(), "walking"), "walking");
-                    getPriceFromServer(latStart,lonStart,latFinish,lonFinish);
-                }else{
-                    Snackbar snackbar2 = Snackbar.make(root, "No se pudo Conectar", Snackbar.LENGTH_INDEFINITE);
-                    snackbar2.setAction("Reintentar", new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            getPriceFromServer(latStart, lonStart, latFinish, lonFinish);
-                        }
-                    });
-                    snackbar2.show();
-                }
-            //}
-
+            setFinish();
 
         });
-
-
 
 
         btPedir.setOnClickListener(v -> {

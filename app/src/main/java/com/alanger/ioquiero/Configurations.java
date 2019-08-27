@@ -17,7 +17,7 @@ public class Configurations {
 
     public static String getUrlSearchPlaces(String text,String lat,String lon){
 
-        return "https://maps.googleapis.com/maps/api/place/textsearch/json?query="+text+"&location="+lat+","+lon+"&radius=20000&key="+API_KEY;
+        return "https://maps.googleapis.com/maps/api/place/textsearch/json?location="+lat+","+lon+"&radius=10000&region=pe&query="+text+"&key="+API_KEY;
 
     }
 

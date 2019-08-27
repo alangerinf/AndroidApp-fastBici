@@ -30,8 +30,8 @@
     <string name="contrasena">Contraseña</string>
     <string name="company_mark">.@Fastbici</string>
     <string name="b">B</string>
-    <string name="lugar_de_partida">Lugar de Partida ...</string>
-    <string name="lugar_de_llegada">Lugar de Llegada ...</string>
+    <string name="lugar_de_partida">Lugar de Recojo</string>
+    <string name="lugar_de_llegada">Lugar de Entrega</string>
     <string name="phone_invalid">Número de Telefono invalido</string>
     <string name="bandeja_de_pedidos_vacia">Bandeja de Pedidos Vacia</string>
     <string name="title_activity_pedido">PedidoActivity</string>

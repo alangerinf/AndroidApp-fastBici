@@ -404,15 +404,9 @@ public class FragmentMain extends Fragment implements OnMapReadyCallback, Tariff
 
         if(mode==0){//si es de modificar el toogle inicio
             eTextSearch.setHint("Lugar de Recojo");
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                eTextSearch.setHintTextColor(ctx.getColor(R.color.customGreen));
-            }
+
         }else {//si se estamodificando el toogle de final
             eTextSearch.setHint("Lugar de Entrega");
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                eTextSearch.setHintTextColor(ctx.getColor(R.color.red));
-            }
-
         }
 
         eTextSearch.setOnFocusChangeListener(new View.OnFocusChangeListener() {

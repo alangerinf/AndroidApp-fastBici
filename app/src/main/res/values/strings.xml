@@ -54,4 +54,7 @@
     <string name="contactanos">Contactanos</string>
     <string name="punto_de_origen">PUNTO DE ORIGEN</string>
     <string name="punto_de_llegada">PUNTO DE LLEGADA</string>
+    <string name="title_activity_maps32">Map</string>
+    <string name="title_activity_maps_activitysadad">Map</string>
+    <string name="title_activity_maps_activityaaa">Map</string>
 </resources>

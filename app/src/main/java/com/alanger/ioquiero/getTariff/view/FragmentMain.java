@@ -14,9 +14,11 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 
+import androidx.annotation.RequiresApi;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -72,7 +74,7 @@ import org.json.JSONObject;
 
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.net.URLEncoder;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -96,7 +98,7 @@ public class FragmentMain extends Fragment implements OnMapReadyCallback, Tariff
     private static int STATUS = 0;
 
     private static Context ctx;
-    private static GoogleMap mMap;
+        private static GoogleMap mMap;
     private static Geocoder geocode;
     private static double LatTemp = 0, LonTemp = 0, CurrentLat = 0, CurrentLon = 0, latStart, lonStart, latFinish, lonFinish;
     ;
@@ -124,7 +126,7 @@ public class FragmentMain extends Fragment implements OnMapReadyCallback, Tariff
     private static ConstraintLayout red_pointer;
 
 
-    private static ConstraintLayout clSearchFinish, clSearchStart;//botones de busqueda en google api
+    private static ConstraintLayout clViewFinish, clViewStart;//botones de busqueda en google api
 
 
     private static ActivityMain activityMain;
@@ -219,6 +221,8 @@ public class FragmentMain extends Fragment implements OnMapReadyCallback, Tariff
         clSearch.setVisibility(View.INVISIBLE);
         clResultado.setVisibility(View.INVISIBLE);
 
+        clViewFinish.setAlpha(0.3f);
+
         clPrecio.setVisibility(View.GONE);
         handler.post(
                 () -> {
@@ -307,7 +311,59 @@ public class FragmentMain extends Fragment implements OnMapReadyCallback, Tariff
             Place item = placeList.get(pos);
             Toast.makeText(ctx,item.getFormatted_address(),Toast.LENGTH_LONG).show();
 
+            LatLng latLng = new LatLng(Double.valueOf(item.getLat()),Double.valueOf(item.getLon()));
+
+            CameraPosition cameraPosition = new CameraPosition.Builder()
+                    .target(latLng)
+                    .zoom(15.0f)
+                    .build();
+            mMap.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
             clSearch.setVisibility(View.GONE);
+
+
+            if(mode==0 && STATUS==2){//si ya se registraron las  2 fechas
+
+                clResultado.setVisibility(View.INVISIBLE);
+
+                tViewAddressStart.setText(item.getFormatted_address());
+                markerStart.setPosition(latLng);
+
+                btnSetStart.setVisibility(View.INVISIBLE);
+
+                btnRestart.setVisibility(View.VISIBLE);
+
+                if(isConnectedToInternetToUpdate()){
+                    new FetchURL(getActivity()).execute(getUrl(markerStart.getPosition(), markerFinish.getPosition(), "walking"), "walking");
+                    getPriceFromServer(latStart,lonStart,latFinish,lonFinish);
+                }else{
+                    Snackbar snackbar2 = Snackbar.make(root, "No se pudo Conectar", Snackbar.LENGTH_INDEFINITE);
+                    snackbar2.setAction("Reintentar", new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            getPriceFromServer(latStart, lonStart, latFinish, lonFinish);
+                        }
+                    });
+                    snackbar2.show();
+                }
+
+            }else {
+                if(mode==0){
+                    tViewAddressStart.setText(item.getFormatted_address());
+
+                    setStart();
+
+                    tViewAddressFinish.setText(item.getFormatted_address());
+
+                }else {
+                    tViewAddressFinish.setText(item.getFormatted_address());
+                    setFinish();
+                }
+
+            }
+
+
+
+
         });
 
 
@@ -332,7 +388,18 @@ public class FragmentMain extends Fragment implements OnMapReadyCallback, Tariff
 
         eTextSearch.setText("");
 
+        if(mode==0){//si es de modificar el toogle inicio
+            eTextSearch.setHint("Lugar de Recojo");
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                eTextSearch.setHintTextColor(ctx.getColor(R.color.customGreen));
+            }
+        }else {//si se estamodificando el toogle de final
+            eTextSearch.setHint("Lugar de Entrega");
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                eTextSearch.setHintTextColor(ctx.getColor(R.color.red));
+            }
 
+        }
 
         eTextSearch.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
@@ -426,14 +493,41 @@ public class FragmentMain extends Fragment implements OnMapReadyCallback, Tariff
                                         JSONArray results = response.getJSONArray("results");
                                         for(int i=0;i<results.length();i++){
 
-                                            JSONObject jsonTemp = results.getJSONObject(i);
+
 
                                             Place placeTemp = new Place(
-                                                    jsonTemp.getJSONObject("geometry").getJSONObject("location").getString("lat"),
-                                                    jsonTemp.getJSONObject("geometry").getJSONObject("location").getString("lng"),
-                                                    jsonTemp.getJSONArray("types"),
-                                                    jsonTemp.getString("formatted_address")
+
                                             );
+
+                                            JSONObject jsonTemp = results.getJSONObject(i);
+
+                                            try {
+
+                                                placeTemp.setLat(jsonTemp.getJSONObject("geometry").getJSONObject("location").getString("lat"));
+
+                                            }catch (Exception e){
+
+                                            }
+                                            try {
+                                                placeTemp.setLon(  jsonTemp.getJSONObject("geometry").getJSONObject("location").getString("lng"));
+                                            }catch (Exception e){
+
+                                            }
+
+                                            try {
+                                                placeTemp.setTypes(jsonTemp.getJSONArray("types"));
+                                            }catch (Exception e){
+
+                                            }
+                                            try {
+                                                placeTemp.setFormatted_address(jsonTemp.getString("formatted_address"));
+                                            }catch (Exception e){
+
+                                            }
+
+
+
+
 
                                             boolean flag = true;
 
@@ -515,6 +609,10 @@ public class FragmentMain extends Fragment implements OnMapReadyCallback, Tariff
 
 
     private void setStart(){
+        clViewFinish.setAlpha(1);
+        clViewFinish.setClickable(true);
+        clViewFinish.setFocusable(true);
+
         if(markerStart !=null) {
             markerStart.remove();
         }
@@ -590,14 +688,16 @@ public class FragmentMain extends Fragment implements OnMapReadyCallback, Tariff
     private void declareEvents(){
 
 
-        clSearchStart.setOnClickListener(v->{
+        clViewStart.setOnClickListener(v->{
             showDialogSearch(0);
         });
 
-        clSearchFinish.setOnClickListener(v->{
+        clViewFinish.setOnClickListener(v->{
             showDialogSearch(1);
         });
 
+        clViewFinish.setFocusable(false);
+        clViewFinish.setClickable(false);
 
         btnSetStart.setOnClickListener(v -> {
 
@@ -713,6 +813,7 @@ public class FragmentMain extends Fragment implements OnMapReadyCallback, Tariff
                                                 tViewMin.setText(""+ (int)(float) (resp.approximateTime() / 1) + " min");
 
                                                 CO2 = resp.co2Saved();
+
                                                 timeAproximate = resp.approximateTime();
 
                                                 //  tViewKilometers.setText(resp.);
@@ -903,8 +1004,8 @@ public class FragmentMain extends Fragment implements OnMapReadyCallback, Tariff
         geocode = new Geocoder(ctx, Locale.getDefault());
 
 
-        clSearchFinish = getView().findViewById(R.id.clSearchFinish);
-        clSearchStart = getView().findViewById(R.id.clSearchStart);
+        clViewFinish = getView().findViewById(R.id.clViewFinish);
+        clViewStart = getView().findViewById(R.id.clViewStart);
 
         clSearch = getView().findViewById(R.id.clSearch);
 
@@ -1150,10 +1251,13 @@ public class FragmentMain extends Fragment implements OnMapReadyCallback, Tariff
                                                         }
 
                                                         if(statusTemp==0){
-                                                            tViewAddressStart.setText(direccion + " " + number);
+
+                                                           // tViewAddressStart.setText(direccion + " " + number);
+                                                            tViewAddressStart.setText(zero.getString("formatted_address"));
                                                         }else {
                                                             if(statusTemp==1){
-                                                                tViewAddressFinish.setText(direccion + " " + number);
+//                                                                tViewAddressFinish.setText(direccion + " " + number);
+                                                                tViewAddressFinish.setText(zero.getString("formatted_address"));
                                                             }
                                                         }
 
@@ -1220,7 +1324,9 @@ public class FragmentMain extends Fragment implements OnMapReadyCallback, Tariff
                         response -> {
                             try {
                                 JSONArray results = response.getJSONArray("results");
+
                                 JSONObject zero = results.getJSONObject(0);
+
                                 JSONArray address_components = zero.getJSONArray("address_components");
 
                                 // direccion = Utils.NoPrecisa;
@@ -1243,10 +1349,12 @@ public class FragmentMain extends Fragment implements OnMapReadyCallback, Tariff
                                 }
 
                                 if(STATUS==0){
-                                    tViewAddressStart.setText(direccion + " " + number);
+                                   // tViewAddressStart.setText(direccion + " " + number);
+                                    tViewAddressStart.setText(zero.getString("formatted_address"));
                                 }else {
                                     if(STATUS==1){
-                                        tViewAddressFinish.setText(direccion + " " + number);
+                                       // tViewAddressFinish.setText(direccion + " " + number);
+                                        tViewAddressFinish.setText(zero.getString("formatted_address"));
                                     }
                                 }
 

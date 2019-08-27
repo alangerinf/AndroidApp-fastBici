@@ -5,16 +5,26 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.airbnb.lottie.LottieAnimationView;
+import com.alanger.ioquiero.GetPrice_Query;
 import com.alanger.ioquiero.R;
+import com.alanger.ioquiero.WakeUpHerokuQuery;
 import com.alanger.ioquiero.login.view.LoginActivity;
 import com.alanger.ioquiero.models.SharedPreferencesManager;
 import com.alanger.ioquiero.models.User;
+import com.alanger.ioquiero.volskayaGraphql.GraphqlClient;
+import com.apollographql.apollo.ApolloCall;
+import com.apollographql.apollo.exception.ApolloException;
+import com.google.android.material.snackbar.Snackbar;
+
+import javax.annotation.Nonnull;
 
 
 public class ActivityPreloader extends Activity {
@@ -25,11 +35,16 @@ public class ActivityPreloader extends Activity {
     static TextView tViewlogo_p2;
     static Context ctx;
 
+    static String TAG = ActivityPreloader.class.getSimpleName();
+
+    Handler h = new Handler();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_preloader);
         declare();
+        conectandoServer();
         startAnimations();
     }
 
@@ -41,6 +56,50 @@ public class ActivityPreloader extends Activity {
         iViewLogoEmpresa = findViewById(R.id.iViewLogoEmpresa);
         tViewlogo_p1 = findViewById(R.id.tViewlogo_p1);
         tViewlogo_p2 = findViewById(R.id.tViewlogo_p2);
+    }
+
+
+    void conectandoServer(){
+
+
+        Log.d(TAG,"conectandoServer");
+
+        GraphqlClient.getMyApolloClient()
+                .query(
+                        WakeUpHerokuQuery
+                                .builder()
+                                .build()
+                )
+                .enqueue(new ApolloCall.Callback<WakeUpHerokuQuery.Data>() {
+
+                    @Override
+                    public void onResponse(@Nonnull com.apollographql.apollo.api.Response<WakeUpHerokuQuery.Data> response) {
+
+                        WakeUpHerokuQuery.Data data = response.data();
+                        String resp =  data.wakeUpHeroku();
+                        Log.d(TAG,resp);
+
+                        h.post(()->{
+                            Log.d(TAG,"Comprobación Exitosa del Servidor");
+
+                        });
+
+
+
+                    }
+
+                    @Override
+                    public void onFailure(@Nonnull ApolloException e) {
+
+                        h.post(() ->{
+
+                                    Log.d(TAG,"onFailure:"+e.toString());
+                        }
+
+                        );
+
+                    }
+                });
     }
 
     void startAnimations(){

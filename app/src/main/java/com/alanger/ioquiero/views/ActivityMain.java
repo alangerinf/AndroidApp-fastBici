@@ -8,6 +8,7 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 
+import com.alanger.ioquiero.BuildConfig;
 import com.alanger.ioquiero.Configurations;
 import com.alanger.ioquiero.directionhelpers.TaskLoadedCallback;
 import com.alanger.ioquiero.views.fragments.FragmentCambiarContrasenha;
@@ -143,9 +144,8 @@ public class ActivityMain extends AppCompatActivity
 
 
     void call(){
-        Intent i = new Intent(Intent.ACTION_CALL);
+        Intent i = new Intent(Intent.ACTION_DIAL);
         i.setData(Uri.parse("tel:"+ Configurations.phone));
-
 
         // Here, thisActivity is the current activity
         if (ContextCompat.checkSelfPermission(this,
@@ -201,7 +201,17 @@ public class ActivityMain extends AppCompatActivity
 
             */
         } else if (id == R.id.nav_share) {
-
+            try {
+                Intent shareIntent = new Intent(Intent.ACTION_SEND);
+                shareIntent.setType("text/plain");
+                shareIntent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.app_name));
+                String shareMessage= "\nHola, te recomiendo esta Aplicación.\n\n";
+                shareMessage = shareMessage + "https://play.google.com/store/apps/details?id=" + BuildConfig.APPLICATION_ID +"\n\n";
+                shareIntent.putExtra(Intent.EXTRA_TEXT, shareMessage);
+                startActivity(Intent.createChooser(shareIntent, "choose one"));
+            } catch(Exception e) {
+                //e.toString();
+            }
 
         }
 

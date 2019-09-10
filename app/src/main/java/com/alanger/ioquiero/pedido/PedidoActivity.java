@@ -52,7 +52,7 @@ public class PedidoActivity extends AppCompatActivity implements
         ResumenFragment.OnFragmentInteractionListener
 {
 
-    private static String TAG = PedidoActivity.class.getSimpleName();
+    private static String TAG = PedidoActivity.class.getSimpleName()+"Log";
 
 
     private Pedido PEDIDO;
@@ -69,7 +69,7 @@ public class PedidoActivity extends AppCompatActivity implements
 
 
 
-    static CustomViewPager viewPager;
+    public static CustomViewPager viewPager;
     static SectionsPagerAdapter sectionsPagerAdapter;
     static Context ctx;
 
@@ -365,28 +365,6 @@ public class PedidoActivity extends AppCompatActivity implements
     }
 
 
-    @Override
-    public void onFragmentInteractionPaso1(boolean flag1, String refA, String refB, List<Product> productos) {
-        this.flag1 = flag1;
-        PEDIDO.setRefA(refA);
-        PEDIDO.setRefB(refB);
-        PEDIDO.setProductList(productos);
-        PageViewModel.set(PEDIDO);
-        if(flag1){
-            progressBar1.setVisibility(View.INVISIBLE);
-            iViewOk1.setVisibility(View.VISIBLE);
-            viewPager.setAllowedSwipeDirection(CustomViewPager.SwipeDirection.right);
-            enableBtnNext();
-            disableBtnBack();
-        }else {
-           disableBtnNext();
-           disableBtnBack();
-            progressBar1.setVisibility(View.VISIBLE);
-            iViewOk1.setVisibility(View.INVISIBLE);
-            viewPager.setAllowedSwipeDirection(CustomViewPager.SwipeDirection.none);
-        }
-    }
-
 
     void enableBtnNext(){
         btnNext.setBackgroundColor(getResources().getColor(R.color.colorAccent));
@@ -461,11 +439,12 @@ public class PedidoActivity extends AppCompatActivity implements
     }
 
     @Override
-    public void onFragmentInteractionPaso2(boolean flag, String nombre, String telefono, String descripcion) {
+    public void onFragmentInteractionPaso2(boolean flag, String nombre, String telefono, String refB) {
+        Log.d(TAG,"paso 2 interaction");
         this.flag2 = flag;
         PEDIDO.setNameCliente(nombre);
         PEDIDO.setTelefono(telefono);
-        PEDIDO.setDescripcion(descripcion);
+        PEDIDO.setRefB(refB);
         PageViewModel.set(PEDIDO);
         enableBtnBack();
         if(flag2){
@@ -487,5 +466,28 @@ public class PedidoActivity extends AppCompatActivity implements
     @Override
     public void onFragmentInteraction(Uri uri) {
 
+    }
+
+    @Override
+    public void onFragmentInteractionPaso1(boolean flag, String refA, String productos) {
+        Log.d(TAG,"paso 1 interaction");
+        this.flag1 = flag;
+        PEDIDO.setRefA(refA);
+        PEDIDO.setProductList(productos);
+        PageViewModel.set(PEDIDO);
+
+        if(flag1){
+            progressBar1.setVisibility(View.INVISIBLE);
+            iViewOk1.setVisibility(View.VISIBLE);
+            viewPager.setAllowedSwipeDirection(CustomViewPager.SwipeDirection.right);
+            enableBtnNext();
+            disableBtnBack();
+        }else {
+            disableBtnNext();
+            disableBtnBack();
+            progressBar1.setVisibility(View.VISIBLE);
+            iViewOk1.setVisibility(View.INVISIBLE);
+            viewPager.setAllowedSwipeDirection(CustomViewPager.SwipeDirection.none);
+        }
     }
 }

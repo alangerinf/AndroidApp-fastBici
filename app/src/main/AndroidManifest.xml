@@ -59,7 +59,9 @@
         <activity
             android:name=".pedido.PedidoActivity"
             android:label="@string/title_activity_pedido"
-            android:theme="@style/AppTheme2.NoActionBar" />
+            android:theme="@style/AppTheme2.NoActionBar" >
+
+        </activity>
         <activity android:name=".views.OrdersTrayActivity" />
         <activity android:name=".register.view.VerifyTokenActivity" />
         <activity

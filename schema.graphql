@@ -133,7 +133,7 @@ type volskayaMessageOutputType implements volskayaMessageInterface {
 type volskayaMessagePriceOutputType {
     approximateTime: Float
     co2Saved: Float
-    distance: Int
+    distance: Float
     price: Float
     volskayaResponse: volskayaMessageOutputType!
 }

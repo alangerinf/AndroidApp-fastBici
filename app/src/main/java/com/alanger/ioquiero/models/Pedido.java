@@ -6,7 +6,10 @@ import java.util.List;
 public class Pedido {
 
     private String clientID;
-    private List<Product> productList;
+
+
+
+    private String productList;
     private String refA;
     private String refB;
     private String telefono;
@@ -25,15 +28,15 @@ public class Pedido {
     private double price;
 
     public Pedido() {
-        this.productList = new ArrayList<>();
-        clientID = "";
-        LatA=0;
-        LonA=0;
-        nameAddressA="";
+        this.productList = "";
+        this.clientID = "";
+        this.LatA=0;
+        this.LonA=0;
+        this.nameAddressA="";
 
-        LatB=0;
-        LonB=0;
-        nameAddressB="";
+        this.LatB=0;
+        this.LonB=0;
+        this.nameAddressB="";
 
 
         this.refA="";
@@ -42,12 +45,11 @@ public class Pedido {
         this.nameCliente="";
         this.descripcion="";
     }
-
-    public List<Product> getProductList() {
+    public String getProductList() {
         return productList;
     }
 
-    public void setProductList(List<Product> productList) {
+    public void setProductList(String productList) {
         this.productList = productList;
     }
 

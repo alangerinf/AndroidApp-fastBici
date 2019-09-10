@@ -76,7 +76,6 @@ public class ResumenFragment extends Fragment {
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
     }
-    static TextView fpresumen_tViewNProductos;
     static TextView fpresumen_tViewDesc;
     static TextView fpresumen_tViewClienteName;
     static WebView mWebView;
@@ -89,7 +88,6 @@ public class ResumenFragment extends Fragment {
 
         View root = inflater.inflate(R.layout.fragment_resumen, container, false);
 
-        fpresumen_tViewNProductos = root.findViewById(R.id.fpresumen_tViewNProductos);
         fpresumen_tViewDesc = root.findViewById(R.id.fpresumen_tViewDesc);
         fpresumen_tViewClienteName = root.findViewById(R.id.fpresumen_tViewClienteName);
         mWebView = root.findViewById(R.id.fpresumen_webView);
@@ -111,7 +109,6 @@ public class ResumenFragment extends Fragment {
         pageViewModel.get().observe(this, new Observer<Pedido>() {
             @Override
             public void onChanged(Pedido pedido) {
-                fpresumen_tViewNProductos.setText(""+pedido.getProductList().size()+" productos diferentes");
                 fpresumen_tViewDesc.setText(""+pedido.getDescripcion());
                 fpresumen_tViewClienteName.setText("Preguntar por "+pedido.getNameCliente());
                 LoadMap("-8.1141364","-79.0239832","-8.103876","-79.018018");

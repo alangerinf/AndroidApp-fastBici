@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +23,7 @@ import android.widget.Toast;
 
 import com.alanger.ioquiero.R;
 import com.alanger.ioquiero.models.Product;
+import com.alanger.ioquiero.pedido.PedidoActivity;
 import com.alanger.ioquiero.pedido.adapters.RViewProductListAdapter;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
@@ -49,13 +51,14 @@ public class Paso1Fragment extends Fragment {
     private String mParam2;
 
     private static Context ctx;
-    private static RecyclerView rView;
-    private static RViewProductListAdapter adapter;
+ //   private static RecyclerView rView;
+ //   private static RViewProductListAdapter adapter;
     private static View fp1_rootView;
 
-    private  static FloatingActionButton fp1_addProducts;
+ //   private  static FloatingActionButton fp1_addProducts;
     private  static TextInputEditText fp1_tietRefA;
-    private  static TextInputEditText fp1_tietRefB;
+    private  static TextInputEditText fp1_tietDescripcion;
+   // private  static TextInputEditText fp1_tietRefB;
 
     private static List<Product> productList  = new ArrayList<>();
 
@@ -104,37 +107,58 @@ public class Paso1Fragment extends Fragment {
     }
 
     private void events() {
-        fp1_addProducts.setOnClickListener(new View.OnClickListener() {
+  /*      fp1_addProducts.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               /* List<String> pro = new ArrayList<>();
-                pro.add("pro1");
-                pro.add("pro2");
-                enviar(fp1_tietRefA.getText().toString(),fp1_tietRefB.getText().toString(),pro);
-            */
+               // List<String> pro = new ArrayList<>();
+               // pro.add("pro1");
+               // pro.add("pro2");
+              //  enviar(fp1_tietRefA.getText().toString(),fp1_tietRefB.getText().toString(),pro);
+            //
                 showDialogProduct(new Product(),true);
             }
         });
-
+*/
 
     }
 
     private void declare() {
         //productList = new ArrayList<>();
         fp1_rootView = getView().findViewById(R.id.fp1_rootView);
-        rView = getView().findViewById(R.id.fp1_rViewProductos);
-        adapter = new RViewProductListAdapter(getContext(),productList);
+      //  rView = getView().findViewById(R.id.fp1_rViewProductos);
+      //  adapter = new RViewProductListAdapter(getContext(),productList);
 
-        new ItemTouchHelper(itemTouchHelperCallBack).attachToRecyclerView(rView);
-        rView.setAdapter(adapter);
+      //  new ItemTouchHelper(itemTouchHelperCallBack).attachToRecyclerView(rView);
+      //  rView.setAdapter(adapter);
 
-        fp1_addProducts = getView().findViewById(R.id.fp1_fabAddProducts);
+      //  fp1_addProducts = getView().findViewById(R.id.fp1_fabAddProducts);
         fp1_tietRefA = getView().findViewById(R.id.fp1_tietRefA);
-        fp1_tietRefB = getView().findViewById(R.id.fp1_tietRefB);
+      //  fp1_tietRefB = getView().findViewById(R.id.fp1_tietRefB);
+
+        fp1_tietDescripcion = getView().findViewById(R.id.fp1_tietDescripcion);
+        fp1_tietDescripcion.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                Log.d("paso1","esc");
+                if(PedidoActivity.viewPager.getCurrentItem()==0){
+                    enviar(fp1_tietRefA.getText().toString(),fp1_tietDescripcion.getText().toString());
+                }
+            }
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
 
     }
-
-    @Override
+        @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
@@ -149,13 +173,16 @@ public class Paso1Fragment extends Fragment {
         events();
     }
     // TODO: Rename method, update argument and hook method into UI event
-    public void enviar(String refA, String refB, List<Product> productos) {
+    public void enviar(String refA, String productos) {
         if (mListener != null) {
             boolean flag = true;
-            if(productos.size()==0){
+
+
+            if(productos.length()==0){
                 flag=false;
             }
-            mListener.onFragmentInteractionPaso1(flag, refA, refB, productos );
+
+            mListener.onFragmentInteractionPaso1(flag, refA, productos );
         }
     }
 
@@ -179,10 +206,10 @@ public class Paso1Fragment extends Fragment {
 
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
-        void onFragmentInteractionPaso1(boolean flag, String refA, String regB, List<Product> productos);
+        void onFragmentInteractionPaso1(boolean flag, String refA, String productos);
 
     }
-
+/*
     private void showDialogProduct(Product product, boolean isNew){
         Dialog dialogClose;
         dialogClose = new Dialog(ctx);
@@ -267,8 +294,9 @@ public class Paso1Fragment extends Fragment {
         dialogClose.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dialogClose.show();
     }
+    */
 
-
+/*
     ItemTouchHelper.SimpleCallback itemTouchHelperCallBack = new ItemTouchHelper.SimpleCallback(0,ItemTouchHelper.RIGHT) {
         @Override
         public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
@@ -293,5 +321,5 @@ public class Paso1Fragment extends Fragment {
             snackbar.show();
         }
     };
-
+*/
 }

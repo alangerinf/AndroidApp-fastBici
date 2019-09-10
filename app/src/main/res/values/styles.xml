@@ -38,12 +38,11 @@
         <item name="colorPrimary">@color/white</item>
     </style>
 
-
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.MaterialComponents.Light" />
 
     <style name="AppTheme2.PopupOverlay" parent="ThemeOverlay.MaterialComponents.Light" />
 
-    <style name="UnelevatedButton" parent="Widget.MaterialComponents.Button.UnelevatedButton"></style>
+    <style name="UnelevatedButton" parent="Widget.MaterialComponents.Button.UnelevatedButton" />
 
     <style name="customTextInputLayout" parent="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
         <item name="colorPrimary">@color/colorPrimary</item>

@@ -38,7 +38,8 @@ public class Paso2Fragment extends Fragment {
 
     TextInputEditText fp2_tietNombre;
     TextInputEditText fp2_tietTelefono;
-    TextInputEditText fp2_tietDescripcion;
+    TextInputEditText fp2_tietRefB;
+   // TextInputEditText fp2_tietDescripcion;
 
 
 
@@ -123,6 +124,7 @@ public class Paso2Fragment extends Fragment {
             }
         });
 
+        /*
         fp2_tietDescripcion.addTextChangedListener(new TextWatcher() {
 
             public void onTextChanged(CharSequence s, int start, int before,
@@ -143,12 +145,14 @@ public class Paso2Fragment extends Fragment {
 
             }
         });
+        */
     }
 
     private void declare() {
         fp2_tietNombre = getView().findViewById(R.id.fp2_tietNombre);
         fp2_tietTelefono = getView().findViewById(R.id.fp2_tietTelefono);
-        fp2_tietDescripcion = getView().findViewById(R.id.fp2_tietDescripcion);
+        fp2_tietRefB = getView().findViewById(R.id.fp2_tietRefB);
+       // fp2_tietDescripcion = getView().findViewById(R.id.fp2_tietDescripcion);
     }
 
     @Override
@@ -163,13 +167,15 @@ public class Paso2Fragment extends Fragment {
         if (mListener != null) {
             String nombre = fp2_tietNombre.getText().toString();
             String telefono = fp2_tietTelefono.getText().toString();
-            String descripcion = fp2_tietDescripcion.getText().toString();
+            String refB  = fp2_tietRefB.getText().toString();
+           // String descripcion = fp2_tietDescripcion.getText().toString();
 
             boolean flag = true;
-            if(nombre.equals("")||telefono.equals("")||descripcion.equals("")){
+
+            if(nombre.equals("")||telefono.equals("")){
                 flag= false;
             }
-            mListener.onFragmentInteractionPaso2(flag,nombre,telefono,descripcion);
+            mListener.onFragmentInteractionPaso2(flag,nombre,telefono,refB);
         }
     }
 
@@ -202,6 +208,6 @@ public class Paso2Fragment extends Fragment {
      */
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
-        void onFragmentInteractionPaso2(boolean flag, String nombre,String telefono, String descripcion);
+        void onFragmentInteractionPaso2(boolean flag, String nombre,String telefono,String refB);
     }
 }

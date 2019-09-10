@@ -13,10 +13,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="28dp"
         android:layout_marginEnd="24dp"
         android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:ignore="MissingConstraints">
@@ -37,9 +38,9 @@
                     android:layout_height="30dp"
                     android:background="@drawable/shape_shadow_center"
                     android:text="A"
-                    android:textStyle="bold"
                     android:textAlignment="center"
-                    android:textSize="14sp" />
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
@@ -84,27 +85,30 @@
             </LinearLayout>
 
             <com.google.android.material.textfield.TextInputLayout
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                 android:layout_width="match_parent"
-                android:padding="0dp"
                 android:layout_height="100dp"
                 android:hint="@string/referencia_a"
-                android:textColorHint="@color/colorPrimaryDark"
+                android:padding="0dp"
+                android:textColorHint="@color/materialGrey600"
+                app:boxCornerRadiusBottomEnd="50dp"
+                app:boxCornerRadiusBottomStart="50dp"
+                app:boxCornerRadiusTopEnd="50dp"
+                app:boxCornerRadiusTopStart="50dp"
                 app:boxStrokeColor="@color/colorPrimaryDark"
                 app:hintTextColor="@color/colorPrimaryDark">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/fp1_tietRefA"
-                    android:theme="@style/customTextInputLayout"
-                    android:textCursorDrawable="@drawable/custom_edit_text_cursor"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    />
+                    android:textCursorDrawable="@drawable/custom_edit_text_cursor"
+                    android:theme="@style/customTextInputLayout" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
         </LinearLayout>
-
+<!--
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -121,9 +125,9 @@
                     android:layout_height="30dp"
                     android:background="@drawable/shape_shadow_center"
                     android:text="B"
-                    android:textStyle="bold"
                     android:textAlignment="center"
-                    android:textSize="14sp" />
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
@@ -168,25 +172,65 @@
             </LinearLayout>
 
             <com.google.android.material.textfield.TextInputLayout
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                 android:layout_width="match_parent"
                 android:layout_height="100dp"
                 android:hint="@string/referencia_b"
-                android:textColorHint="@color/colorPrimaryDark"
+                android:textColorHint="@color/materialGrey600"
+                app:boxCornerRadiusBottomEnd="50dp"
+                app:boxCornerRadiusBottomStart="50dp"
+                app:boxCornerRadiusTopEnd="50dp"
+                app:boxCornerRadiusTopStart="50dp"
                 app:boxStrokeColor="@color/colorPrimaryDark"
                 app:hintTextColor="@color/colorPrimaryDark">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/fp1_tietRefB"
-                    android:theme="@style/customTextInputLayout"
-                    android:textCursorDrawable="@drawable/custom_edit_text_cursor"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:textCursorDrawable="@drawable/custom_edit_text_cursor"
+                    android:theme="@style/customTextInputLayout" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
         </LinearLayout>
+-->
+        <LinearLayout
+            android:layout_marginTop="@dimen/margin_standar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="¿Que Productos Enviaras?"
+                android:textSize="@dimen/textsize_primary"
+                android:textColor="@color/colorPrimaryDark"
+                />
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+                android:layout_width="match_parent"
+                android:padding="0dp"
+                android:layout_height="wrap_content"
+                android:hint="@string/descripci_n"
+                app:helperText="Sea breve y conciso en su descripción"
+                app:boxStrokeColor="@color/colorPrimaryDark"
+                app:hintTextColor="@color/colorPrimaryDark">
 
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/fp1_tietDescripcion"
+                    android:theme="@style/customTextInputLayout"
+                    android:textCursorDrawable="@drawable/custom_edit_text_cursor"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:minLines="5"
+                    android:gravity="top"
+                    android:inputType="textMultiLine"
+                    />
+
+            </com.google.android.material.textfield.TextInputLayout>
+        </LinearLayout>
+        <!--
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -215,10 +259,10 @@
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/fp1_rViewProductos"
-                    app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-                    app:spanCount="1"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+                    app:spanCount="1">
 
 
                 </androidx.recyclerview.widget.RecyclerView>
@@ -229,9 +273,11 @@
 
         </LinearLayout>
 
+        -->
+
     </LinearLayout>
 
-
+<!--
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fp1_fabAddProducts"
         style="@style/Widget.MaterialComponents.FloatingActionButton"
@@ -248,7 +294,7 @@
         app:srcCompat="@drawable/ic_add_white_24dp" />
 
 
-
+-->
 
 
 

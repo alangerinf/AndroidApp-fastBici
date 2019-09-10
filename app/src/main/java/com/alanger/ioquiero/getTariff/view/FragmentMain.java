@@ -4,12 +4,14 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.Geocoder;
 import android.location.Location;
+import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
@@ -20,6 +22,7 @@ import android.os.Handler;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AlertDialog;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -134,29 +137,27 @@ public class FragmentMain extends Fragment implements OnMapReadyCallback, Tariff
 
     @Override
     public void verifyPermission() {
-        String[] PERMISSIONS = {
-                android.Manifest.permission.ACCESS_FINE_LOCATION,
-                android.Manifest.permission.ACCESS_COARSE_LOCATION
-        };
 
+        Log.d(TAG,"falg1");
 
-
-
-        if (ContextCompat.checkSelfPermission(getActivity(),
+        if (ContextCompat.checkSelfPermission(ctx,
                 Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED) {
 
+            Log.d(TAG,"falg2");
             // Asking user if explanation is needed
             if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(),
                     Manifest.permission.ACCESS_FINE_LOCATION)) {
 
+                Log.d(TAG,"falg4");
 
                 //Prompt the user once explanation has been shown
                 requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
                         PERMISION_REQUEST_GPS);
 
-
             } else {
+
+                Log.d(TAG,"falg5");
                 // No explanation needed, we can request the permission.
                 requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
                         PERMISION_REQUEST_GPS);
@@ -164,17 +165,55 @@ public class FragmentMain extends Fragment implements OnMapReadyCallback, Tariff
 
         } else {
 
+            Log.d(TAG,"falg3");
 
-            mMap.getUiSettings().setMyLocationButtonEnabled(true);
-            mMap.setMyLocationEnabled(true);
-            runnable.run();
+            LocationManager manager = (LocationManager) ctx.getSystemService(Context.LOCATION_SERVICE );
+            boolean statusOfGPS = manager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+
+            if(statusOfGPS){
+                mMap.getUiSettings().setMyLocationButtonEnabled(true);
+                mMap.setMyLocationEnabled(true);
+                runnable.run();
+            }else {
+                showGPSDisabledAlertToUser();
+            }
+
+
         }
 
-
-
-
-
     }
+
+    private void showGPSDisabledAlertToUser(){
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(ctx, R.style.AlertDialogTheme);
+        alertDialogBuilder.setMessage("Su GPS se emcuentra desactivado, ¿Desea Activarlo?")
+                .setCancelable(false)
+                .setPositiveButton("Activar",
+                        new DialogInterface.OnClickListener(){
+                            public void onClick(DialogInterface dialog, int id){
+                                Intent callGPSSettingIntent = new Intent(
+                                        android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                                startActivity(callGPSSettingIntent);
+                            }
+                        });
+        alertDialogBuilder.setNegativeButton("Cancelar",
+                new DialogInterface.OnClickListener(){
+                    public void onClick(DialogInterface dialog, int id){
+                        dialog.cancel();
+                        verifyPermission();
+                    }
+                });
+        AlertDialog alert = alertDialogBuilder.create();
+
+        alert.show();
+    }
+
+    public boolean checkLocationPermission()
+    {
+        String permission = "android.permission.ACCESS_FINE_LOCATION";
+        int res = ctx.checkCallingOrSelfPermission(permission);
+        return (res == PackageManager.PERMISSION_GRANTED);
+    }
+
 
     @Override
     public void openTariffResult() {
@@ -721,7 +760,6 @@ public class FragmentMain extends Fragment implements OnMapReadyCallback, Tariff
 
         btPedir.setOnClickListener(v -> {
 
-
             String uriGoogleMaps = "http://maps.google.com/?mode=walking%26saddr="+latStart+","+lonStart+"%26daddr="+latFinish+","+lonFinish;
             //String uriGoogleMaps = "http://maps.google.com/?mode=walking%26saddr=-8.1158903,-79.0356704%26daddr=-8.1179977,-79.0358920";
             String phone = Configurations.phone;
@@ -1144,7 +1182,16 @@ public class FragmentMain extends Fragment implements OnMapReadyCallback, Tariff
         switch (requestCode) {
             case PERMISION_REQUEST_GPS:
                 // If request is cancelled, the result arrays are empty.
-                verifyPermission();
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    mMap.getUiSettings().setMyLocationButtonEnabled(true);
+                    mMap.setMyLocationEnabled(true);
+                    runnable.run();
+                    Toast.makeText(ctx,"permiso consedido",Toast.LENGTH_LONG).show();
+                }else {
+                    verifyPermission();
+                }
+
 
                 return;
 
@@ -1290,6 +1337,7 @@ public class FragmentMain extends Fragment implements OnMapReadyCallback, Tariff
                         }
                         try {
                             Thread.sleep(500);
+                            verifyPermission();
                             run();
                         } catch (InterruptedException e) {
                             e.printStackTrace();

@@ -1,7 +1,7 @@
 <resources>
-    <string name="app_name">FastBici</string>
+    <string name="app_name">Fastbici</string>
     <string name="title_activity_maps">Map</string>
-    <string name="title_activity_main">Fast Bici</string>
+    <string name="title_activity_main">Fastbici</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="nav_header_title">Android Studio</string>
@@ -28,10 +28,10 @@
     <string name="recuperar_pass">Recuperar Contraseña</string>
     <string name="ingresar">Ingresar</string>
     <string name="contrasena">Contraseña</string>
-    <string name="company_mark">.@FastBici</string>
+    <string name="company_mark">.@Fastbici</string>
     <string name="b">B</string>
-    <string name="lugar_de_partida">Lugar de Partida ...</string>
-    <string name="lugar_de_llegada">Lugar de Llegada ...</string>
+    <string name="lugar_de_partida">Lugar de Recojo</string>
+    <string name="lugar_de_llegada">Lugar de Entrega</string>
     <string name="phone_invalid">Número de Telefono invalido</string>
     <string name="bandeja_de_pedidos_vacia">Bandeja de Pedidos Vacia</string>
     <string name="title_activity_pedido">PedidoActivity</string>
@@ -51,4 +51,10 @@
     <string name="cantidad">Cantidad</string>
     <string name="producto">Producto</string>
     <string name="cancelar">Cancelar</string>
+    <string name="contactanos">Contactanos</string>
+    <string name="punto_de_origen">PUNTO DE ORIGEN</string>
+    <string name="punto_de_llegada">PUNTO DE LLEGADA</string>
+    <string name="title_activity_maps32">Map</string>
+    <string name="title_activity_maps_activitysadad">Map</string>
+    <string name="title_activity_maps_activityaaa">Map</string>
 </resources>

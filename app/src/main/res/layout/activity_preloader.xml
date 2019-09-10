@@ -5,52 +5,54 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".views.ActivityPreloader">
-<!--
+
+
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/shape_bg_preloader"
         android:alpha="0.3"
-
         tools:ignore="MissingConstraints">
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
--->
+
     <com.airbnb.lottie.LottieAnimationView
         android:id="@+id/lottie"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:lottie_fileName="lottie/loco.json"
+        android:layout_height="wrap_content"
         android:alpha="0.5"
-        android:visibility="invisible"
-        android:scaleType="centerCrop"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
         app:lottie_autoPlay="true"
+        app:lottie_fileName="lottie/animation_preloader.json"
         app:lottie_loop="true"
         tools:ignore="MissingConstraints" />
 
     <ImageView
         android:id="@+id/iViewLogoEmpresa"
         android:layout_width="200dp"
-        android:layout_height="65dp"
-        android:src="@drawable/icon_pedido"
+        android:layout_height="200dp"
+        android:visibility="invisible"
+        android:src="@drawable/ic_logo_fast"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.35" />
 
     <TextView
         android:id="@+id/tViewlogo_p1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Bienvenido Profesor "
-        android:visibility="invisible"
+        android:layout_marginTop="@dimen/margin_min"
+        android:text="La Opción más Eficaz"
         android:textSize="20sp"
+        android:visibility="invisible"
+        app:layout_constraintEnd_toEndOf="@+id/iViewLogoEmpresa"
         app:layout_constraintStart_toStartOf="@+id/iViewLogoEmpresa"
         app:layout_constraintTop_toBottomOf="@+id/iViewLogoEmpresa" />
 
@@ -58,13 +60,14 @@
         android:id="@+id/tViewlogo_p2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Carlos Castillo Diestra."
+        android:text="para todas tus entregas."
         android:textSize="16sp"
         android:visibility="invisible"
+        app:layout_constraintEnd_toEndOf="@+id/tViewlogo_p1"
         app:layout_constraintStart_toStartOf="@+id/tViewlogo_p1"
         app:layout_constraintTop_toBottomOf="@+id/tViewlogo_p1" />
 
-
+<!--
     <com.airbnb.lottie.LottieAnimationView
         android:id="@+id/ltWorld"
         android:layout_width="500dp"
@@ -83,4 +86,5 @@
         app:lottie_fileName="lottie/world_2.json"
         app:lottie_loop="true"
         tools:ignore="MissingConstraints" />
+        -->
 </androidx.constraintlayout.widget.ConstraintLayout>

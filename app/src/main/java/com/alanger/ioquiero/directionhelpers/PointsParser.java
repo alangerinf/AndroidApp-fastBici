@@ -1,7 +1,6 @@
 package com.alanger.ioquiero.directionhelpers;
 
 import android.content.Context;
-import android.content.res.Resources;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.util.Log;
@@ -9,7 +8,6 @@ import android.util.Log;
 import androidx.core.content.ContextCompat;
 
 import com.alanger.ioquiero.R;
-import com.alanger.ioquiero.getTariff.view.FragmentTariff;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.PolylineOptions;
 
@@ -80,7 +78,7 @@ public class PointsParser extends AsyncTask<String, Integer, List<List<HashMap<S
             lineOptions.addAll(points);
             if (directionMode.equalsIgnoreCase("walking")) {
                 lineOptions.width(10);
-                lineOptions.color(Color.GREEN);
+                lineOptions.color(ContextCompat.getColor((Context)taskCallback,R.color.colorPrimaryDark));
             } else {
                 lineOptions.width(20);
                 lineOptions.color(Color.BLUE);

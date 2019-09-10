@@ -5,7 +5,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/black"
-    >
+    android:clickable="true"
+    android:focusableInTouchMode="true"
+    android:focusable="true">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -20,7 +22,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
-
+            
             <fragment
                 android:id="@+id/map"
                 android:name="com.google.android.gms.maps.SupportMapFragment"
@@ -37,16 +39,29 @@
                 android:id="@+id/lottieMarker"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:lottie_fileName="lottie/loc1.json"
+                app:lottie_fileName="lottie/animation_marker.json"
                 app:lottie_autoPlay="true"
                 app:lottie_loop="true"
                 app:lottie_scale="0.3"
-                android:translationY="-25dp"
+                android:translationY="-15dp"
                 app:layout_constraintBottom_toBottomOf="@+id/map"
                 app:layout_constraintEnd_toEndOf="@+id/map"
                 app:layout_constraintStart_toStartOf="@+id/map"
                 app:layout_constraintTop_toTopOf="@+id/map"
                 tools:ignore="MissingConstraints" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/red_pointer"
+                android:layout_width="5dp"
+                android:layout_height="2dp"
+                android:background="@color/red"
+                app:layout_constraintBottom_toBottomOf="@+id/map"
+                app:layout_constraintEnd_toEndOf="@+id/map"
+                app:layout_constraintStart_toStartOf="@+id/map"
+                app:layout_constraintTop_toTopOf="@+id/map"
+                >
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
             <TextView
                 android:id="@+id/tViewMensaje"
@@ -78,8 +93,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:layout_marginLeft="30dp"
-                    android:layout_marginRight="30dp"
+                    android:layout_marginLeft="32dp"
+                    android:layout_marginRight="32dp"
                     android:paddingTop="8dp"
                     android:paddingBottom="8dp">
 
@@ -88,9 +103,9 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:backgroundTint="@color/colorPrimaryDark"
-
-                        android:text="PUNTO DE ORIGEN"
+                        android:background="@drawable/shape_drawer_itemlist"
                         android:textColor="@color/white"
+                        android:text="@string/punto_de_origen"
                         android:textSize="@dimen/textsize_primary"
                         android:visibility="invisible" />
 
@@ -99,22 +114,23 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_alignParentEnd="true"
-
                         android:layout_gravity="center"
                         android:backgroundTint="@color/colorPrimaryDark"
-                        android:text="PUNTO DE LLEGADA"
+                        android:background="@drawable/shape_drawer_itemlist"
                         android:textColor="@color/white"
+                        android:text="@string/punto_de_llegada"
                         android:textSize="@dimen/textsize_primary"
                         android:visibility="invisible" />
 
                     <androidx.appcompat.widget.AppCompatButton
-                        android:id="@+id/btnCalcular"
+                        android:id="@+id/btnPedir"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_alignParentRight="true"
                         android:layout_gravity="center"
+                        android:text="PEDIR AHORA"
                         android:backgroundTint="@color/colorPrimaryDark"
-                        android:text="CALCULAR PRECIO"
+                        android:background="@drawable/shape_drawer_itemlist"
                         android:textColor="@color/white"
                         android:textSize="@dimen/textsize_primary"
                         android:visibility="invisible" />
@@ -152,49 +168,118 @@
 
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/clViewKm"
+                android:id="@+id/clResultados"
                 android:layout_width="0dp"
-                android:layout_height="45dp"
-                android:layout_alignParentRight="true"
-                android:alpha="0.5"
-                android:background="@color/materialGrey600"
-                android:gravity="center"
-                android:padding="10dp"
-                tools:ignore="MissingConstraints"
-                app:layout_constraintStart_toStartOf="@id/txt2"
-                app:layout_constraintEnd_toEndOf="@id/txt2"
-                app:layout_constraintBottom_toBottomOf="@id/txt2"
-                app:layout_constraintTop_toTopOf="@id/txt2" />
-
-            <TextView
-                android:id="@+id/txt2"
-                android:layout_width="100dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:gravity="center"
-                android:padding="10dp"
-                android:text="0 km"
-                android:textColor="@color/white"
-                android:textStyle="bold"
+                android:layout_height="140dp"
+                android:layout_marginStart="48dp"
+                android:layout_marginEnd="48dp"
+                android:layout_marginBottom="@dimen/margin_min"
+                app:layout_constraintBottom_toTopOf="@+id/clPrecio"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/clViewFinish"
-                tools:ignore="MissingConstraints" />
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/clModalFinish"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@color/white"
-                android:visibility="invisible">
+                app:layout_constraintStart_toStartOf="parent"
+                tools:ignore="MissingConstraints">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/clBGResultados"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    tools:layout_editor_absoluteX="353dp"
-                    tools:layout_editor_absoluteY="143dp">
+                    android:layout_height="0dp"
+                    android:alpha="0.5"
+                    android:background="@drawable/shape_shadow_green">
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:orientation="vertical"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:layout_width="30dp"
+                            android:layout_height="match_parent"
+                            android:src="@drawable/ic_directions_bike_white_24dp" />
+
+                        <TextView
+                            android:id="@+id/tViewKilometers"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:padding="10dp"
+                            android:text="0 km"
+                            android:textColor="@color/white"
+                            android:textSize="16sp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:layout_width="30dp"
+                            android:layout_height="match_parent"
+                            android:src="@drawable/ic_timer_white_24dp" />
+
+                        <TextView
+                            android:id="@+id/tViewMin"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:padding="10dp"
+                            android:paddingStart="18dp"
+                            android:paddingEnd="18dp"
+                            android:text="0 min"
+                            android:textColor="@color/white"
+                            android:textSize="16sp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:layout_width="30dp"
+                            android:layout_height="match_parent"
+                            android:src="@drawable/ic_leaf_white" />
+
+                        <TextView
+                            android:id="@+id/tViewco2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:padding="10dp"
+                            android:paddingStart="18dp"
+                            android:paddingEnd="18dp"
+                            android:text="0 CO2"
+                            android:textColor="@color/white"
+                            android:textSize="16sp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+
+                </LinearLayout>
+
+
             </androidx.constraintlayout.widget.ConstraintLayout>
+
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/clViewFinish"
@@ -202,6 +287,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:layout_marginEnd="60dp"
+                android:alpha="0.3"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/clViewStart">
@@ -254,13 +340,13 @@
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
                 <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/clEditFinish"
+                    android:id="@+id/clSearchFinish"
                     android:layout_width="40dp"
                     android:layout_height="0dp"
                     android:layout_marginTop="4dp"
                     android:layout_marginEnd="4dp"
                     android:layout_marginBottom="4dp"
-                    android:background="@drawable/shape_green_button_right"
+                    android:background="@drawable/shape_red_button_right"
                     app:layout_constraintBottom_toBottomOf="@+id/tViewAddressFinish"
                     app:layout_constraintEnd_toEndOf="@+id/tViewAddressFinish"
                     app:layout_constraintTop_toTopOf="@+id/tViewAddressFinish">
@@ -276,16 +362,6 @@
                         app:layout_constraintTop_toTopOf="parent"
                         app:srcCompat="@drawable/ic_search_white_24dp" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/clModalStart"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@color/white"
-                android:visibility="invisible">
-
             </androidx.constraintlayout.widget.ConstraintLayout>
 
 
@@ -349,7 +425,7 @@
 
 
                 <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/clEditStart"
+                    android:id="@+id/clSearchStart"
                     android:layout_width="40dp"
                     android:layout_height="0dp"
                     android:layout_marginTop="4dp"
@@ -374,9 +450,212 @@
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/clPrecio"
+                android:visibility="visible"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:background="@drawable/shape_drawer_itemlist"
+                app:layout_constraintBottom_toTopOf="@+id/lLayoutPrecio"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent">
+
+                <TextView
+                    android:id="@+id/tViewPriceEntero"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="10"
+                    android:textSize="32sp"
+                    app:layout_constraintBottom_toBottomOf="@+id/textView31"
+                    app:layout_constraintEnd_toStartOf="@+id/tViewPriceDecimal"
+                    app:layout_constraintStart_toEndOf="@+id/textView31" />
+
+                <TextView
+                    android:id="@+id/textView31"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:text="S/."
+                    android:textSize="32sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/tViewPriceEntero"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/tViewPriceDecimal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginEnd="16dp"
+                    android:text="00"
+                    android:textSize="18sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/tViewPriceEntero" />
+
+                <View
+                    android:id="@+id/divider5"
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:background="@color/grayDark"
+                    app:layout_constraintEnd_toEndOf="@+id/tViewPriceDecimal"
+                    app:layout_constraintStart_toStartOf="@+id/tViewPriceDecimal"
+                    app:layout_constraintTop_toBottomOf="@+id/tViewPriceDecimal" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/progress_dialog"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clickable="true"
+        android:focusable="true"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/constraintLayout15"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:alpha="0.6"
+            android:background="@color/white"
+            tools:ignore="MissingConstraints">
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/lottie"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:layout_marginTop="8dp"
+            android:scaleType="centerCrop"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:lottie_autoPlay="true"
+            app:lottie_fileName="lottie/anim_loading2.json"
+            app:lottie_loop="true"
+            tools:ignore="MissingConstraints" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/clSearch"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        android:clickable="true"
+        android:focusable="true"
+        >
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/shape_shadow_center"
+
+            />
+
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fAButtonClearText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:backgroundTint="@color/redLight"
+            app:tint="@color/white"
+            android:clickable="true"
+            android:visibility="gone"
+            android:scaleX="0.5"
+            android:scaleY="0.5"
+            app:layout_constraintBottom_toBottomOf="@+id/cLayoutSearch"
+            app:layout_constraintEnd_toEndOf="@+id/cLayoutSearch"
+            app:layout_constraintTop_toTopOf="@+id/cLayoutSearch"
+            app:srcCompat="@drawable/ic_clear_white_24dp"
+            tools:ignore="MissingConstraints"
+            android:focusable="true" />
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/cLayoutSearch"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:background="@drawable/shape_shadow_center"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/iViewClose">
+
+            <ImageView
+                android:id="@+id/imageView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:contentDescription="TODO"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/ic_search_black_24dp" />
+
+            <EditText
+                android:id="@+id/eTextSearch"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="32dp"
+                android:background="@color/white"
+                android:ems="10"
+                android:hint="Lugar de Recojo ..."
+                android:maxLines="1"
+                android:inputType="textPersonName"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/imageView"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rViewPlaces"
+            app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+            app:spanCount="1"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="16dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/cLayoutSearch">
+
+        </androidx.recyclerview.widget.RecyclerView>
+
+        <ImageView
+            android:id="@+id/iViewClose"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:layout_marginEnd="12dp"
+            android:src="@drawable/ic_clear_red_24dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="ContentDescription,MissingConstraints" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
 
 
 

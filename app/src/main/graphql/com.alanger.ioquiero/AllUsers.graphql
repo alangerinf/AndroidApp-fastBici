@@ -6,6 +6,35 @@ query AllUsersQuery {
     }
 }
 
+query wakeUpHeroku {
+    wakeUpHeroku
+}
+
+
+query GetPrice_Query($latStart:Float!,$lonStart:Float!,$latEnd:Float!,$lonEnd:Float!) {
+    getPrice(
+        coordinateStart:{
+            latitude: $latStart,
+            longitude: $lonStart
+        },
+        coordinateFinish: {
+            latitude: $latEnd,
+            longitude: $lonEnd
+        }
+    ){
+        distance,
+        price,
+        co2Saved,
+        approximateTime,
+        volskayaResponse{
+            message,
+            responseCode,
+            responseMessage
+        }
+    }
+}
+
+
 mutation RegisterOrder(
 $route: RouteFieldsInput!
 $clientId: String!
@@ -77,29 +106,6 @@ query getUser($_id:String!){
             message,
             responseCode,
             responseMessage
-        }
-    }
-}
-
-
-query GetPrice($latStart:Float!,$lonStart:Float!,$latFinish:Float!,$lonFinish:Float!) {
-    getPrice(
-        coordinateStart:
-        {
-            latitude:$latStart
-            ,longitude:$lonStart
-        }
-        ,coordinateFinish:
-        {
-            latitude:$latFinish
-            ,longitude: $lonFinish
-        }
-    ){
-        price,
-        volskayaResponse{
-            message
-            ,responseCode
-            ,responseMessage
         }
     }
 }

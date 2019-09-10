@@ -6,6 +6,8 @@ import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.os.Handler;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
+
 import android.view.View;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebChromeClient;
@@ -109,6 +111,8 @@ public class ActivityShowTariffResult extends AppCompatActivity {
 
         });
     }
+
+
 
     private void CargarDatosPrecioBase() {
 

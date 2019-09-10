@@ -33,7 +33,6 @@ public class FragmentCambiarContrasenha extends Fragment {
 
     private OnFragmentInteractionListener mListener;
 
-
     public FragmentCambiarContrasenha() {
         // Required empty public constructor
 

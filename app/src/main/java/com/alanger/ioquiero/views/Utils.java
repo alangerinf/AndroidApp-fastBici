@@ -56,6 +56,8 @@ public class Utils {
             }
         });
     }
-
+    public static float convertDpToPx(float dp, Context context) {
+        return dp * context.getResources().getDisplayMetrics().density;
+    }
 
 }

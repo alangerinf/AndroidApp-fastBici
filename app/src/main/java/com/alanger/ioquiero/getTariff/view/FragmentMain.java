@@ -19,17 +19,17 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 
 import androidx.annotation.DrawableRes;
 import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.core.content.res.ResourcesCompat;
+import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -83,7 +83,6 @@ import org.json.JSONObject;
 
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -133,9 +132,6 @@ public class FragmentMain extends Fragment implements OnMapReadyCallback, Tariff
 
     private static LottieAnimationView lottieMarker;
     private static ConstraintLayout red_pointer;
-
-
-    private static ConstraintLayout clViewFinish, clViewStart;//botones de busqueda en google api
 
 
     private static ActivityMain activityMain;
@@ -283,7 +279,7 @@ public class FragmentMain extends Fragment implements OnMapReadyCallback, Tariff
         clSearch.setVisibility(View.INVISIBLE);
         clResultado.setVisibility(View.INVISIBLE);
 
-        clViewFinish.setAlpha(0.3f);
+        tViewAddressFinish.setAlpha(0.3f);
 
         clPrecio.setVisibility(View.GONE);
         handler.post(
@@ -291,8 +287,8 @@ public class FragmentMain extends Fragment implements OnMapReadyCallback, Tariff
                     tViewMensaje.setVisibility(View.VISIBLE);
                     tViewMensaje.setText("Arrastra el mapa y marca el punto de origen");
                     STATUS = 0;
-                    tViewAddressStart.setText(getString(R.string.lugar_de_partida));
-                    tViewAddressFinish.setText(getString(R.string.lugar_de_llegada));
+                    tViewAddressStart.setText(getString(R.string.donde_recogemos));
+                    tViewAddressFinish.setText(getString(R.string.a_donde_vamos));
                     mMap.clear();
                     btnSetStart.setVisibility(View.INVISIBLE);
                     btnSetFinish.setVisibility(View.INVISIBLE);
@@ -339,8 +335,9 @@ public class FragmentMain extends Fragment implements OnMapReadyCallback, Tariff
 
         markerStart = mMap.addMarker(new MarkerOptions()
                 .position(LatLng)
-                .title("Marker")
-                .icon(BitmapDescriptorFactory.fromResource(R.drawable.marker_start)));
+                .title("¿Donde Recogemos?")
+                .anchor(0.5f,0.5f)
+                .icon(bitmapDescriptorFromVector(0,getContext(),R.drawable.ic_from)));
 
 
         tViewMensaje.setText("Arrastra el mapa y marca el punto de Destino");
@@ -661,9 +658,9 @@ public class FragmentMain extends Fragment implements OnMapReadyCallback, Tariff
 
 
     private void setStart(){
-        clViewFinish.setAlpha(1);
-        clViewFinish.setClickable(true);
-        clViewFinish.setFocusable(true);
+        tViewAddressFinish.setAlpha(1);
+        tViewAddressFinish.setClickable(true);
+        tViewAddressFinish.setFocusable(true);
 
         if(markerStart !=null) {
             markerStart.remove();
@@ -675,8 +672,9 @@ public class FragmentMain extends Fragment implements OnMapReadyCallback, Tariff
 
         markerStart = mMap.addMarker(new MarkerOptions()
                 .position(LatLng)
-                .title("Marker")
-                .icon(bitmapDescriptorFromVector(getContext(), R.drawable.marker_start)));
+                .title("¿Donde Recogemos?")
+                .anchor(0.5f,0.5f)
+                .icon(bitmapDescriptorFromVector(0,getContext(), R.drawable.ic_from)));
 
         btnSetStart.setVisibility(View.INVISIBLE);
 
@@ -713,8 +711,8 @@ public class FragmentMain extends Fragment implements OnMapReadyCallback, Tariff
         LatLng LatLngFinish = new LatLng(latFinish, lonFinish);
         markerFinish = mMap.addMarker(new MarkerOptions()
                 .position(LatLngFinish)
-                .title("Marker")
-                .icon(bitmapDescriptorFromVector(getContext(), R.drawable.marker_finish)));
+                .title("¿Donde vamos?")
+                .icon(bitmapDescriptorFromVector(1,getContext(), R.drawable.ic_to)));
         btnSetFinish.setVisibility(View.INVISIBLE);
         //btPedir.setVisibility(View.VISIBLE);
         setVisibleMarker(View.INVISIBLE);
@@ -740,16 +738,16 @@ public class FragmentMain extends Fragment implements OnMapReadyCallback, Tariff
     private void declareEvents(){
 
 
-        clViewStart.setOnClickListener(v->{
+        tViewAddressStart.setOnClickListener(v->{
             showDialogSearch(0);
         });
 
-        clViewFinish.setOnClickListener(v->{
+        tViewAddressFinish.setOnClickListener(v->{
             showDialogSearch(1);
         });
 
-        clViewFinish.setFocusable(false);
-        clViewFinish.setClickable(false);
+        tViewAddressFinish.setFocusable(false);
+        tViewAddressFinish.setClickable(false);
 
         btnSetStart.setOnClickListener(v -> {
 
@@ -1055,8 +1053,6 @@ public class FragmentMain extends Fragment implements OnMapReadyCallback, Tariff
         geocode = new Geocoder(ctx, Locale.getDefault());
 
 
-        clViewFinish = getView().findViewById(R.id.clViewFinish);
-        clViewStart = getView().findViewById(R.id.clViewStart);
 
         clSearch = getView().findViewById(R.id.clSearch);
 
@@ -1177,14 +1173,13 @@ public class FragmentMain extends Fragment implements OnMapReadyCallback, Tariff
 
     }
 
-    private BitmapDescriptor bitmapDescriptorFromVector(Context context, @DrawableRes int vectorDrawableResourceId) {
-        Drawable background = ContextCompat.getDrawable(context, vectorDrawableResourceId);
-        background.setBounds(0, 0, background.getIntrinsicWidth(), background.getIntrinsicHeight());
-        Drawable vectorDrawable = ContextCompat.getDrawable(context, vectorDrawableResourceId);
-        vectorDrawable.setBounds(40, 20, vectorDrawable.getIntrinsicWidth() + 40, vectorDrawable.getIntrinsicHeight() + 20);
-        Bitmap bitmap = Bitmap.createBitmap(background.getIntrinsicWidth(), background.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
+
+    private BitmapDescriptor bitmapDescriptorFromVector(int mode,Context context, @DrawableRes int vectorDrawableResourceId) {
+        Drawable vectorDrawable = ResourcesCompat.getDrawable(getResources(), vectorDrawableResourceId, null);
+        Bitmap bitmap = Bitmap.createBitmap(vectorDrawable.getIntrinsicWidth(),
+                vectorDrawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(bitmap);
-        background.draw(canvas);
+        vectorDrawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
         vectorDrawable.draw(canvas);
         return BitmapDescriptorFactory.fromBitmap(bitmap);
     }

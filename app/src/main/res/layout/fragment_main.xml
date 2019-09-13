@@ -109,6 +109,7 @@
                         android:layout_height="wrap_content"
                         android:textColor="@color/white"
                         android:text="@string/punto_de_origen"
+                        android:textAllCaps="false"
                         android:textSize="@dimen/textsize_primary"
                         android:visibility="invisible" />
 
@@ -116,6 +117,7 @@
                         android:id="@+id/btnSetFinish"
                         style="@style/Widget.MaterialComponents.Button"
                         app:backgroundTint="@color/colorAccent"
+                        android:textAllCaps="false"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_alignParentEnd="true"
@@ -129,14 +131,15 @@
                 </RelativeLayout>
             </LinearLayout>
 
+
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/clDirections"
                 android:layout_width="match_parent"
                 android:layout_height="100dp"
                 android:background="@drawable/shape_shadow_center_5dp"
-                android:layout_marginStart="32dp"
+                android:layout_marginStart="16dp"
                 android:layout_marginTop="64dp"
-                android:layout_marginEnd="32dp"
+                android:layout_marginEnd="16dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -146,8 +149,8 @@
                     android:id="@+id/divider2"
                     android:layout_width="0dp"
                     android:layout_height="1dp"
-                    android:layout_marginStart="50dp"
-                    android:layout_marginEnd="16dp"
+                    android:layout_marginStart="48dp"
+                    android:layout_marginEnd="8dp"
                     android:background="?android:attr/listDivider"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -157,7 +160,7 @@
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/constraintLayoutStart"
                     android:layout_width="match_parent"
-                    android:layout_height="50dp"
+                    android:layout_height="48dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent">
@@ -185,19 +188,27 @@
                         android:id="@+id/tViewAddressStart"
                         android:layout_width="0dp"
                         android:layout_height="47dp"
-                        android:layout_marginEnd="16dp"
                         android:gravity="fill_vertical"
-                        android:paddingLeft="20dp"
+                        android:paddingLeft="8dp"
                         android:paddingRight="20dp"
                         android:text="@string/donde_recogemos"
                         android:textColor="@color/secondary_text"
                         android:textSize="16sp"
                         app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/imageView8"
                         app:layout_constraintStart_toEndOf="@+id/constraintLayout19"
                         app:layout_constraintTop_toTopOf="parent"
                         tools:ignore="MissingConstraints" />
 
+                    <ImageView
+                        android:id="@+id/imageView8"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="8dp"
+                        android:src="@drawable/ic_chevron_right_24dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
 
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
@@ -205,10 +216,11 @@
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/constraintLayoutEnd"
                     android:layout_width="match_parent"
-                    android:layout_height="50dp"
+                    android:layout_height="48dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent">
+
 
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:id="@+id/constraintLayout20"
@@ -217,6 +229,7 @@
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent">
+
                         <ImageView
                             android:layout_width="16dp"
                             android:layout_height="16dp"
@@ -231,79 +244,32 @@
                         android:id="@+id/tViewAddressFinish"
                         android:layout_width="0dp"
                         android:layout_height="47dp"
-                        android:layout_marginEnd="16dp"
                         android:gravity="fill_vertical"
-                        android:paddingLeft="20dp"
+                        android:paddingLeft="8dp"
                         android:paddingRight="20dp"
                         android:text="@string/a_donde_vamos"
                         android:textColor="@color/secondary_text"
                         android:textSize="16sp"
                         app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/imageView9"
                         app:layout_constraintStart_toEndOf="@+id/constraintLayout20"
                         app:layout_constraintTop_toTopOf="parent"
                         tools:ignore="MissingConstraints"
                         tools:visibility="visible" />
 
+                    <ImageView
+                        android:id="@+id/imageView9"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="8dp"
+                        android:src="@drawable/ic_chevron_right_24dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/clPrecio"
-                android:visibility="visible"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:background="@drawable/shape_drawer_itemlist"
-                app:layout_constraintBottom_toTopOf="@+id/lLayoutPrecio"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent">
-
-                <TextView
-                    android:id="@+id/tViewPriceEntero"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="10"
-                    android:textSize="32sp"
-                    app:layout_constraintBottom_toBottomOf="@+id/textView31"
-                    app:layout_constraintEnd_toStartOf="@+id/tViewPriceDecimal"
-                    app:layout_constraintStart_toEndOf="@+id/textView31" />
-
-                <TextView
-                    android:id="@+id/textView31"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginBottom="8dp"
-                    android:text="S/."
-                    android:textSize="32sp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/tViewPriceEntero"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <TextView
-                    android:id="@+id/tViewPriceDecimal"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
-                    android:layout_marginEnd="16dp"
-                    android:text="00"
-                    android:textSize="18sp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="@+id/tViewPriceEntero" />
-
-                <View
-                    android:id="@+id/divider5"
-                    android:layout_width="0dp"
-                    android:layout_height="1dp"
-                    android:background="@color/grayDark"
-                    app:layout_constraintEnd_toEndOf="@+id/tViewPriceDecimal"
-                    app:layout_constraintStart_toStartOf="@+id/tViewPriceDecimal"
-                    app:layout_constraintTop_toBottomOf="@+id/tViewPriceDecimal" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -596,7 +562,7 @@
                     android:textSize="12sp" />
 
                 <TextView
-                    android:id="@+id/textView30"
+                    android:id="@+id/tViewPrecio"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:paddingTop="0dp"
@@ -615,7 +581,7 @@
                 android:layout_height="0dp"
                 android:textColor="@color/white"
                 android:layout_marginEnd="16dp"
-                android:text="Confirma Pedido"
+                android:text="Confirmar Pedido"
                 android:textAllCaps="false"
                 android:textSize="@dimen/textsize_primary"
                 app:layout_constraintBottom_toBottomOf="@+id/linearLayout2"

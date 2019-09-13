@@ -116,13 +116,11 @@ public class FragmentMain extends Fragment implements OnMapReadyCallback, Tariff
     private static ConstraintLayout  clPedir;
     private static ExtendedFloatingActionButton btnRestart;
     private static TextView tViewAddressStart, tViewAddressFinish, tViewMensaje;
-    private static TextView tViewPriceEntero, tViewPriceDecimal;
+    private static TextView tViewPriceEntero;
 
     private static ConstraintLayout clSearch;
 
     private static TextView tViewKilometers, tViewMin, tViewCo2;
-
-    private static ConstraintLayout clPrecio;
 
     private static Marker markerStart = null, markerFinish = null;
 
@@ -284,7 +282,6 @@ public class FragmentMain extends Fragment implements OnMapReadyCallback, Tariff
 
         tViewAddressFinish.setAlpha(0.3f);
 
-        clPrecio.setVisibility(View.GONE);
         handler.post(
                 () -> {
                     tViewMensaje.setVisibility(View.VISIBLE);
@@ -319,7 +316,7 @@ public class FragmentMain extends Fragment implements OnMapReadyCallback, Tariff
             markerFinish.remove();
         }
 
-        markerTo.setVisibility(View.INVISIBLE);
+        markerTo.setVisibility(View.VISIBLE);
         marketFrom.setVisibility(View.INVISIBLE);
 
 
@@ -693,7 +690,7 @@ public class FragmentMain extends Fragment implements OnMapReadyCallback, Tariff
         //  Toast.makeText(ctx,""+(latStart-latFinish)+" "+(lonStart==lonFinish) , Toast.LENGTH_LONG).show();
 
 
-        returnToSetFinish();
+       // returnToSetFinish();
 
         tViewMensaje.setVisibility(View.GONE);
         if (markerFinish != null) {
@@ -864,8 +861,8 @@ public class FragmentMain extends Fragment implements OnMapReadyCallback, Tariff
                                                 //tViewKilometers.setText(""+data.getPrice().);
                                                 PRECIO = resp.price();
 
-                                                clPrecio.setVisibility(View.VISIBLE);
-                                                tViewPriceEntero.setText("" + resp.price().intValue());
+
+                                                tViewPriceEntero.setText("S/ " + resp.price());
                                             }
                                         }
                                 );
@@ -873,10 +870,12 @@ public class FragmentMain extends Fragment implements OnMapReadyCallback, Tariff
 
                             case errorCommonCode:
                                 h.post(
+
                                         new Runnable() {
                                             @Override
                                             public void run() {
 
+                                                markerTo.setVisibility(View.VISIBLE);
                                                 Snackbar snackbar = Snackbar.make(root, "Ocurrio un Error Desconocido", Snackbar.LENGTH_LONG);
                                                 snackbar.show();
                                             }
@@ -889,8 +888,8 @@ public class FragmentMain extends Fragment implements OnMapReadyCallback, Tariff
                                             @Override
                                             public void run() {
 
-                                                showSnackBackError("Delivery Fuera de la Covertura");
-
+                                                markerTo.setVisibility(View.VISIBLE);
+                                                showSnackBackError("Delivery Fuera de la Cobertura");
                                                 returnToSetFinish();
                                             }
                                         }
@@ -901,7 +900,9 @@ public class FragmentMain extends Fragment implements OnMapReadyCallback, Tariff
                                         new Runnable() {
                                             @Override
                                             public void run() {
-                                                showSnackBackError("Distancia Maxima Superada");
+
+                                                markerTo.setVisibility(View.VISIBLE);
+                                                showSnackBackError("Distancia Máxima Superada");
 
                                                 returnToSetFinish();
                                             }
@@ -914,6 +915,7 @@ public class FragmentMain extends Fragment implements OnMapReadyCallback, Tariff
                                             @Override
                                             public void run() {
 
+                                                markerTo.setVisibility(View.VISIBLE);
                                                 showSnackBackError("No se supero la distancia minima");
 
                                                 returnToSetFinish();
@@ -922,7 +924,7 @@ public class FragmentMain extends Fragment implements OnMapReadyCallback, Tariff
                                 );
                                 break;
                             default:
-
+                                markerTo.setVisibility(View.VISIBLE);
                                 Toast.makeText(ctx, "errorCode:" + volskayaResponse.responseCode(), Toast.LENGTH_LONG).show();
                                 break;
 
@@ -943,6 +945,8 @@ public class FragmentMain extends Fragment implements OnMapReadyCallback, Tariff
                                                 new View.OnClickListener() {
                                                     @Override
                                                     public void onClick(View v) {
+
+                                                        markerTo.setVisibility(View.VISIBLE);
                                                         getPriceFromServer(latStart, lonStart, latFinish, lonFinish);
                                                     }
                                                 },
@@ -1071,9 +1075,8 @@ public class FragmentMain extends Fragment implements OnMapReadyCallback, Tariff
         tViewMin = getView().findViewById(R.id.tViewMin);
         tViewCo2 = getView().findViewById(R.id.tViewco2);
 
-        tViewPriceEntero = getView().findViewById(R.id.tViewPriceEntero);
-        tViewPriceDecimal = getView().findViewById(R.id.tViewPriceDecimal);
-        clPrecio = getView().findViewById(R.id.clPrecio);
+        tViewPriceEntero = getView().findViewById(R.id.tViewPrecio);
+
         declareEvents();
         defaultAttributes();
         // verifyPermission();

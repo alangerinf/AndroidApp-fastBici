@@ -186,7 +186,7 @@ public class FragmentMain extends Fragment implements OnMapReadyCallback, Tariff
 
     private void showGPSDisabledAlertToUser() {
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(ctx, R.style.AlertDialogTheme);
-        alertDialogBuilder.setMessage("Su GPS se emcuentra desactivado, ¿Desea Activarlo?")
+        alertDialogBuilder.setMessage("Su GPS se encuentra desactivado, ¿Desea Activarlo?")
                 .setCancelable(false)
                 .setPositiveButton("Activar",
                         new DialogInterface.OnClickListener() {
@@ -332,6 +332,7 @@ public class FragmentMain extends Fragment implements OnMapReadyCallback, Tariff
                 .anchor(0.5f, 0.5f)
                 .icon(bitmapDescriptorFromVector(0, getContext(), R.drawable.ic_from)));
 
+        markerStart.showInfoWindow();
 
         tViewMensaje.setText("Arrastra el mapa y marca el punto de Destino");
         //  Toast.makeText(ctx,"AHORA ARRASTRA EL MAPA Y UBICA EL DESTINO",Toast.LENGTH_SHORT).show();
@@ -658,7 +659,7 @@ public class FragmentMain extends Fragment implements OnMapReadyCallback, Tariff
                 .title("¿Donde Recogemos?")
                 .anchor(0.5f, 0.5f)
                 .icon(bitmapDescriptorFromVector(0, getContext(), R.drawable.ic_from)));
-
+        markerStart.showInfoWindow();
 
         markerTo.setVisibility(View.VISIBLE);
         marketFrom.setVisibility(View.INVISIBLE);
@@ -702,6 +703,8 @@ public class FragmentMain extends Fragment implements OnMapReadyCallback, Tariff
                 .position(LatLngFinish)
                 .title("¿Donde vamos?")
                 .icon(bitmapDescriptorFromVector(1, getContext(), R.drawable.ic_to)));
+        markerFinish.showInfoWindow();
+
         btnSetFinish.setVisibility(View.INVISIBLE);
         //btnPedir.setVisibility(View.VISIBLE);
         //ovualtar los amrkers

@@ -352,6 +352,22 @@ public class FragmentMain extends Fragment implements OnMapReadyCallback, Tariff
         ((InputMethodManager) ctx.getSystemService(Context.INPUT_METHOD_SERVICE)).toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
     }
 
+    private void calculatePrice() {
+        if (isConnectedToInternetToUpdate()) {
+            new FetchURL(getActivity()).execute(getUrl(markerStart.getPosition(), markerFinish.getPosition(), "walking"), "walking");
+            getPriceFromServer(latStart, lonStart, latFinish, lonFinish);
+        } else {
+            Snackbar snackbar2 = Snackbar.make(root, "No se pudo Conectar", Snackbar.LENGTH_INDEFINITE);
+            snackbar2.setAction("Reintentar", new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    getPriceFromServer(latStart, lonStart, latFinish, lonFinish);
+                }
+            });
+            snackbar2.show();
+        }
+    }
+
     private void showDialogSearch(int mode) {
 
         List<Place> placeList = new ArrayList<>();
@@ -373,37 +389,30 @@ public class FragmentMain extends Fragment implements OnMapReadyCallback, Tariff
             clSearch.setVisibility(View.GONE);
 
 
-            if (mode == 0 && STATUS == 2) {//si ya se registraron las  2 fechas
-
+            if (STATUS == 2) { //si ya se registraron las  2 fechas
                 clPedir.setVisibility(View.GONE);
+                if ( mode == 0 ) {
+                    tViewAddressStart.setText(item.getFormatted_address());
+                    markerStart.setPosition(latLng);
+                }
 
-                tViewAddressStart.setText(item.getFormatted_address());
-                markerStart.setPosition(latLng);
+                if ( mode == 1 ) {
+                    tViewAddressFinish.setText(item.getFormatted_address());
+                    markerFinish.setPosition(latLng);
+                }
 
                 btnSetStart.setVisibility(View.INVISIBLE);
-
                 btnRestart.setVisibility(View.VISIBLE);
-
-                if (isConnectedToInternetToUpdate()) {
-                    new FetchURL(getActivity()).execute(getUrl(markerStart.getPosition(), markerFinish.getPosition(), "walking"), "walking");
-                    getPriceFromServer(latStart, lonStart, latFinish, lonFinish);
-                } else {
-                    Snackbar snackbar2 = Snackbar.make(root, "No se pudo Conectar", Snackbar.LENGTH_INDEFINITE);
-                    snackbar2.setAction("Reintentar", new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            getPriceFromServer(latStart, lonStart, latFinish, lonFinish);
-                        }
-                    });
-                    snackbar2.show();
-                }
+                calculatePrice();
 
             } else {
                 handler.postDelayed(
                         () -> {
                             if (mode == 0) {
+                                tViewAddressStart.setText(item.getFormatted_address());
                                 setStart();
                             } else {
+                                tViewAddressFinish.setText(item.getFormatted_address());
                                 setFinish();
                             }
 

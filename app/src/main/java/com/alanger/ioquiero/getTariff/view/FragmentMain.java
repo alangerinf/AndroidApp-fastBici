@@ -136,6 +136,8 @@ public class FragmentMain extends Fragment implements OnMapReadyCallback, Tariff
 
     private static ActivityMain activityMain;
 
+    private static FloatingActionButton fabDrawer;
+
     @Override
     public void verifyPermission() {
 
@@ -387,6 +389,7 @@ public class FragmentMain extends Fragment implements OnMapReadyCallback, Tariff
                     .build();
             mMap.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
             clSearch.setVisibility(View.GONE);
+            showFabDrawer();
 
 
             if (STATUS == 2) { //si ya se registraron las  2 fechas
@@ -641,6 +644,7 @@ public class FragmentMain extends Fragment implements OnMapReadyCallback, Tariff
 
 
         getView().findViewById(R.id.iViewClose).setOnClickListener(v -> {
+            showFabDrawer();
             clSearch.setVisibility(View.GONE);
         });
 
@@ -739,14 +743,19 @@ public class FragmentMain extends Fragment implements OnMapReadyCallback, Tariff
         //}
     }
 
+    private void hideFabDrawer() { fabDrawer.setVisibility(View.INVISIBLE); }
+    private void showFabDrawer() { fabDrawer.setVisibility(View.VISIBLE); }
+
     private void declareEvents() {
 
 
         tViewAddressStart.setOnClickListener(v -> {
+            hideFabDrawer();
             showDialogSearch(0);
         });
 
         tViewAddressFinish.setOnClickListener(v -> {
+            hideFabDrawer();
             showDialogSearch(1);
         });
 
@@ -1088,6 +1097,8 @@ public class FragmentMain extends Fragment implements OnMapReadyCallback, Tariff
         tViewCo2 = getView().findViewById(R.id.tViewco2);
 
         tViewPriceEntero = getView().findViewById(R.id.tViewPrecio);
+
+        fabDrawer = (FloatingActionButton) getActivity().findViewById(R.id.fabDrawer);
 
         declareEvents();
         defaultAttributes();

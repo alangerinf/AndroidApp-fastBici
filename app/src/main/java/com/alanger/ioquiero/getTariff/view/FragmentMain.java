@@ -1234,7 +1234,7 @@ public class FragmentMain extends Fragment implements OnMapReadyCallback, Tariff
                     }
                     mMap.setMyLocationEnabled(true);
                     runnable.run();
-                    Toast.makeText(ctx,"permiso consedido",Toast.LENGTH_LONG).show();
+                    Toast.makeText(ctx,"permiso concedido",Toast.LENGTH_LONG).show();
                 }else {
                     verifyPermission();
                 }

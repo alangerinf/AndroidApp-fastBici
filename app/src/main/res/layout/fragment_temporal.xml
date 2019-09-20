@@ -8,45 +8,54 @@
     android:focusableInTouchMode="true"
     android:id="@+id/fp1_rootView">
 
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/clSearch"
-        android:elevation="100dp"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:clickable="true"
-        android:focusable="true"
-        >
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/constraintLayout22"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/white"
+            android:layout_height="wrap_content"
 
-            >
+>
 
-            <TextView
-                android:id="@+id/tViewTittle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:text="Tu Pedido"
-                android:textColor="@color/grayDark"
-                android:textSize="16sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
 
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
                 android:orientation="vertical"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tViewTittle">
+                app:layout_constraintStart_toStartOf="parent">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:id="@+id/tViewTittle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:layout_marginBottom="16dp"
+                        android:gravity="center"
+                        android:text="Tu Pedido"
+                        android:textColor="@color/grayDark"
+                        android:textSize="18sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
 
                 <TextView
                     android:id="@+id/textView31"
@@ -54,7 +63,7 @@
                     android:layout_height="wrap_content"
                     android:text="Direccion de recojo y entrega"
                     android:textColor="@color/materialGrey600"
-                    android:textSize="14sp" />
+                    android:textSize="16sp" />
 
                 <View
                     android:id="@+id/divider0"
@@ -98,7 +107,7 @@
                         android:paddingEnd="20dp"
                         android:text="@string/donde_recogemos"
                         android:textColor="@color/grayDark"
-                        android:textSize="14sp"
+                        android:textSize="16sp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toEndOf="@+id/constraintLayout1"
@@ -149,7 +158,7 @@
                         android:maxLines="1"
                         android:paddingStart="8dp"
                         android:paddingEnd="20dp"
-                        android:textSize="14sp"
+                        android:textSize="16sp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toEndOf="@+id/constraintLayout2"
@@ -201,7 +210,7 @@
                         android:paddingEnd="20dp"
                         android:text="@string/a_donde_vamos"
                         android:textColor="@color/grayDark"
-                        android:textSize="14sp"
+                        android:textSize="16sp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toEndOf="@+id/constraintLayout3"
@@ -252,7 +261,7 @@
                         android:maxLines="1"
                         android:paddingStart="8dp"
                         android:paddingEnd="20dp"
-                        android:textSize="14sp"
+                        android:textSize="16sp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toEndOf="@+id/constraintLayout4"
@@ -275,7 +284,7 @@
                     android:layout_marginTop="32dp"
                     android:text="Tu Producto"
                     android:textColor="@color/materialGrey600"
-                    android:textSize="14sp" />
+                    android:textSize="16sp" />
 
                 <View
                     android:id="@+id/divider5"
@@ -286,7 +295,7 @@
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
-                    android:layout_height="32dp"
+                    android:layout_height="wrap_content"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent">
@@ -294,7 +303,7 @@
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:id="@+id/constraintLayout6"
                         android:layout_width="32dp"
-                        android:layout_height="0dp"
+                        android:layout_height="32dp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent">
@@ -312,14 +321,13 @@
 
                     <EditText
                         android:layout_width="0dp"
-                        android:layout_height="match_parent"
+                        android:layout_height="wrap_content"
                         android:background="@color/white"
                         android:hint="¿Qué quieres enviar?"
-                        android:inputType="text"
-                        android:maxLines="1"
+                        android:inputType="textMultiLine"
                         android:paddingStart="8dp"
                         android:paddingEnd="20dp"
-                        android:textSize="14sp"
+                        android:textSize="16sp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toEndOf="@+id/constraintLayout6"
@@ -342,7 +350,7 @@
                     android:layout_marginTop="32dp"
                     android:text="Datos del Cliente"
                     android:textColor="@color/materialGrey600"
-                    android:textSize="14sp" />
+                    android:textSize="16sp" />
 
                 <View
                     android:id="@+id/divider8"
@@ -382,11 +390,11 @@
                         android:layout_height="match_parent"
                         android:background="@color/white"
                         android:hint="Nombre"
-                        android:inputType="text"
+                        android:inputType="textPersonName"
                         android:maxLines="1"
                         android:paddingStart="8dp"
                         android:paddingEnd="20dp"
-                        android:textSize="14sp"
+                        android:textSize="16sp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toEndOf="@+id/constraintLayout8"
@@ -433,11 +441,11 @@
                         android:layout_height="match_parent"
                         android:background="@color/white"
                         android:hint="Teléfono"
-                        android:inputType="text"
+                        android:inputType="phone"
                         android:maxLines="1"
                         android:paddingStart="8dp"
                         android:paddingEnd="20dp"
-                        android:textSize="14sp"
+                        android:textSize="16sp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toEndOf="@+id/constraintLayout9"
@@ -460,7 +468,7 @@
                     android:layout_marginTop="32dp"
                     android:text="Resumen Fastbici"
                     android:textColor="@color/materialGrey600"
-                    android:textSize="14sp" />
+                    android:textSize="16sp" />
 
                 <View
                     android:id="@+id/divider11"
@@ -523,10 +531,10 @@
                                 android:layout_height="wrap_content"
                                 android:gravity="fill_vertical"
                                 android:paddingStart="8dp"
-                                android:paddingEnd="8dp"
+                                android:paddingEnd="4dp"
                                 android:text="1.5"
                                 android:textColor="@color/grayDark"
-                                android:textSize="14sp"
+                                android:textSize="16sp"
                                 app:layout_constraintBottom_toBottomOf="parent"
                                 app:layout_constraintStart_toEndOf="@+id/constraintLayout10"
                                 app:layout_constraintTop_toTopOf="parent"
@@ -536,8 +544,6 @@
                                 android:id="@+id/textView35"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-                                android:layout_marginTop="6dp"
-                                android:layout_marginBottom="6dp"
                                 android:text="km"
                                 android:textColor="@color/grayDark"
                                 app:layout_constraintBottom_toBottomOf="parent"
@@ -583,10 +589,10 @@
                             android:layout_height="wrap_content"
                             android:gravity="fill_vertical"
                             android:paddingStart="8dp"
-                            android:paddingEnd="8dp"
+                            android:paddingEnd="4dp"
                             android:text="41"
                             android:textColor="@color/grayDark"
-                            android:textSize="14sp"
+                            android:textSize="16sp"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintStart_toEndOf="@+id/constraintLayout18"
                             app:layout_constraintTop_toTopOf="parent" />
@@ -596,6 +602,7 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:text="CO2"
+                            android:textColor="@color/grayDark"
                             android:textSize="10sp"
                             app:layout_constraintBottom_toBottomOf="@+id/textView34"
                             app:layout_constraintEnd_toEndOf="parent"
@@ -633,13 +640,47 @@
                         app:layout_constraintTop_toTopOf="parent">
 
                         <androidx.constraintlayout.widget.ConstraintLayout
+                            android:id="@+id/constraintLayout20"
                             android:layout_width="32dp"
                             android:layout_height="0dp"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent">
 
+                            <ImageView
+                                android:id="@+id/imageView13"
+                                android:layout_width="16dp"
+                                android:layout_height="16dp"
+                                android:src="@drawable/ic_time"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
                         </androidx.constraintlayout.widget.ConstraintLayout>
+
+                        <TextView
+                            android:id="@+id/textView37"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingStart="8dp"
+                            android:paddingEnd="4dp"
+                            android:text="10"
+                            android:textColor="@color/grayDark"
+                            android:textSize="16sp"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintStart_toEndOf="@+id/constraintLayout20"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <TextView
+                            android:id="@+id/textView38"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:text="min"
+                            android:textColor="@color/grayDark"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toEndOf="@+id/textView37"
+                            app:layout_constraintTop_toTopOf="parent" />
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
                     <androidx.constraintlayout.widget.ConstraintLayout
@@ -651,13 +692,47 @@
                         app:layout_constraintTop_toTopOf="parent">
 
                         <androidx.constraintlayout.widget.ConstraintLayout
-                            android:layout_width="0dp"
-                            android:layout_height="16dp"
+                            android:id="@+id/constraintLayout21"
+                            android:layout_width="32dp"
+                            android:layout_height="0dp"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent">
 
+                            <ImageView
+                                android:id="@+id/imageView14"
+                                android:layout_width="18dp"
+                                android:layout_height="18dp"
+                                android:src="@drawable/ic_dolar"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
                         </androidx.constraintlayout.widget.ConstraintLayout>
+
+                        <TextView
+                            android:id="@+id/textView39"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingStart="8dp"
+                            android:text="S/"
+                            android:textColor="@color/grayDark"
+                            android:textSize="16sp"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintStart_toEndOf="@+id/constraintLayout21"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <TextView
+                            android:id="@+id/textView40"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:text="0.00"
+                            android:textColor="@color/grayDark"
+                            android:textSize="16sp"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toEndOf="@+id/textView39"
+                            app:layout_constraintTop_toTopOf="parent" />
                     </androidx.constraintlayout.widget.ConstraintLayout>
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -667,27 +742,31 @@
                     android:layout_height="1dp"
                     android:background="@color/gray" />
 
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnOk"
+                      
+                        android:layout_marginTop="16dp"
+                        android:layout_marginBottom="8dp"
+                        android:layout_marginStart="32dp"
+                        android:layout_marginEnd="32dp"
+                        style="@style/Widget.MaterialComponents.Button"
+                        app:backgroundTint="@color/colorAccent"
+                        android:textAllCaps="false"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:textColor="@color/white"
+                        android:text="Pedir Ahora"
+                        android:textSize="@dimen/textsize_primary"
+                        />
 
             </LinearLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/fAButtonClearText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:clickable="true"
-            android:focusable="true"
-            android:scaleX="0.5"
-            android:scaleY="0.5"
-            android:visibility="gone"
-            app:backgroundTint="@color/redLight"
-            app:srcCompat="@drawable/ic_clear_white_24dp"
-            app:tint="@color/white"
-            tools:ignore="MissingConstraints"
-            tools:layout_editor_absoluteX="395dp"
-            tools:layout_editor_absoluteY="61dp" />
+    </ScrollView>
+
 
 
         <ImageView
@@ -702,7 +781,6 @@
             tools:ignore="ContentDescription,MissingConstraints" />
 
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
 
 
 

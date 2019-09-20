@@ -166,7 +166,7 @@
                     app:layout_constraintTop_toTopOf="parent">
 
                     <androidx.constraintlayout.widget.ConstraintLayout
-                        android:id="@+id/constraintLayout19"
+                        android:id="@+id/constraintLayout1"
                         android:layout_width="50dp"
                         android:layout_height="0dp"
                         app:layout_constraintBottom_toBottomOf="parent"
@@ -196,7 +196,7 @@
                         android:textSize="16sp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toStartOf="@+id/imageView8"
-                        app:layout_constraintStart_toEndOf="@+id/constraintLayout19"
+                        app:layout_constraintStart_toEndOf="@+id/constraintLayout1"
                         app:layout_constraintTop_toTopOf="parent"
                         tools:ignore="MissingConstraints" />
 
@@ -223,7 +223,7 @@
 
 
                     <androidx.constraintlayout.widget.ConstraintLayout
-                        android:id="@+id/constraintLayout20"
+                        android:id="@+id/constraintLayout2"
                         android:layout_width="50dp"
                         android:layout_height="0dp"
                         app:layout_constraintBottom_toBottomOf="parent"
@@ -252,7 +252,7 @@
                         android:textSize="16sp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toStartOf="@+id/imageView9"
-                        app:layout_constraintStart_toEndOf="@+id/constraintLayout20"
+                        app:layout_constraintStart_toEndOf="@+id/constraintLayout2"
                         app:layout_constraintTop_toTopOf="parent"
                         tools:ignore="MissingConstraints"
                         tools:visibility="visible" />

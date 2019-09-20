@@ -1183,6 +1183,8 @@ public class FragmentMain extends Fragment implements OnMapReadyCallback, Tariff
 
             btnSetStart.setVisibility(View.INVISIBLE);
             btnSetFinish.setVisibility(View.INVISIBLE);
+            handler.removeCallbacks(runnableSerchAddress);
+
             Log.d(TAG, "INICIANDO CAMARA MOVE");
         });
 
@@ -1401,13 +1403,9 @@ public class FragmentMain extends Fragment implements OnMapReadyCallback, Tariff
                                 tViewAddressFinish.setText("Reintentando");
                             }
                         }
-                        try {
-                            Thread.sleep(500);
-                            verifyPermission();
-                            run();
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
+                        verifyPermission();
+                        handler.postDelayed(runnableSerchAddress,2000);
+
 
                         Log.d(TAG,"voleyE "+error.toString());
                         //    Toast.makeText(getContext(),"jsonE: "+error.toString(),Toast.LENGTH_LONG).show();

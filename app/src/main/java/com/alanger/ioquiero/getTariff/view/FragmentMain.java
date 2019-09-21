@@ -20,6 +20,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 
@@ -746,6 +747,14 @@ public class FragmentMain extends Fragment implements OnMapReadyCallback, Tariff
     private void hideFabDrawer() { fabDrawer.setVisibility(View.INVISIBLE); }
     private void showFabDrawer() { fabDrawer.setVisibility(View.VISIBLE); }
 
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        btnPedir.setClickable(true);
+        btnPedir.setFocusable(true);
+    }
+
     private void declareEvents() {
 
 
@@ -776,6 +785,36 @@ public class FragmentMain extends Fragment implements OnMapReadyCallback, Tariff
 
         btnPedir.setOnClickListener(v -> {
 
+            Intent i = new Intent(getActivity(),ActivityGetData.class);
+            i.putExtra(ActivityGetData.EXTRA_LATSTART,latStart);
+            i.putExtra(ActivityGetData.EXTRA_LONSTART,lonStart);
+            i.putExtra(ActivityGetData.EXTRA_LATFINISH,latFinish);
+            i.putExtra(ActivityGetData.EXTRA_LONFINISH,lonFinish);
+
+
+            i.putExtra(ActivityGetData.EXTRA_ADDRESSSTART,tViewAddressStart.getText().toString());
+            i.putExtra(ActivityGetData.EXTRA_ADDRESSFINISH,tViewAddressFinish.getText().toString());
+
+            i.putExtra(ActivityGetData.EXTRA_PRICE,PRECIO);
+            i.putExtra(ActivityGetData.EXTRA_CO2,CO2);
+            i.putExtra(ActivityGetData.EXTRA_KM,KM);
+            i.putExtra(ActivityGetData.EXTRA_TIME,timeAproximate);
+
+            startActivity(i);
+            // Check if we're running on Android 5.0 or higher
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                getActivity().overridePendingTransition(R.anim.fade_in,R.anim.fade_out);
+            } else {
+                // Swap without transition
+            }
+
+            btnPedir.setClickable(false);
+            btnPedir.setFocusable(false);
+
+
+
+            /*
+
             String uriGoogleMaps = "http://maps.google.com/?mode=walking%26saddr=" + latStart + "," + lonStart + "%26daddr=" + latFinish + "," + lonFinish;
             //String uriGoogleMaps = "http://maps.google.com/?mode=walking%26saddr=-8.1158903,-79.0356704%26daddr=-8.1179977,-79.0358920";
             String phone = Configurations.phone;
@@ -791,6 +830,7 @@ public class FragmentMain extends Fragment implements OnMapReadyCallback, Tariff
             Log.d(TAG, "" + uri.toString());
             Intent myIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri.toString()));
             startActivity(myIntent);
+            */
         });
 
         btnRestart.setOnClickListener(v -> {
@@ -828,6 +868,7 @@ public class FragmentMain extends Fragment implements OnMapReadyCallback, Tariff
     private static Handler h = new Handler();
     Double PRECIO;
     Double CO2;
+    Double KM;
     Double timeAproximate;
 
     private void getPriceFromServer(double latStart, double lonStart, double latFinish, double lonFinish) {
@@ -875,6 +916,7 @@ public class FragmentMain extends Fragment implements OnMapReadyCallback, Tariff
                                                 tViewMin.setText("" + (int) (float) (resp.approximateTime() / 1));
 
                                                 CO2 = resp.co2Saved();
+                                                KM = resp.distance();
 
                                                 timeAproximate = resp.approximateTime();
 

@@ -21,9 +21,7 @@
             android:id="@+id/constraintLayout22"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-
->
-
+        >
 
             <LinearLayout
                 android:layout_width="0dp"
@@ -150,6 +148,7 @@
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
                     <EditText
+                        android:id="@+id/eTextRefStart"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:background="@color/white"
@@ -253,6 +252,7 @@
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
                     <EditText
+                        android:id="@+id/eTextRefFinish"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:background="@color/white"
@@ -320,6 +320,7 @@
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
                     <EditText
+                        android:id="@+id/eTextProduct"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:background="@color/white"
@@ -386,6 +387,7 @@
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
                     <EditText
+                        android:id="@+id/eTextClientName"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:background="@color/white"
@@ -437,6 +439,7 @@
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
                     <EditText
+                        android:id="@+id/eTextClientPhone"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:background="@color/white"
@@ -584,7 +587,7 @@
                         </androidx.constraintlayout.widget.ConstraintLayout>
 
                         <TextView
-                            android:id="@+id/textView34"
+                            android:id="@+id/tViewCO2"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:gravity="fill_vertical"
@@ -601,12 +604,13 @@
                             android:id="@+id/textView36"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
+                            android:layout_marginBottom="1dp"
                             android:text="CO2"
                             android:textColor="@color/grayDark"
                             android:textSize="10sp"
-                            app:layout_constraintBottom_toBottomOf="@+id/textView34"
+                            app:layout_constraintBottom_toBottomOf="@+id/tViewCO2"
                             app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toEndOf="@+id/textView34" />
+                            app:layout_constraintStart_toEndOf="@+id/tViewCO2" />
                     </androidx.constraintlayout.widget.ConstraintLayout>
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -659,7 +663,7 @@
                         </androidx.constraintlayout.widget.ConstraintLayout>
 
                         <TextView
-                            android:id="@+id/textView37"
+                            android:id="@+id/tViewTime"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:paddingStart="8dp"
@@ -679,7 +683,7 @@
                             android:textColor="@color/grayDark"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toEndOf="@+id/textView37"
+                            app:layout_constraintStart_toEndOf="@+id/tViewTime"
                             app:layout_constraintTop_toTopOf="parent" />
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -723,7 +727,7 @@
                             app:layout_constraintTop_toTopOf="parent" />
 
                         <TextView
-                            android:id="@+id/textView40"
+                            android:id="@+id/tViewPrice"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:text="0.00"
@@ -759,7 +763,6 @@
                         android:text="Pedir Ahora"
                         android:textSize="@dimen/textsize_primary"
                         />
-
             </LinearLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>

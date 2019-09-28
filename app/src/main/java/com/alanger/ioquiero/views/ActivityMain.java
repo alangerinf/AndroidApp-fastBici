@@ -94,13 +94,22 @@ public class ActivityMain extends FragmentActivity
 
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
-        } else {
-            moveTaskToBack(true);
-            //super.onBackPressed();
+
+        if(FragmentMain.clSearchIsVisible){
+            FragmentMain.clSearch.setVisibility(View.GONE);
+            FragmentMain.clSearchIsVisible=false;
+        }else {
+            DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+
+            if (drawer.isDrawerOpen(GravityCompat.START)) {
+                drawer.closeDrawer(GravityCompat.START);
+            } else {
+                moveTaskToBack(true);
+                //super.onBackPressed();
+            }
         }
+
+
     }
 
     @Override

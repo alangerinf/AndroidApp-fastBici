@@ -44,6 +44,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -119,7 +120,8 @@ public class FragmentMain extends Fragment implements OnMapReadyCallback, Tariff
     private static TextView tViewAddressStart, tViewAddressFinish, tViewMensaje;
     private static TextView tViewPriceEntero;
 
-    private static ConstraintLayout clSearch;
+    public static ConstraintLayout clSearch;
+    public static boolean clSearchIsVisible=false;
 
     private static TextView tViewKilometers, tViewMin, tViewCo2;
 
@@ -138,6 +140,17 @@ public class FragmentMain extends Fragment implements OnMapReadyCallback, Tariff
     private static ActivityMain activityMain;
 
     private static FloatingActionButton fabDrawer;
+    FloatingActionButton fAButtonClearText;
+    EditText eTextSearch;
+
+    ProgressBar progress_search ;
+
+
+
+    List<Place> placeList ;
+    RViewAdapterPlace rViewAdapterPlace ;
+    RecyclerView rViewPlaces ;
+
 
     @Override
     public void verifyPermission() {
@@ -371,11 +384,156 @@ public class FragmentMain extends Fragment implements OnMapReadyCallback, Tariff
         }
     }
 
-    private void showDialogSearch(int mode) {
 
-        List<Place> placeList = new ArrayList<>();
-        RViewAdapterPlace rViewAdapterPlace = new RViewAdapterPlace(placeList);
-        RecyclerView rViewPlaces = getView().findViewById(R.id.rViewPlaces);
+    Runnable runSearch = new Runnable() {
+        @Override
+        public void run() {
+
+            progress_search.setVisibility(View.VISIBLE);
+
+            AppController.getInstance().cancelPendingRequests(TAG);
+
+
+            String text = eTextSearch.getText().toString().replaceAll(" ", "+");
+            Log.d(TAG,"buscando direcciones:"+text);
+
+            if (text.length() > 0) {
+
+                fAButtonClearText.setVisibility(View.VISIBLE);
+                fAButtonClearText.setClickable(true);
+                fAButtonClearText.setFocusable(true);
+
+                URL myURL = null;
+                try {
+                    myURL = new URL(Configurations.getUrlSearchPlaces(text, String.valueOf(lat), String.valueOf(lng)));
+
+                } catch (MalformedURLException e) {
+                    Log.d(TAG,e.toString());
+                    e.printStackTrace();
+                }
+
+                Log.d(TAG, myURL.toString());
+                JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.GET,
+                        myURL.toString(), null,
+                        new Response.Listener<JSONObject>() {
+                            @Override
+                            public void onResponse(JSONObject response) {
+                                Log.d(TAG, response.toString());
+                                Log.d(TAG, "***************************************");
+
+                                try {
+
+
+                                    JSONArray results = response.getJSONArray("results");
+                                    for (int i = 0; i < results.length(); i++) {
+
+
+                                        Place placeTemp = new Place(
+
+                                        );
+
+                                        JSONObject jsonTemp = results.getJSONObject(i);
+
+                                        try {
+
+                                            placeTemp.setLat(jsonTemp.getJSONObject("geometry").getJSONObject("location").getString("lat"));
+
+                                        } catch (Exception e) {
+
+                                        }
+                                        try {
+                                            placeTemp.setLon(jsonTemp.getJSONObject("geometry").getJSONObject("location").getString("lng"));
+                                        } catch (Exception e) {
+
+                                        }
+
+                                        try {
+                                            placeTemp.setTypes(jsonTemp.getJSONArray("types"));
+                                        } catch (Exception e) {
+
+                                        }
+                                        try {
+                                            placeTemp.setFormatted_address(jsonTemp.getString("formatted_address"));
+                                        } catch (Exception e) {
+
+                                        }
+
+
+                                        boolean flag = true;
+
+                                        for (int x = 0; x < placeTemp.getTypes().length(); x++) {
+                                            if (placeTemp.getTypes().getString(x).equals("country")) {
+                                                flag = false;
+                                                break;
+                                            } else {
+                                                Log.d(TAG, "----->cat:" + placeTemp.getTypes().getString(x));
+                                            }
+                                        }
+
+                                        double maxlat = -7.990756;
+                                        double minlat = -8.224768;
+
+
+                                        double maxlon = -78.896751;
+                                        double minlon = -79.192724;
+
+                                        double lat = Double.parseDouble(placeTemp.getLat());
+                                        double lon = Double.parseDouble(placeTemp.getLon());
+
+                                        if (maxlat < lat || minlat > lat) {
+                                            flag = false;
+                                        } else {
+                                            if (maxlon < lon || minlon > lon) {
+                                                flag = false;
+                                            }
+                                        }
+
+
+                                        Log.d(TAG, "********");
+                                        if (flag) {
+                                            placeList.add(placeTemp);
+                                            Log.d(TAG, "\n");
+                                            Log.d(TAG, jsonTemp.toString());
+                                        }
+                                        Log.d(TAG, "********");
+
+
+                                    }
+                                    rViewAdapterPlace.notifyDataSetChanged();
+                                    progress_search.setVisibility(View.GONE);
+                                    handler.removeCallbacks(runSearch);
+                                } catch (JSONException e) {
+                                    handler.removeCallbacks(runSearch);
+                                    progress_search.setVisibility(View.GONE);
+                                    rViewAdapterPlace.notifyDataSetChanged();
+                                    Toast.makeText(root.getContext(), e.toString(), Toast.LENGTH_SHORT).show();
+                                    Log.d(TAG, "JSONException " + e.toString());
+                                    e.printStackTrace();
+                                }
+                            }
+                        }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(root.getContext(), error.toString(), Toast.LENGTH_SHORT).show();
+                        Log.d(TAG, "onErrorResponse " + error.toString());
+                        error.printStackTrace();
+                    }
+                }
+                );
+                AppController.getInstance().addToRequestQueue(jsonObjReq);
+
+
+            } else {
+                fAButtonClearText.setVisibility(View.GONE);
+            }
+
+        }
+    };
+
+    private void showDialogSearch(int mode) {
+        clSearchIsVisible= true;
+        placeList = new ArrayList<>();
+        rViewAdapterPlace = new RViewAdapterPlace(placeList);
 
         rViewAdapterPlace.setOnClicListener(v -> {
             int pos = rViewPlaces.getChildAdapterPosition(v);
@@ -419,8 +577,7 @@ public class FragmentMain extends Fragment implements OnMapReadyCallback, Tariff
                                 tViewAddressFinish.setText(item.getFormatted_address());
                                 setFinish();
                             }
-
-                        }, 100
+                        }, 200
 
                 );
 
@@ -430,8 +587,7 @@ public class FragmentMain extends Fragment implements OnMapReadyCallback, Tariff
 
         rViewPlaces.setAdapter(rViewAdapterPlace);
 
-        FloatingActionButton fAButtonClearText = getView().findViewById(R.id.fAButtonClearText);
-        EditText eTextSearch = getView().findViewById(R.id.eTextSearch);
+
 
         h.post(new Runnable() {
             @Override
@@ -475,8 +631,11 @@ public class FragmentMain extends Fragment implements OnMapReadyCallback, Tariff
                 fAButtonClearText.setVisibility(View.INVISIBLE);
                 eTextSearch.requestFocus();
                 showKeyboard(eTextSearch);
+                progress_search.setVisibility(View.GONE);
+                handler.removeCallbacks(runSearch);
             }
         });
+
 
 
         eTextSearch.addTextChangedListener(new TextWatcher() {
@@ -489,6 +648,9 @@ public class FragmentMain extends Fragment implements OnMapReadyCallback, Tariff
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
+                placeList.clear();
+                rViewAdapterPlace.notifyDataSetChanged();
+                handler.removeCallbacks(runSearch);
 
                 String text = eTextSearch.getText().toString();
 
@@ -498,155 +660,31 @@ public class FragmentMain extends Fragment implements OnMapReadyCallback, Tariff
                     handler.post(new Runnable() {
                         @Override
                         public void run() {
-                            eTextSearch.setText("");
+                            eTextSearch.setText(eTextSearch.getText().toString().trim());
                         }
                     });
                 }
 
+                progress_search.setVisibility(View.GONE);
+                if(!eTextSearch.getText().toString().equals("")){
+                    handler.postDelayed(
+                            runSearch
+                            , 1000);
 
-            }
-
-            @SuppressLint("RestrictedApi")
-            @Override
-            public void afterTextChanged(Editable s) {
-                AppController.getInstance().cancelPendingRequests(TAG);
-                placeList.clear();
-                rViewAdapterPlace.notifyDataSetChanged();
-
-
-                String text = eTextSearch.getText().toString().replaceAll(" ", "+");
-
-
-                if (text.length() > 0) {
-
-                    fAButtonClearText.setVisibility(View.VISIBLE);
-                    fAButtonClearText.setClickable(true);
-                    fAButtonClearText.setFocusable(true);
-
-                    URL myURL = null;
-                    try {
-                        myURL = new URL(Configurations.getUrlSearchPlaces(text, String.valueOf(lat), String.valueOf(lng)));
-
-                    } catch (MalformedURLException e) {
-                        e.printStackTrace();
-                    }
-                    Log.d(TAG, myURL.toString());
-                    JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.GET,
-                            myURL.toString(), null,
-                            new Response.Listener<JSONObject>() {
-                                @Override
-                                public void onResponse(JSONObject response) {
-                                    Log.d(TAG, response.toString());
-                                    Log.d(TAG, "***************************************");
-                                    try {
-
-                                        JSONArray results = response.getJSONArray("results");
-                                        for (int i = 0; i < results.length(); i++) {
-
-
-                                            Place placeTemp = new Place(
-
-                                            );
-
-                                            JSONObject jsonTemp = results.getJSONObject(i);
-
-                                            try {
-
-                                                placeTemp.setLat(jsonTemp.getJSONObject("geometry").getJSONObject("location").getString("lat"));
-
-                                            } catch (Exception e) {
-
-                                            }
-                                            try {
-                                                placeTemp.setLon(jsonTemp.getJSONObject("geometry").getJSONObject("location").getString("lng"));
-                                            } catch (Exception e) {
-
-                                            }
-
-                                            try {
-                                                placeTemp.setTypes(jsonTemp.getJSONArray("types"));
-                                            } catch (Exception e) {
-
-                                            }
-                                            try {
-                                                placeTemp.setFormatted_address(jsonTemp.getString("formatted_address"));
-                                            } catch (Exception e) {
-
-                                            }
-
-
-                                            boolean flag = true;
-
-                                            for (int x = 0; x < placeTemp.getTypes().length(); x++) {
-                                                if (placeTemp.getTypes().getString(x).equals("country")) {
-                                                    flag = false;
-                                                    break;
-                                                } else {
-                                                    Log.d(TAG, "----->cat:" + placeTemp.getTypes().getString(x));
-                                                }
-                                            }
-
-                                            double maxlat = -7.990756;
-                                            double minlat = -8.224768;
-
-
-                                            double maxlon = -78.896751;
-                                            double minlon = -79.192724;
-
-                                            double lat = Double.parseDouble(placeTemp.getLat());
-                                            double lon = Double.parseDouble(placeTemp.getLon());
-
-                                            if (maxlat < lat || minlat > lat) {
-                                                flag = false;
-                                            } else {
-                                                if (maxlon < lon || minlon > lon) {
-                                                    flag = false;
-                                                }
-                                            }
-
-
-                                            Log.d(TAG, "********");
-                                            if (flag) {
-                                                placeList.add(placeTemp);
-                                                Log.d(TAG, "\n");
-                                                Log.d(TAG, jsonTemp.toString());
-                                            }
-                                            Log.d(TAG, "********");
-
-
-                                        }
-                                        rViewAdapterPlace.notifyDataSetChanged();
-
-                                    } catch (JSONException e) {
-                                        Toast.makeText(root.getContext(), e.toString(), Toast.LENGTH_SHORT).show();
-                                        Log.d(TAG, "JSONException " + e.toString());
-                                        e.printStackTrace();
-                                    }
-                                }
-                            }, new Response.ErrorListener() {
-                        @Override
-                        public void onErrorResponse(VolleyError error) {
-                            Toast.makeText(root.getContext(), error.toString(), Toast.LENGTH_SHORT).show();
-                            Log.d(TAG, "onErrorResponse " + error.toString());
-                            error.printStackTrace();
-                        }
-                    }
-                    );
-                    AppController.getInstance().addToRequestQueue(jsonObjReq);
-
-
-                } else {
-                    fAButtonClearText.setVisibility(View.GONE);
                 }
 
+
             }
 
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
         });
-
-
         getView().findViewById(R.id.iViewClose).setOnClickListener(v -> {
             showFabDrawer();
             clSearch.setVisibility(View.GONE);
+            clSearchIsVisible = false;
         });
 
 
@@ -689,8 +727,6 @@ public class FragmentMain extends Fragment implements OnMapReadyCallback, Tariff
 
 
     void setFinish() {
-
-
         latFinish = mMap.getCameraPosition().target.latitude;
         lonFinish = mMap.getCameraPosition().target.longitude;
 /*
@@ -810,8 +846,6 @@ public class FragmentMain extends Fragment implements OnMapReadyCallback, Tariff
 
             btnPedir.setClickable(false);
             btnPedir.setFocusable(false);
-
-
 
             /*
 
@@ -1141,6 +1175,13 @@ public class FragmentMain extends Fragment implements OnMapReadyCallback, Tariff
         tViewPriceEntero = getView().findViewById(R.id.tViewPrecio);
 
         fabDrawer = (FloatingActionButton) getActivity().findViewById(R.id.fabDrawer);
+        progress_search= getView().findViewById(R.id.progress_search);
+
+        fAButtonClearText = getView().findViewById(R.id.fAButtonClearText);
+         eTextSearch = getView().findViewById(R.id.eTextSearch);
+
+
+        rViewPlaces = getView().findViewById(R.id.rViewPlaces);
 
         declareEvents();
         defaultAttributes();

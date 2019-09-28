@@ -6,7 +6,7 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/nav_tarifario"
-            android:icon="@drawable/ic_monetization_on_black_24dp"
+            android:icon="@drawable/ic_money_v2"
             android:title="Cotizar Delivery" />
        
         <!--
@@ -26,8 +26,15 @@
 -->
         <item
             android:id="@+id/nav_share"
-            android:icon="@drawable/ic_menu_share"
+            android:icon="@drawable/ic_share_v2"
             android:title="Compatir" />
+
+        <item
+            android:id="@+id/nav_client"
+            android:icon="@drawable/ic_phone"
+            android:title="Atención al cliente `"
+            />
+
     </group>
 
 

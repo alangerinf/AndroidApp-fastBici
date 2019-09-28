@@ -142,17 +142,11 @@ public class ActivityMain extends FragmentActivity
         }
         */
 
-        if (id==R.id.action_call){
-            call();
-
-            return true;
-        }
-
         return super.onOptionsItemSelected(item);
     }
 
 
-    void call(){
+    void callClient(){
         Intent i = new Intent(Intent.ACTION_DIAL);
         i.setData(Uri.parse("tel:"+ Configurations.phone));
 
@@ -185,8 +179,6 @@ public class ActivityMain extends FragmentActivity
                 e.printStackTrace();
             }
         }
-
-
     }
 
 
@@ -224,8 +216,7 @@ public class ActivityMain extends FragmentActivity
                 //e.toString();
             }
 
-        }
-
+        } else if (id == R.id.nav_client) callClient();
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);

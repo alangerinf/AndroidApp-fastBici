@@ -28,6 +28,13 @@
             android:id="@+id/nav_share"
             android:icon="@drawable/ic_menu_share"
             android:title="Compatir" />
+
+        <item
+            android:id="@+id/nav_client"
+            android:icon="@drawable/ic_phone"
+            android:title="Atención al cliente `"
+            />
+
     </group>
 
 

@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.alanger.ioquiero.R;
@@ -68,6 +69,10 @@ public class ActivityGetData extends AppCompatActivity {
             }
         });
 
+        iViewCloseDetailPedido.setOnClickListener(ev -> {
+            onBackPressed();
+        });
+
     }
 
 
@@ -102,6 +107,7 @@ public class ActivityGetData extends AppCompatActivity {
 
     MaterialButton btnOk;
 
+    ImageView iViewCloseDetailPedido;
 
     private void declare() {
 
@@ -119,6 +125,7 @@ public class ActivityGetData extends AppCompatActivity {
         tViewCO2 = findViewById(R.id.tViewCO2);
 
         btnOk = findViewById(R.id.btnOk);
+        iViewCloseDetailPedido =  findViewById(R.id.iViewClose_detail_pedido);
     }
 
     private void getExtras() {

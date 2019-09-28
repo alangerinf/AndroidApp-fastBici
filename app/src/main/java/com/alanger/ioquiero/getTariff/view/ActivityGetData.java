@@ -2,12 +2,18 @@ package com.alanger.ioquiero.getTariff.view;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.alanger.ioquiero.Configurations;
 import com.alanger.ioquiero.R;
 import com.google.android.material.button.MaterialButton;
 
@@ -40,12 +46,34 @@ public class ActivityGetData extends AppCompatActivity {
     private static double km;
     private static double time;
 
+    TextView tViewAddressStart;
+    TextView tViewAddressFinish;
+
+    EditText eTextRefStart;
+    EditText eTextRefFinish;
+
+    EditText eTextProduct;
+
+    EditText eTextClientName;
+    EditText eTextClientPhone;
+
+    TextView tViewkm, tViewTime, tViewPrice, tViewCO2;
+
+    MaterialButton btnOk;
+
+    ImageView iViewCloseDetailPedido;
+
+    Context ctx;
+
+    String TAG = ActivityGetData.class.getSimpleName();
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_temporal);
+
+        ctx = this;
 
         getExtras();
 
@@ -62,8 +90,61 @@ public class ActivityGetData extends AppCompatActivity {
         btnOk.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                v.setClickable(false);
-                v.setFocusable(false);
+
+                if(dataisValide()){
+                    v.setClickable(false);
+                    v.setFocusable(false);
+                    String uriGoogleMaps = "http://maps.google.com/?mode=walking%26saddr=" + latStart + "," + lonStart + "%26daddr=" + latFinish + "," + lonFinish;
+                    //String uriGoogleMaps = "http://maps.google.com/?mode=walking%26saddr=-8.1158903,-79.0356704%26daddr=-8.1179977,-79.0358920";
+                    String phone = Configurations.phone;
+
+                    /**
+                    ENTREGA PEDIDO ENCARACOLADOS
+                    HORA DE ENTREGA 12 AM
+                    CLIENTE: KARINA FLORES
+                    CELULAR: 948051691
+                    DIRECCION: CALLE LOS BRILLANTES 627, RESIDENCIAL LOS BRILLANTES BLOCK H DPTO 404, URB SANTA INÉS
+                    COBRAR: 99.00 SOLES INCLUIDO DELIVERY
+                    COSTO DEL DELIVERY 9.00
+                    OBSERVACION: CLIENTE PAGA CON 100.00 SOLES
+                    UBICACION
+                    */
+
+                    String product = eTextProduct.getText().toString().trim();
+                    Uri uri = Uri.parse("https://api.whatsapp.com/send?phone=" + phone + "&text=" +
+                            "\n*ENTREGA PEDIDO*"+
+                            "\n DESCRIPCIÓN DEL PRODUCTO"+" "+product+
+                            "\n TIEMPO APROXIMADO:"      +" "+time   +" MINUTOS"+
+                            "\n COSTO DEL DELIVERY:"     +" "+ price +" SOLES"+
+                            "\n"+
+                            (eTextRefStart.getText().toString().trim().equals("")?
+                                    ""
+                                    :
+                                    "\n*REFERENCIA DE DONDE RECOJEMOS*"+
+                                            "\n"+eTextRefStart.getText().toString().trim()
+
+                            )+
+                            (eTextRefStart.getText().toString().trim().equals("")?
+                                    "\n"
+                                    :
+                                    "\n*REFERENCIA DE DONDE VAMOS*"+
+                                            "\n"+eTextRefStart.getText().toString().trim()
+
+                            )+
+                            "\n"+
+                                    uriGoogleMaps+
+                            ""
+                    );
+                    //    uri = Uri.parse("smsto:" + "98*********7");
+                    Log.d(TAG, "" + uri.toString());
+                    Intent myIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri.toString()));
+                    startActivity(myIntent);
+                }else {
+
+                    Toast.makeText(ctx,"Faltan campos obligatorios(*)",Toast.LENGTH_LONG).show();
+
+                }
+
 
 
             }
@@ -73,6 +154,29 @@ public class ActivityGetData extends AppCompatActivity {
             onBackPressed();
         });
 
+    }
+
+    private boolean dataisValide() {
+        boolean flag=true;
+
+        String phone = eTextClientPhone.getText().toString();
+        String name = eTextClientName.getText().toString();
+        String product = eTextProduct.getText().toString();
+
+        if(phone.length()!=9){
+            eTextClientPhone.setError("Ingrese un numero de 9 digitos");
+        }
+        if(name.equals("")){
+            
+        }
+
+
+        if(phone.equals("") && name.equals("") && product.equals("")){
+
+
+            flag= false;
+        }
+        return flag;
     }
 
 
@@ -92,22 +196,7 @@ public class ActivityGetData extends AppCompatActivity {
         tViewTime.setText(""+time);
     }
 
-    TextView tViewAddressStart;
-    TextView tViewAddressFinish;
 
-    EditText eTextRefStart;
-    EditText eTextRefFinish;
-
-    EditText eTextProduct;
-
-    EditText eTextClientName;
-    EditText eTextClientPhone;
-
-    TextView tViewkm, tViewTime, tViewPrice, tViewCO2;
-
-    MaterialButton btnOk;
-
-    ImageView iViewCloseDetailPedido;
 
     private void declare() {
 
@@ -137,7 +226,7 @@ public class ActivityGetData extends AppCompatActivity {
         latStart = b.getDouble(EXTRA_LATSTART);
         lonStart = b.getDouble(EXTRA_LONSTART);
         latFinish = b.getDouble(EXTRA_LATFINISH);
-        latFinish = b.getDouble(EXTRA_LONFINISH);
+        lonFinish = b.getDouble(EXTRA_LONFINISH);
 
         price = b.getDouble(EXTRA_PRICE);
         co2 = b.getDouble(EXTRA_CO2);

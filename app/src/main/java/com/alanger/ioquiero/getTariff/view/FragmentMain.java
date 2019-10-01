@@ -6,7 +6,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -55,7 +54,6 @@ import com.alanger.ioquiero.app.AppController;
 import com.alanger.ioquiero.directionhelpers.FetchURL;
 import com.alanger.ioquiero.getTariff.view.adapters.RViewAdapterPlace;
 import com.alanger.ioquiero.views.ActivityMain;
-import com.alanger.ioquiero.views.Utils;
 import com.alanger.ioquiero.volskayaGraphql.GraphqlClient;
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -63,6 +61,8 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.apollographql.apollo.ApolloCall;
 import com.apollographql.apollo.exception.ApolloException;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -76,6 +76,7 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
@@ -91,8 +92,6 @@ import java.util.List;
 import java.util.Locale;
 
 import javax.annotation.Nonnull;
-
-import static android.content.Context.MODE_PRIVATE;
 
 /**
  * Created by Administrador on 09/09/2017.
@@ -111,8 +110,11 @@ public class FragmentMain extends Fragment implements OnMapReadyCallback, Tariff
     private static Context ctx;
     private static GoogleMap mMap;
     private static Geocoder geocode;
-    private static double LatTemp = 0, LonTemp = 0, CurrentLat = 0, CurrentLon = 0, latStart, lonStart, latFinish, lonFinish;
-    ;
+    private static double LatTemp = 0, LonTemp = 0, //ubicacion temporal para algun paso de data
+
+    CurrentLat = 0, CurrentLon = 0,//ubicacion actual
+    latStart, lonStart, latFinish, lonFinish; //lo q se seteo
+
 
     private static Button btnSetStart, btnSetFinish, btnPedir;
     private static ConstraintLayout  clPedir;
@@ -125,14 +127,12 @@ public class FragmentMain extends Fragment implements OnMapReadyCallback, Tariff
 
     private static TextView tViewKilometers, tViewMin, tViewCo2;
 
+
+
     private static Marker markerStart = null, markerFinish = null;
-
-
     private static ImageView markerTo, marketFrom;
 
     private static String direccion, number;
-
-    private static SharedPreferences pref;
 
     private static final Handler handler = new Handler();
 
@@ -150,6 +150,9 @@ public class FragmentMain extends Fragment implements OnMapReadyCallback, Tariff
     List<Place> placeList ;
     RViewAdapterPlace rViewAdapterPlace ;
     RecyclerView rViewPlaces ;
+
+
+    private FusedLocationProviderClient fusedLocationClient;
 
 
     @Override
@@ -190,7 +193,7 @@ public class FragmentMain extends Fragment implements OnMapReadyCallback, Tariff
             if (statusOfGPS) {
                 mMap.getUiSettings().setMyLocationButtonEnabled(true);
                 mMap.setMyLocationEnabled(true);
-                runnable.run();
+                runnableSetCurrentLocation.run();
             } else {
                 showGPSDisabledAlertToUser();
             }
@@ -224,11 +227,6 @@ public class FragmentMain extends Fragment implements OnMapReadyCallback, Tariff
         alert.show();
     }
 
-    public boolean checkLocationPermission() {
-        String permission = "android.permission.ACCESS_FINE_LOCATION";
-        int res = ctx.checkCallingOrSelfPermission(permission);
-        return (res == PackageManager.PERMISSION_GRANTED);
-    }
 
 
     @Override
@@ -405,7 +403,7 @@ public class FragmentMain extends Fragment implements OnMapReadyCallback, Tariff
 
                 URL myURL = null;
                 try {
-                    myURL = new URL(Configurations.getUrlSearchPlaces(text, String.valueOf(lat), String.valueOf(lng)));
+                    myURL = new URL(Configurations.getUrlSearchPlaces(text, String.valueOf(CurrentLat), String.valueOf(CurrentLon)));
 
                 } catch (MalformedURLException e) {
                     Log.d(TAG,e.toString());
@@ -1088,14 +1086,7 @@ public class FragmentMain extends Fragment implements OnMapReadyCallback, Tariff
         return url;
     }
 
-    /*
-        @Override
-        public void onTaskDone(Object... values) {
-            if (currentPolyline != null)
-                currentPolyline.remove();
-            currentPolyline = mMap.addPolyline((PolylineOptions) values[0]);
-        }
-      */
+
     public static void drawRoute(Object... values) {
         if (currentPolyline != null)
             currentPolyline.remove();
@@ -1146,8 +1137,9 @@ public class FragmentMain extends Fragment implements OnMapReadyCallback, Tariff
         super.onViewCreated(view, savedInstanceState);
         ctx = getContext();
 
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(ctx);
 
-        pref = this.getActivity().getSharedPreferences(Utils.nameSesion, MODE_PRIVATE);
+
         geocode = new Geocoder(ctx, Locale.getDefault());
 
 
@@ -1202,35 +1194,38 @@ public class FragmentMain extends Fragment implements OnMapReadyCallback, Tariff
         CurrentLon = loc.getLongitude();
     }
 
-    Runnable runnable = new Runnable() {
+    Runnable runnableSetCurrentLocation = new Runnable() {
         @Override
         public void run() {
             try {
-                LocationManager locationManager = (LocationManager)
-                        ctx.getSystemService(Context.LOCATION_SERVICE);
-                Criteria criteria = new Criteria();
-
-                if (ActivityCompat.checkSelfPermission(ctx,Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(ctx,Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                Log.d(TAG,"runnableSetCurrentLocation()");
+                if (ActivityCompat.checkSelfPermission(ctx, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(ctx, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                     verifyPermission();
                     return;
                 }
-                Location loc = locationManager.getLastKnownLocation(locationManager
-                        .getBestProvider(criteria, false));
 
-                if (loc != null) {
-                    setCurrentLoc(loc);
-                    if (ActivityCompat.checkSelfPermission(ctx, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(ctx, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                        return;
-                    }
-                    mMap.setMyLocationEnabled(true);
-                    positionLastLoc();
-                    handler.removeCallbacks(runnable);
-                } else {
-                    handler.postDelayed(runnable, 100);
-                }
+                fusedLocationClient.getLastLocation()
+                        .addOnSuccessListener(getActivity(), (OnSuccessListener<Location>) location -> {
+                            // Got last known location. In some rare situations this can be null.
+
+                            if (location != null) {
+
+                                    mMap.setMyLocationEnabled(true);
+                                    setCurrentLoc(location);
+                                    positionLastLoc();
+                                    finishMoveMapEvent();
+                                    handler.removeCallbacks(runnableSetCurrentLocation);
+                                } else {
+                                    handler.postDelayed(runnableSetCurrentLocation, 100);
+                                }
+
+
+                        });
+
+
             } catch (Exception e) {
                 //algo salio mal
-                handler.postDelayed(runnable, 100);
+                handler.postDelayed(runnableSetCurrentLocation, 100);
                 Toast.makeText(ctx, "salio Mal", Toast.LENGTH_LONG).show();
             }
         }
@@ -1239,27 +1234,23 @@ public class FragmentMain extends Fragment implements OnMapReadyCallback, Tariff
     @Override
     public void onDestroy() {
         super.onDestroy();
-        handler.removeCallbacks(runnable);
+        handler.removeCallbacks(runnableSetCurrentLocation);
     }
 
     private void posicionarMarker() {
-        LatLng posicion = new LatLng(lat, lng);
+
+        Log.d(TAG,"posicionarMarker()"+CurrentLat+","+CurrentLon);
+        LatLng posicion = new LatLng(CurrentLat, CurrentLon);
         CameraPosition cameraPosition = new CameraPosition.Builder().target(posicion).zoom(16.0f).build();
         CameraUpdate cameraUpdate = CameraUpdateFactory.newCameraPosition(cameraPosition);
         mMap.animateCamera(cameraUpdate, 500, this);
     }
 
-    Double lat, lng;
-
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-        lat = -8.1190123;
-        lng = -79.0362434;
+
         verifyPermission();
-
-        posicionarMarker();
-
 
         mMap.setOnCameraMoveStartedListener(i -> {
             // btn_pedir.setVisibility(View.INVISIBLE);
@@ -1271,38 +1262,49 @@ public class FragmentMain extends Fragment implements OnMapReadyCallback, Tariff
             Log.d(TAG, "INICIANDO CAMARA MOVE");
         });
 
+
+
         mMap.setOnCameraIdleListener(() -> {
-            try {
-
-                LocationManager locationManager = (LocationManager)
-                        ctx.getSystemService(Context.LOCATION_SERVICE);
-                Criteria criteria = new Criteria();
-
-                if (ActivityCompat.checkSelfPermission(ctx,Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(ctx,Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                    verifyPermission();
-                    return;
-                }
-                Location loc = locationManager.getLastKnownLocation(locationManager
-                        .getBestProvider(criteria, false));
-                        loc.setLongitude(mMap.getCameraPosition().target.longitude);
-                        loc.setLatitude(mMap.getCameraPosition().target.latitude);
-                        updateLocInView(loc);
-                    } catch (Exception e) {
-                        Log.d(TAG,e.toString());
-                    }
-                    if (!isFirstIdle) {//si es la primera  ves q se inicia el mapa
-                        isFirstIdle = true;
-                    } else {//si ya se inicio el mapa hace rato
-
-                        //tViewAddressStart.setText(direccion);
-                        tViewAddressStart.setVisibility(View.VISIBLE);
-                        enableInputs();
-                    }
-
-                    Log.d(TAG, "setOnCameraIdleListener");
-                }
+            finishMoveMapEvent();
+            }
         );
 
+    }
+
+
+    void finishMoveMapEvent(){
+        try {
+
+            if (ActivityCompat.checkSelfPermission(ctx,Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(ctx,Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                verifyPermission();
+                return;
+            }
+
+            double CameraLat = mMap.getCameraPosition().target.latitude;
+            double CameraLong = mMap.getCameraPosition().target.longitude;
+
+            Log.d(TAG,"setOnCameraIdleListener() "+CameraLat+" , "+CameraLong);
+
+            Location loc = new Location("provider");
+
+            loc.setLongitude(CameraLong);
+            loc.setLatitude(CameraLat);
+
+            updateLocInView(loc);
+
+
+        } catch (Exception e) {
+            Log.d(TAG,"setOnCameraIdleListener()"+e.toString());
+        }
+        if (!isFirstIdle) {//si es la primera  ves q se inicia el mapa
+            isFirstIdle = true;
+        } else {//si ya se inicio el mapa hace rato
+
+            tViewAddressStart.setVisibility(View.VISIBLE);
+            enableInputs();
+        }
+
+        Log.d(TAG, "setOnCameraIdleListener");
     }
 
 
@@ -1338,7 +1340,7 @@ public class FragmentMain extends Fragment implements OnMapReadyCallback, Tariff
                         return;
                     }
                     mMap.setMyLocationEnabled(true);
-                    runnable.run();
+                    runnableSetCurrentLocation.run();
                     Toast.makeText(ctx,"permiso concedido",Toast.LENGTH_LONG).show();
                 }else {
                     verifyPermission();

@@ -113,17 +113,21 @@ public class ActivityGetData extends AppCompatActivity {
                     String product = eTextProduct.getText().toString().trim();
                     Uri uri = Uri.parse("https://api.whatsapp.com/send?phone=" + phone + "&text=" +
                             "\n*ENTREGA PEDIDO*"+
+                            "\n NOMBRE:"+" "+eTextClientName.getText().toString().trim()+
+                            "\n TELEFONO:"+" "+eTextClientPhone.getText().toString().trim()+
                             "\n DESCRIPCIÓN DEL PRODUCTO"+" "+product+
                             "\n TIEMPO APROXIMADO:"      +" "+time   +" MINUTOS"+
                             "\n COSTO DEL DELIVERY:"     +" "+ price +" SOLES"+
+                            "\n ¿DONDE RECOJEMOS?:"     +" "+ addressStart +
                             "\n"+
-                            (eTextRefStart.getText().toString().trim().equals("")?
+                            (!eTextRefStart.getText().toString().trim().equals("")?
                                     ""
                                     :
                                     "\n*REFERENCIA DE DONDE RECOJEMOS*"+
                                             "\n"+eTextRefStart.getText().toString().trim()
 
                             )+
+                            "\n ¿DONDE VAMOS?:"     +" "+ addressFinish +
                             (eTextRefStart.getText().toString().trim().equals("")?
                                     "\n"
                                     :
@@ -167,12 +171,14 @@ public class ActivityGetData extends AppCompatActivity {
             eTextClientPhone.setError("Ingrese un numero de 9 digitos");
         }
         if(name.equals("")){
-            
+            eTextClientName.setError("Ingrese su nombre");
         }
 
+        if(product.equals("")){
+            eTextProduct.setError("Ingrese un producto");
+        }
 
         if(phone.equals("") && name.equals("") && product.equals("")){
-
 
             flag= false;
         }

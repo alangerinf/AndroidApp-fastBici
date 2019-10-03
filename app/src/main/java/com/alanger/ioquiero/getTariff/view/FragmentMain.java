@@ -1262,8 +1262,6 @@ public class FragmentMain extends Fragment implements OnMapReadyCallback, Tariff
             Log.d(TAG, "INICIANDO CAMARA MOVE");
         });
 
-
-
         mMap.setOnCameraIdleListener(() -> {
             finishMoveMapEvent();
             }

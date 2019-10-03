@@ -113,26 +113,26 @@ public class ActivityGetData extends AppCompatActivity {
                     String product = eTextProduct.getText().toString().trim();
                     Uri uri = Uri.parse("https://api.whatsapp.com/send?phone=" + phone + "&text=" +
                             "\n*ENTREGA PEDIDO*"+
-                            "\n NOMBRE:"+" "+eTextClientName.getText().toString().trim()+
-                            "\n TELEFONO:"+" "+eTextClientPhone.getText().toString().trim()+
-                            "\n DESCRIPCIÓN DEL PRODUCTO"+" "+product+
-                            "\n TIEMPO APROXIMADO:"      +" "+time   +" MINUTOS"+
-                            "\n COSTO DEL DELIVERY:"     +" "+ price +" SOLES"+
-                            "\n ¿DONDE RECOJEMOS?:"     +" "+ addressStart +
+                            "\nNOMBRE:"+" "+eTextClientName.getText().toString().trim()+
+                            "\nTELEFONO:"+" "+eTextClientPhone.getText().toString().trim()+
+                            "\nDESCRIPCIÓN DEL PRODUCTO"+" "+product+
+                            "\nTIEMPO APROXIMADO:"      +" "+time   +" MINUTOS"+
+                            "\nCOSTO DEL DELIVERY:"     +" "+ price +" SOLES"+
+                            "\n¿DONDE RECOJEMOS?:"     +" "+ addressStart +
                             "\n"+
-                            (!eTextRefStart.getText().toString().trim().equals("")?
+                            (eTextRefStart.getText().toString().trim().equals("")?
                                     ""
                                     :
                                     "\n*REFERENCIA DE DONDE RECOJEMOS*"+
                                             "\n"+eTextRefStart.getText().toString().trim()
 
                             )+
-                            "\n ¿DONDE VAMOS?:"     +" "+ addressFinish +
-                            (eTextRefStart.getText().toString().trim().equals("")?
+                            "\n¿DONDE VAMOS?:"     +" "+ addressFinish +
+                            (eTextRefFinish.getText().toString().trim().equals("")?
                                     "\n"
                                     :
                                     "\n*REFERENCIA DE DONDE VAMOS*"+
-                                            "\n"+eTextRefStart.getText().toString().trim()
+                                            "\n"+eTextRefFinish.getText().toString().trim()
 
                             )+
                             "\n"+

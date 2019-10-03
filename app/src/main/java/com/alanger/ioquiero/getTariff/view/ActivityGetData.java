@@ -161,8 +161,6 @@ public class ActivityGetData extends AppCompatActivity {
     }
 
     private boolean dataisValide() {
-        boolean flag=true;
-
         String phone = eTextClientPhone.getText().toString();
         String name = eTextClientName.getText().toString();
         String product = eTextProduct.getText().toString();
@@ -177,12 +175,7 @@ public class ActivityGetData extends AppCompatActivity {
         if(product.equals("")){
             eTextProduct.setError("Ingrese un producto");
         }
-
-        if(phone.equals("") && name.equals("") && product.equals("")){
-
-            flag= false;
-        }
-        return flag;
+        return !(phone.equals("") || name.equals("") || product.equals(""));
     }
 
 

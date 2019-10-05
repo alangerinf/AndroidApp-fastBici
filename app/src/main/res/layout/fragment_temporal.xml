@@ -152,7 +152,7 @@
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:background="@color/white"
-                        android:hint="¿Referencia de dónde recojemos?"
+                        android:hint="¿Referencia de dónde recojemos? (*)"
                         android:inputType="text"
                         android:maxLines="1"
                         android:paddingStart="8dp"
@@ -256,7 +256,7 @@
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:background="@color/white"
-                        android:hint="¿Referencia de dónde vamos?"
+                        android:hint="¿Referencia de dónde vamos? (*)"
                         android:inputType="text"
                         android:maxLines="1"
                         android:paddingStart="8dp"
@@ -349,7 +349,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="32dp"
-                    android:text="Datos del Cliente"
+                    android:text="@string/quien_recibe"
                     android:textColor="@color/materialGrey600"
                     android:textSize="16sp" />
 

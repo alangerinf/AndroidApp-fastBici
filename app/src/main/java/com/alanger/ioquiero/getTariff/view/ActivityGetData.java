@@ -85,16 +85,30 @@ public class ActivityGetData extends AppCompatActivity {
 
     }
 
+    private void buildWhatsAppRequest(String uriGoogleMaps, String bodyMsg) {
+        Intent whatsappIntent =  new Intent("android.intent.action.MAIN");
+        whatsappIntent.setAction(Intent.ACTION_SEND);
+        whatsappIntent.setType("text/plain");
+        whatsappIntent.putExtra(Intent.EXTRA_TEXT,  bodyMsg + uriGoogleMaps);
+        whatsappIntent.setPackage("com.whatsapp");
+        whatsappIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        try {
+            startActivity(whatsappIntent);
+        } catch (android.content.ActivityNotFoundException ex) {
+            Toast.makeText(ctx,"Whatsapp no esta instalado.",Toast.LENGTH_LONG).show();
+        }
+    }
+
     private void events() {
 
         btnOk.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                if(dataisValide()){
+                if(formIsValid()){
                     v.setClickable(false);
                     v.setFocusable(false);
-                    String uriGoogleMaps = "http://maps.google.com/?mode=walking%26saddr=" + latStart + "," + lonStart + "%26daddr=" + latFinish + "," + lonFinish;
+                    String uriGoogleMaps = "http://maps.google.com/?mode=walking&saddr=" + latStart + "," + lonStart + "&daddr=" + latFinish + "," + lonFinish;
                     //String uriGoogleMaps = "http://maps.google.com/?mode=walking%26saddr=-8.1158903,-79.0356704%26daddr=-8.1179977,-79.0358920";
                     String phone = Configurations.phone;
 
@@ -111,42 +125,41 @@ public class ActivityGetData extends AppCompatActivity {
                     */
 
                     String product = eTextProduct.getText().toString().trim();
-                    Uri uri = Uri.parse("https://api.whatsapp.com/send?phone=" + phone + "&text=" +
-                            "\n*ENTREGA PEDIDO*"+
-                            "\nNOMBRE:"                         +" "+eTextClientName.getText().toString().trim()+
-                            "\nTELEFONO:"                       +" "+eTextClientPhone.getText().toString().trim()+
+
+                    String bodyMsg = "\n*ENTREGA PEDIDO*"+
+                            "\nNOMBRE:"                         +" "+eTextClientName.getText().toString().trim() +
+                            "\nTELEFONO:"                       +" "+eTextClientPhone.getText().toString().trim() +
                             "\n*DESCRIPCIÓN DEL PRODUCTO:*"     +" "+product+
                             "\nTIEMPO APROXIMADO:"              +" "+time   +" MINUTOS"+
-                            "\nCOSTO DEL DELIVERY:"             +" "+ price +" SOLES"+
+                            "\nCOSTO DEL DELIVERY:"             +" "+ price +" SOLES" +
                             "\n"+
                             "\n*¿DONDE RECOJEMOS?:*"     +
                             "\n "+ addressStart +
                             "\n"+
-                            (eTextRefStart.getText().toString().trim().equals("")?
+                            (eTextRefStart.getText().toString().trim().isEmpty()?
                                     ""
                                     :
                                     "REFERENCIA DE DONDE RECOJEMOS:"+
                                             "\n"+eTextRefStart.getText().toString().trim()
 
-                            )+
-                            "\n*¿DONDE VAMOS?:*"     +
+                            ) +
+                            "\n*¿DONDE VAMOS?:*" +
                             "\n "+ addressFinish +
-                            "\n"+
-                            (eTextRefFinish.getText().toString().trim().equals("")?
+                            "\n" +
+                            (eTextRefFinish.getText().toString().trim().isEmpty()?
                                     ""
                                     :
                                     "REFERENCIA DE DONDE VAMOS:"+
                                             "\n"+eTextRefFinish.getText().toString().trim()
 
                             )+
-                            "\n"+
-                                    uriGoogleMaps+
-                            ""
-                    );
-                    //    uri = Uri.parse("smsto:" + "98*********7");
-                    Log.d(TAG, "" + uri.toString());
-                    Intent myIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri.toString()));
-                    startActivity(myIntent);
+                            "\n"
+                            ;
+
+                    Log.d(TAG, "bodyMsg" + bodyMsg);
+                    Log.d(TAG, "uriGoogleMaps" + uriGoogleMaps);
+                    buildWhatsAppRequest(uriGoogleMaps, bodyMsg);
+
                 }else {
 
                     Toast.makeText(ctx,"Faltan campos obligatorios(*)",Toast.LENGTH_LONG).show();
@@ -164,22 +177,29 @@ public class ActivityGetData extends AppCompatActivity {
 
     }
 
-    private boolean dataisValide() {
+    private boolean formIsValid() {
         String phone = eTextClientPhone.getText().toString();
-        String name = eTextClientName.getText().toString();
-        String product = eTextProduct.getText().toString();
+        boolean isEmptyName = eTextClientName.getText().toString().isEmpty();
+        boolean isEmptyProduct = eTextProduct.getText().toString().isEmpty();
+        boolean isEmptyRefFinish = eTextRefFinish.getText().toString().isEmpty();
+        boolean isEmptyRefStart = eTextRefStart.getText().toString().isEmpty();
 
         if(phone.length()!=9){
             eTextClientPhone.setError("Ingrese un numero de 9 digitos");
         }
-        if(name.equals("")){
+        if(isEmptyName){
             eTextClientName.setError("Ingrese su nombre");
         }
-
-        if(product.equals("")){
+        if(isEmptyProduct){
             eTextProduct.setError("Ingrese un producto");
         }
-        return !(phone.equals("") || name.equals("") || product.equals(""));
+        if(isEmptyRefStart) {
+            eTextRefStart.setError("Ingrese una referencia de recojo");
+        }
+        if(isEmptyRefFinish) {
+            eTextRefFinish.setError("Ingrese una referencia de donde vamos");
+        }
+        return !(isEmptyProduct || isEmptyName|| isEmptyRefFinish || isEmptyRefStart );
     }
 
 

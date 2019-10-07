@@ -32,6 +32,7 @@
     <string name="b">B</string>
     <string name="donde_recogemos">¿Donde Recogemos?</string>
     <string name="a_donde_vamos">¿A dónde vamos?</string>
+    <string name="quien_recibe">¿Quién recibe?</string>
     <string name="phone_invalid">Número de Telefono invalido</string>
     <string name="bandeja_de_pedidos_vacia">Bandeja de Pedidos Vacia</string>
     <string name="title_activity_pedido">PedidoActivity</string>

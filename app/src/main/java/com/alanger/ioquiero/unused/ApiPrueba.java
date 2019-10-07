@@ -28,7 +28,6 @@ public class ApiPrueba {
 
     public void download(){
 
-
         String BASE_URL = "<your_server>/graphql";
 
         OkHttpClient okHttpClient = new OkHttpClient.Builder().build();
@@ -37,11 +36,6 @@ public class ApiPrueba {
                 .serverUrl(BASE_URL)
                 .okHttpClient(okHttpClient)
                 .build();
-
-
-
-
-
 
         status=1;
    //     progress = new ProgressDialog(ctx);

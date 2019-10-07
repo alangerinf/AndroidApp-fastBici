@@ -52,10 +52,12 @@ public class ActivityGetData extends AppCompatActivity {
     EditText eTextRefStart;
     EditText eTextRefFinish;
 
-    EditText eTextProduct;
+    EditText eTextProduct, eTextObservations;
 
     EditText eTextClientName;
     EditText eTextClientPhone;
+
+
 
     TextView tViewkm, tViewTime, tViewPrice, tViewCO2;
 
@@ -153,7 +155,13 @@ public class ActivityGetData extends AppCompatActivity {
                                             "\n"+eTextRefFinish.getText().toString().trim()
 
                             )+
-                            "\n"
+                            "\n"+
+                            (eTextObservations.getText().toString().trim().isEmpty()?
+                                    ""
+                                    :
+                                    "OBSERVACIONES:"+
+                                    "\n"+eTextObservations.getText().toString().trim()
+                            )
                             ;
 
                     Log.d(TAG, "bodyMsg" + bodyMsg);
@@ -230,6 +238,8 @@ public class ActivityGetData extends AppCompatActivity {
         eTextProduct = findViewById(R.id.eTextProduct);
         eTextClientName = findViewById(R.id.eTextClientName);
         eTextClientPhone = findViewById(R.id.eTextClientPhone);
+
+        eTextObservations = findViewById(R.id.eTextObservations);
 
         tViewkm = findViewById(R.id.tViewkm);
         tViewTime = findViewById(R.id.tViewTime);

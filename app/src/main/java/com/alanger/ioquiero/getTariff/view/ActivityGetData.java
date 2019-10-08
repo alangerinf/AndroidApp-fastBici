@@ -128,12 +128,12 @@ public class ActivityGetData extends AppCompatActivity {
 
                     String product = eTextProduct.getText().toString().trim();
 
-                    String bodyMsg = "\n*ENTREGA PEDIDO*"+
-                            "\nNOMBRE:"                         +" "+eTextClientName.getText().toString().trim() +
-                            "\nTELEFONO:"                       +" "+eTextClientPhone.getText().toString().trim() +
+                    String bodyMsg = "\n*___________ ENTREGA PEDIDO ___________*"+
+                            "\n*NOMBRE:*"                         +" "+eTextClientName.getText().toString().trim() +
+                            "\n*TELEFONO:*"                       +" "+eTextClientPhone.getText().toString().trim() +
                             "\n*DESCRIPCIÓN DEL PRODUCTO:*"     +" "+product+
-                            "\nTIEMPO APROXIMADO:"              +" "+time   +" MINUTOS"+
-                            "\nCOSTO DEL DELIVERY:"             +" "+ price +" SOLES" +
+                            "\n*TIEMPO APROXIMADO:*"              +" "+time   +" MINUTOS"+
+                            "\n*COSTO DEL DELIVERY:*"             +" "+ price +" SOLES" +
                             "\n"+
                             "\n*¿DONDE RECOJEMOS?:*"     +
                             "\n "+ addressStart +
@@ -141,7 +141,7 @@ public class ActivityGetData extends AppCompatActivity {
                             (eTextRefStart.getText().toString().trim().isEmpty()?
                                     ""
                                     :
-                                    "REFERENCIA DE DONDE RECOJEMOS:"+
+                                    "*_REFERENCIA DE DONDE RECOJEMOS:_*"+
                                             "\n"+eTextRefStart.getText().toString().trim()
 
                             ) +
@@ -151,7 +151,7 @@ public class ActivityGetData extends AppCompatActivity {
                             (eTextRefFinish.getText().toString().trim().isEmpty()?
                                     ""
                                     :
-                                    "REFERENCIA DE DONDE VAMOS:"+
+                                    "*_REFERENCIA DE DONDE VAMOS:_*"+
                                             "\n"+eTextRefFinish.getText().toString().trim()
 
                             )+
@@ -159,9 +159,10 @@ public class ActivityGetData extends AppCompatActivity {
                             (eTextObservations.getText().toString().trim().isEmpty()?
                                     ""
                                     :
-                                    "OBSERVACIONES:"+
+                                    "*OBSERVACIONES:*"+
                                     "\n"+eTextObservations.getText().toString().trim()
-                            )
+                            )+
+                            "\n"
                             ;
 
                     Log.d(TAG, "bodyMsg" + bodyMsg);

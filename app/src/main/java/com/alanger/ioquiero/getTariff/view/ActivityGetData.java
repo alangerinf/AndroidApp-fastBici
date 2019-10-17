@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -51,6 +52,10 @@ public class ActivityGetData extends AppCompatActivity {
 
     EditText eTextRefStart;
     EditText eTextRefFinish;
+
+
+    EditText eTextConCuantoPaga;
+    Spinner spnQuienPaga;
 
     EditText eTextProduct, eTextObservations;
 
@@ -160,7 +165,14 @@ public class ActivityGetData extends AppCompatActivity {
                                     ""
                                     :
                                     "*OBSERVACIONES:*"+
-                                    "\n"+eTextObservations.getText().toString().trim()
+                                            "\n"+eTextObservations.getText().toString().trim()
+                            )+
+                            "\n"+
+                            "*"+spnQuienPaga.getSelectedItem().toString()+"* "+
+                            (eTextConCuantoPaga.getText().toString().trim().isEmpty()?
+                                    ""
+                                    :
+                                    ": S/ "+ eTextConCuantoPaga.getText().toString().trim()
                             )+
                             "\n"
                             ;
@@ -241,6 +253,10 @@ public class ActivityGetData extends AppCompatActivity {
         eTextClientPhone = findViewById(R.id.eTextClientPhone);
 
         eTextObservations = findViewById(R.id.eTextObservations);
+
+
+        eTextConCuantoPaga = findViewById(R.id.eTextConCuantoPaga);
+        spnQuienPaga = findViewById(R.id.spnQuienPaga);
 
         tViewkm = findViewById(R.id.tViewkm);
         tViewTime = findViewById(R.id.tViewTime);

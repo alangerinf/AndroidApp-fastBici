@@ -1341,10 +1341,10 @@ public class FragmentMain extends Fragment implements OnMapReadyCallback, Tariff
                     runnableSetCurrentLocation.run();
                     Toast.makeText(ctx,"permiso concedido",Toast.LENGTH_LONG).show();
                 }else {
-                    verifyPermission();
+                    handler.postDelayed(
+                            this::verifyPermission
+                    ,1000);
                 }
-
-
                 return;
 
             // other 'case' lines to check for other

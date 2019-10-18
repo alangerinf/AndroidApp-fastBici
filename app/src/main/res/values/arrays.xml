@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="arrayPaga">
-        <item>Cobrargit  al recoger</item>
+        <item>Cobrar al recoger</item>
         <item>Cobrar al entregar</item>
     </string-array>
 </resources>

@@ -168,11 +168,10 @@ public class ActivityGetData extends AppCompatActivity {
                                             "\n"+eTextObservations.getText().toString().trim()
                             )+
                             "\n"+
-                            "*"+spnQuienPaga.getSelectedItem().toString()+"* "+
                             (eTextConCuantoPaga.getText().toString().trim().isEmpty()?
                                     ""
                                     :
-                                    ": S/ "+ eTextConCuantoPaga.getText().toString().trim()
+                            "*Paga con:* S/ "+ eTextConCuantoPaga.getText().toString().trim()+" ( *"+ spnQuienPaga.getSelectedItem().toString() +"* ) "
                             )+
                             "\n"
                             ;
@@ -184,11 +183,7 @@ public class ActivityGetData extends AppCompatActivity {
                 }else {
 
                     Toast.makeText(ctx,"Faltan campos obligatorios(*)",Toast.LENGTH_LONG).show();
-
                 }
-
-
-
             }
         });
 

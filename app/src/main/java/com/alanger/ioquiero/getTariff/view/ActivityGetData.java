@@ -132,7 +132,6 @@ public class ActivityGetData extends AppCompatActivity {
                     */
 
                     String product = eTextProduct.getText().toString().trim();
-
                     String bodyMsg = "\n*___________ ENTREGA PEDIDO ___________*"+
                             "\n*NOMBRE:*"                         +" "+eTextClientName.getText().toString().trim() +
                             "\n*TELEFONO:*"                       +" "+eTextClientPhone.getText().toString().trim() +
@@ -175,13 +174,11 @@ public class ActivityGetData extends AppCompatActivity {
                             )+
                             "\n"
                             ;
-
                     Log.d(TAG, "bodyMsg" + bodyMsg);
                     Log.d(TAG, "uriGoogleMaps" + uriGoogleMaps);
                     buildWhatsAppRequest(uriGoogleMaps, bodyMsg);
 
                 }else {
-
                     Toast.makeText(ctx,"Faltan campos obligatorios(*)",Toast.LENGTH_LONG).show();
                 }
             }

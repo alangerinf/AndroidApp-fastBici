@@ -554,11 +554,13 @@ public class FragmentMain extends Fragment implements OnMapReadyCallback, Tariff
                 if ( mode == 0 ) {
                     tViewAddressStart.setText(item.getFormatted_address());
                     markerStart.setPosition(latLng);
+                    updateLatLngStart(latLng);
                 }
 
                 if ( mode == 1 ) {
                     tViewAddressFinish.setText(item.getFormatted_address());
                     markerFinish.setPosition(latLng);
+                    updateLatLngFinish(latLng);
                 }
 
                 btnSetStart.setVisibility(View.INVISIBLE);
@@ -688,6 +690,15 @@ public class FragmentMain extends Fragment implements OnMapReadyCallback, Tariff
 
     }
 
+    private void updateLatLngStart(LatLng latLng) {
+        latStart = latLng.latitude;
+        lonStart = latLng.longitude;
+    }
+
+    private void updateLatLngFinish(LatLng latLng) {
+        latFinish = latLng.latitude;
+        lonFinish = latLng.longitude;
+    }
 
     private void setStart() {
 
@@ -699,13 +710,15 @@ public class FragmentMain extends Fragment implements OnMapReadyCallback, Tariff
         if (markerStart != null) {
             markerStart.remove();
         }
-        latStart = mMap.getCameraPosition().target.latitude;
-        lonStart = mMap.getCameraPosition().target.longitude;
 
-        LatLng LatLng = new LatLng(latStart, lonStart);
+        LatLng latLng = new LatLng(
+                mMap.getCameraPosition().target.latitude,
+                mMap.getCameraPosition().target.longitude
+        );
+        updateLatLngStart(latLng);
 
         markerStart = mMap.addMarker(new MarkerOptions()
-                .position(LatLng)
+                .position(latLng)
                 .title("¿Donde Recogemos?")
                 .anchor(0.5f, 0.5f)
                 .icon(bitmapDescriptorFromVector(0, getContext(), R.drawable.ic_from)));
@@ -725,8 +738,11 @@ public class FragmentMain extends Fragment implements OnMapReadyCallback, Tariff
 
 
     void setFinish() {
-        latFinish = mMap.getCameraPosition().target.latitude;
-        lonFinish = mMap.getCameraPosition().target.longitude;
+        LatLng latLngFinish = new LatLng(
+                mMap.getCameraPosition().target.latitude,
+                mMap.getCameraPosition().target.longitude
+        );
+        updateLatLngFinish(latLngFinish);
 /*
             if(latStart==latFinish && lonStart==tlonFinish){
 
@@ -746,9 +762,8 @@ public class FragmentMain extends Fragment implements OnMapReadyCallback, Tariff
             markerFinish.remove();
         }
 
-        LatLng LatLngFinish = new LatLng(latFinish, lonFinish);
         markerFinish = mMap.addMarker(new MarkerOptions()
-                .position(LatLngFinish)
+                .position(latLngFinish)
                 .title("¿Donde vamos?")
                 .icon(bitmapDescriptorFromVector(1, getContext(), R.drawable.ic_to)));
         markerFinish.showInfoWindow();

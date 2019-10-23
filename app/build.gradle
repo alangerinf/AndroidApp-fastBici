@@ -11,8 +11,8 @@ android {
         applicationId 'com.alanger.ioquiero'
         minSdkVersion 21
         targetSdkVersion 28
-        versionCode 9
-        versionName "1.2g"
+        versionCode 11
+        versionName "1.4g"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {

@@ -19,7 +19,6 @@ import android.webkit.WebViewClient;
 import android.widget.TextView;
 
 import com.alanger.ioquiero.R;
-import com.alanger.ioquiero.getTariff.view.ActivityShowTariffResult;
 import com.alanger.ioquiero.models.Pedido;
 
 /**

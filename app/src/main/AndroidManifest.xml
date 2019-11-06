@@ -31,7 +31,7 @@
         tools:ignore="GoogleAppIndexingWarning">
         <activity
             android:theme="@style/AppTheme2.NoActionBar"
-            android:name=".getTariff.view.ActivityGetData">
+            android:name=".getTariff.view.ActivityPedidoDetail">
 
 
         </activity>
@@ -86,7 +86,7 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme2.NoActionBar" />
         <activity
-            android:name=".getTariff.view.ActivityShowTariffResult"
+            android:name=".getTariff.view.unused.ActivityShowTariffResult"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme2.NoActionBar" />
         <activity

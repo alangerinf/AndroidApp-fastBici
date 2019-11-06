@@ -16,9 +16,10 @@ import android.widget.Toast;
 
 import com.alanger.ioquiero.Configurations;
 import com.alanger.ioquiero.R;
+import com.alanger.ioquiero.getTariff.view.adapters.DialogSelectEnterprise;
 import com.google.android.material.button.MaterialButton;
 
-public class ActivityGetData extends AppCompatActivity {
+public class ActivityPedidoDetail extends AppCompatActivity {
 
     public static String EXTRA_LATSTART = "latStart";
     public static String EXTRA_LONSTART = "lonStart";
@@ -72,13 +73,13 @@ public class ActivityGetData extends AppCompatActivity {
 
     Context ctx;
 
-    String TAG = ActivityGetData.class.getSimpleName();
+    String TAG = ActivityPedidoDetail.class.getSimpleName();
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.fragment_temporal);
+        setContentView(R.layout.activity_pedido_detail);
 
         ctx = this;
 
@@ -92,13 +93,17 @@ public class ActivityGetData extends AppCompatActivity {
 
     }
 
-    private void buildWhatsAppRequest(String uriGoogleMaps, String bodyMsg) {
+    private void buildWhatsAppRequest(Uri bodyMsg) {
+        /*
         Intent whatsappIntent =  new Intent("android.intent.action.MAIN");
         whatsappIntent.setAction(Intent.ACTION_SEND);
         whatsappIntent.setType("text/plain");
         whatsappIntent.putExtra(Intent.EXTRA_TEXT,  bodyMsg + uriGoogleMaps);
         whatsappIntent.setPackage("com.whatsapp");
         whatsappIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        */
+        Intent whatsappIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(bodyMsg.toString()));
+
         try {
             startActivity(whatsappIntent);
         } catch (android.content.ActivityNotFoundException ex) {
@@ -132,7 +137,13 @@ public class ActivityGetData extends AppCompatActivity {
                     */
 
                     String product = eTextProduct.getText().toString().trim();
-                    String bodyMsg = "\n*___________ ENTREGA PEDIDO ___________*"+
+
+                    /******************************* */
+
+                    Uri uriMensaje =
+                            Uri.parse(
+                            "https://api.whatsapp.com/send?phone=" + phone + "&text=" +
+                            "\n*___________ ENTREGA PEDIDO ___________*"+
                             "\n*NOMBRE:*"                         +" "+eTextClientName.getText().toString().trim() +
                             "\n*TELEFONO:*"                       +" "+eTextClientPhone.getText().toString().trim() +
                             "\n*DESCRIPCIÓN DEL PRODUCTO:*"     +" "+product+
@@ -172,11 +183,11 @@ public class ActivityGetData extends AppCompatActivity {
                                     :
                             "*Paga con:* S/ "+ eTextConCuantoPaga.getText().toString().trim()+" ( *"+ spnQuienPaga.getSelectedItem().toString() +"* ) "
                             )+
-                            "\n"
+                            "\n"+
+                            uriGoogleMaps)
                             ;
-                    Log.d(TAG, "bodyMsg" + bodyMsg);
-                    Log.d(TAG, "uriGoogleMaps" + uriGoogleMaps);
-                    buildWhatsAppRequest(uriGoogleMaps, bodyMsg);
+                    new DialogSelectEnterprise(ctx,uriMensaje);
+                    //buildWhatsAppRequest(uriMensaje);
 
                 }else {
                     Toast.makeText(ctx,"Faltan campos obligatorios(*)",Toast.LENGTH_LONG).show();

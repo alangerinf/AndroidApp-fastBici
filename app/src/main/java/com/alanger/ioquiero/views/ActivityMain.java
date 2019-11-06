@@ -2,7 +2,6 @@ package com.alanger.ioquiero.views;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -15,22 +14,17 @@ import com.alanger.ioquiero.directionhelpers.TaskLoadedCallback;
 import com.alanger.ioquiero.views.fragments.FragmentCambiarContrasenha;
 import com.alanger.ioquiero.views.fragments.FragmentPedidos;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
 
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
-import android.util.Log;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
 import com.google.android.material.navigation.NavigationView;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.appcompat.app.ActionBarDrawerToggle;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.FragmentActivity;
 
 import android.view.Menu;
@@ -38,12 +32,12 @@ import android.view.MenuItem;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 
-import com.alanger.ioquiero.getTariff.view.FragmentMain;
+import com.alanger.ioquiero.getTariff.view.FragmentMapPicker;
 import com.alanger.ioquiero.R;
 
 public class ActivityMain extends FragmentActivity
         implements NavigationView.OnNavigationItemSelectedListener,
-        FragmentMain.OnFragmentInteractionListener,
+        FragmentMapPicker.OnFragmentInteractionListener,
         FragmentPedidos.OnFragmentInteractionListener,
         FragmentCambiarContrasenha.OnFragmentInteractionListener,
         TaskLoadedCallback
@@ -64,7 +58,7 @@ public class ActivityMain extends FragmentActivity
   //      Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
        // setSupportActionBar(toolbar);
 
-        myFragment = new FragmentMain(this);
+        myFragment = new FragmentMapPicker(this);
 
 
 
@@ -95,9 +89,9 @@ public class ActivityMain extends FragmentActivity
     @Override
     public void onBackPressed() {
 
-        if(FragmentMain.clSearchIsVisible){
-            FragmentMain.clSearch.setVisibility(View.GONE);
-            FragmentMain.clSearchIsVisible=false;
+        if(FragmentMapPicker.clSearchIsVisible){
+            FragmentMapPicker.clSearch.setVisibility(View.GONE);
+            FragmentMapPicker.clSearchIsVisible=false;
         }else {
             DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
 
@@ -201,7 +195,7 @@ public class ActivityMain extends FragmentActivity
 
 
         if (id == R.id.nav_tarifario) {
-            myFragment = new FragmentMain(this);
+            myFragment = new FragmentMapPicker(this);
             getSupportFragmentManager().beginTransaction().replace(R.id.content_main, myFragment).commit();
             /*
         } else if (id == R.id.nav_mispedidos) {
@@ -247,7 +241,7 @@ public class ActivityMain extends FragmentActivity
 
     @Override
     public void onTaskDone(Object... values) {
-        FragmentMain.drawRoute(values);
+        FragmentMapPicker.drawRoute(values);
     }
 
 

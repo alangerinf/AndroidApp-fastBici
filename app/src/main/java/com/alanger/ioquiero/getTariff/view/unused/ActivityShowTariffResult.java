@@ -1,4 +1,4 @@
-package com.alanger.ioquiero.getTariff.view;
+package com.alanger.ioquiero.getTariff.view.unused;
 
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -111,8 +111,6 @@ public class ActivityShowTariffResult extends AppCompatActivity {
 
         });
     }
-
-
 
     private void CargarDatosPrecioBase() {
 

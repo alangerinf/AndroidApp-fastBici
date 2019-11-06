@@ -11,7 +11,6 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
-import android.location.Criteria;
 import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
@@ -52,7 +51,9 @@ import com.alanger.ioquiero.GetPrice_Query;
 import com.alanger.ioquiero.R;
 import com.alanger.ioquiero.app.AppController;
 import com.alanger.ioquiero.directionhelpers.FetchURL;
+import com.alanger.ioquiero.getTariff.models.Place;
 import com.alanger.ioquiero.getTariff.view.adapters.RViewAdapterPlace;
+import com.alanger.ioquiero.getTariff.view.unused.ActivityShowTariffResult;
 import com.alanger.ioquiero.views.ActivityMain;
 import com.alanger.ioquiero.volskayaGraphql.GraphqlClient;
 import com.android.volley.Request;
@@ -96,9 +97,9 @@ import javax.annotation.Nonnull;
 /**
  * Created by Administrador on 09/09/2017.
  */
-public class FragmentMain extends Fragment implements OnMapReadyCallback, TariffView, GoogleMap.CancelableCallback {
+public class FragmentMapPicker extends Fragment implements OnMapReadyCallback, TariffView, GoogleMap.CancelableCallback {
 
-    private static String TAG = FragmentMain.class.getSimpleName();
+    private static String TAG = FragmentMapPicker.class.getSimpleName();
     private static Polyline currentPolyline;
 
     private static final int PERMISION_REQUEST_GPS = 100;
@@ -276,7 +277,7 @@ public class FragmentMain extends Fragment implements OnMapReadyCallback, Tariff
         void onFragmentInteraction(Uri uri);
     }
 
-    public FragmentMain(ActivityMain activityMain) {
+    public FragmentMapPicker(ActivityMain activityMain) {
         this.activityMain = activityMain;
         activityMain.setTitle("FastBici");
     }
@@ -834,20 +835,20 @@ public class FragmentMain extends Fragment implements OnMapReadyCallback, Tariff
 
         btnPedir.setOnClickListener(v -> {
 
-            Intent i = new Intent(getActivity(),ActivityGetData.class);
-            i.putExtra(ActivityGetData.EXTRA_LATSTART,latStart);
-            i.putExtra(ActivityGetData.EXTRA_LONSTART,lonStart);
-            i.putExtra(ActivityGetData.EXTRA_LATFINISH,latFinish);
-            i.putExtra(ActivityGetData.EXTRA_LONFINISH,lonFinish);
+            Intent i = new Intent(getActivity(), ActivityPedidoDetail.class);
+            i.putExtra(ActivityPedidoDetail.EXTRA_LATSTART,latStart);
+            i.putExtra(ActivityPedidoDetail.EXTRA_LONSTART,lonStart);
+            i.putExtra(ActivityPedidoDetail.EXTRA_LATFINISH,latFinish);
+            i.putExtra(ActivityPedidoDetail.EXTRA_LONFINISH,lonFinish);
 
 
-            i.putExtra(ActivityGetData.EXTRA_ADDRESSSTART,tViewAddressStart.getText().toString());
-            i.putExtra(ActivityGetData.EXTRA_ADDRESSFINISH,tViewAddressFinish.getText().toString());
+            i.putExtra(ActivityPedidoDetail.EXTRA_ADDRESSSTART,tViewAddressStart.getText().toString());
+            i.putExtra(ActivityPedidoDetail.EXTRA_ADDRESSFINISH,tViewAddressFinish.getText().toString());
 
-            i.putExtra(ActivityGetData.EXTRA_PRICE,PRECIO);
-            i.putExtra(ActivityGetData.EXTRA_CO2,CO2);
-            i.putExtra(ActivityGetData.EXTRA_KM,KM);
-            i.putExtra(ActivityGetData.EXTRA_TIME,timeAproximate);
+            i.putExtra(ActivityPedidoDetail.EXTRA_PRICE,PRECIO);
+            i.putExtra(ActivityPedidoDetail.EXTRA_CO2,CO2);
+            i.putExtra(ActivityPedidoDetail.EXTRA_KM,KM);
+            i.putExtra(ActivityPedidoDetail.EXTRA_TIME,timeAproximate);
 
             startActivity(i);
             // Check if we're running on Android 5.0 or higher
@@ -1134,7 +1135,7 @@ public class FragmentMain extends Fragment implements OnMapReadyCallback, Tariff
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        root = inflater.inflate(R.layout.fragment_main, container, false);
+        root = inflater.inflate(R.layout.fragment_map_picker, container, false);
 
         //Si usas getActivity estas suponiendo que la vista se buscara en el layout cargado por la Activity.
         //SupportMapFragment mapFragment = (SupportMapFragment) getActivity().getSupportFragmentManager().findFragmentById(R.id.map);

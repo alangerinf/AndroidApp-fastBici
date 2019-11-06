@@ -12,8 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.alanger.ioquiero.R;
-import com.alanger.ioquiero.getTariff.view.Place;
-import com.alanger.ioquiero.models.Product;
+import com.alanger.ioquiero.getTariff.models.Place;
 
 import java.util.List;
 

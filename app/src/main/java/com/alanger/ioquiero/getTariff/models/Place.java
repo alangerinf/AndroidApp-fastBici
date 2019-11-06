@@ -1,4 +1,4 @@
-package com.alanger.ioquiero.getTariff.view;
+package com.alanger.ioquiero.getTariff.models;
 
 import org.json.JSONArray;
 

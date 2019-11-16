@@ -11,21 +11,6 @@ import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 
 public class GraphqlClient {
-
-    private static CustomTypeAdapter<Double> doubleCustomTypeAdapter  = new CustomTypeAdapter<Double>(){
-        @Override
-        public Double decode(@NotNull CustomTypeValue customTypeValue) {
-            return Double.valueOf(customTypeValue.value.toString());
-        }
-
-        @NotNull
-        @Override
-        public CustomTypeValue encode(@NotNull Double value) {
-            return new CustomTypeValue.GraphQLNumber(value);
-        }
-    };
-
-
     private static final String BASE_URL = "https://volskayaforce.herokuapp.com/api/graphql";
     public static ApolloClient getMyApolloClient() {
 
@@ -39,7 +24,6 @@ public class GraphqlClient {
         ApolloClient apolloClient = ApolloClient.builder()
                 .serverUrl(BASE_URL)
                 .okHttpClient(okHttpClient)
-                .addCustomTypeAdapter(CustomType.DOUBLE, doubleCustomTypeAdapter)
                 .build();
         return apolloClient;
     }

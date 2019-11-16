@@ -12,16 +12,10 @@ query wakeUpHeroku {
     wakeUpHeroku
 }
 
-query getPriceQuery($latStart:Double!,$lonStart:Double!,$latEnd:Double!,$lonEnd:Double!) {
+query getPriceQuery(  $coordinateStart: CoordinateInput!, $coordinateFinish: CoordinateInput!) {
     calculatePriceRoute(
-        coordinateStart: {
-            latitude: $latStart,
-            longitude: $lonStart
-        }
-        coordinateFinish : {
-            latitude: $latEnd,
-            longitude: $lonEnd
-        }
+        coordinateStart: $coordinateStart
+        coordinateFinish : $coordinateFinish
     ){
         value {
             price,

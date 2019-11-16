@@ -56,6 +56,7 @@ import com.alanger.ioquiero.fragment.Success;
 import com.alanger.ioquiero.getTariff.models.Place;
 import com.alanger.ioquiero.getTariff.view.adapters.RViewAdapterPlace;
 import com.alanger.ioquiero.getTariff.view.unused.ActivityShowTariffResult;
+import com.alanger.ioquiero.type.CoordinateInput;
 import com.alanger.ioquiero.views.ActivityMain;
 import com.alanger.ioquiero.volskayaGraphql.GraphqlClient;
 import com.android.volley.Request;
@@ -921,15 +922,26 @@ public class FragmentMapPicker extends Fragment implements OnMapReadyCallback, T
     double kilometers;
     double approximateTime;
     private void getPriceFromServer(double latStart, double lonStart, double latFinish, double lonFinish) {
+        CoordinateInput coordinateStartInput =
+                CoordinateInput.builder()
+                        .latitude(latStart)
+                        .longitude(lonStart)
+                        .build();
+
+        CoordinateInput coordinateFinishInput =
+                CoordinateInput
+                        .builder()
+                        .latitude(latFinish)
+                        .longitude(lonFinish)
+                        .build();
+
         showProgressDialog();
         GraphqlClient.getMyApolloClient()
                 .query(
                         GetPriceQuery
                                 .builder()
-                                .latStart(latStart)
-                                .lonStart(lonStart)
-                                .latEnd(latFinish)
-                                .lonEnd(lonFinish)
+                                .coordinateStart(coordinateStartInput)
+                                .coordinateFinish(coordinateFinishInput)
                                 .build()
                 )
                 .enqueue(new ApolloCall.Callback<GetPriceQuery.Data>() {
@@ -1024,11 +1036,6 @@ public class FragmentMapPicker extends Fragment implements OnMapReadyCallback, T
                         h.post(
                                 () -> {
                                     Log.d(TAG, "apollo Error: " + e.toString());
-                                    Log.d(TAG, "apollo Error: " + latStart);
-                                    Log.d(TAG, "apollo Error: " + latFinish);
-                                    Log.d(TAG, "apollo Error: " + lonStart);
-                                    Log.d(TAG, "apollo Error: " + lonFinish);
-
                                     showSnackBackError("No se pudo Conectar",
                                             v -> {
                                                 markerTo.setVisibility(View.VISIBLE);

@@ -27,7 +27,7 @@ public class RegisterRepositoryImplB implements RegisterRepositoryB {
     public void registerUser(String email, String password, String phone) {
 
 
-        GraphqlClient.getMyApolloClient()
+/*        GraphqlClient.getMyApolloClient()
 
                 .mutate(
                         RegisterMutation.builder().email(email).pass(password).phone(phone).build()
@@ -58,7 +58,7 @@ public class RegisterRepositoryImplB implements RegisterRepositoryB {
                         }
 
 
-                );
+                );*/
     }
 
 

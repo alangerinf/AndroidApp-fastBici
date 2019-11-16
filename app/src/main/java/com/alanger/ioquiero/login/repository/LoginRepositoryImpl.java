@@ -29,7 +29,7 @@ public class LoginRepositoryImpl implements LoginRepository {
     @Override
     public void signIn(String user, String password) {
 
-        GraphqlClient.getMyApolloClient()
+/*        GraphqlClient.getMyApolloClient()
                 .query(
                         LoginQuery
                                 .builder()
@@ -60,6 +60,6 @@ public class LoginRepositoryImpl implements LoginRepository {
                     public void onFailure(@Nonnull ApolloException e) {
                         presenter.loginError(e.toString());
                     }
-                });
+                });*/
     }
 }

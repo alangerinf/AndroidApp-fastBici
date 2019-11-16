@@ -31,7 +31,7 @@ public class ActivityRecuperar extends Activity {
 
 
     public void testVolskayaGraphql(){
-        GraphqlClient.getMyApolloClient().query(
+      /*  GraphqlClient.getMyApolloClient().query(
                 AllUsersQuery.builder().build()).enqueue(new ApolloCall.Callback<AllUsersQuery.Data>() {
             @Override
             public void onResponse(@Nonnull Response<AllUsersQuery.Data> response) {
@@ -45,12 +45,12 @@ public class ActivityRecuperar extends Activity {
             public void onFailure(@Nonnull ApolloException e) {
 
             }
-        });
+        });*/
 
     }
 
-    public void Login(String email,String password){
-        GraphqlClient.getMyApolloClient()
+    public void Login(String email,String password) {
+   /*     GraphqlClient.getMyApolloClient()
                 .query(
                     LoginQuery
                             .builder()
@@ -70,7 +70,7 @@ public class ActivityRecuperar extends Activity {
 
                     }
                 });
-
+*/
     }
 
 

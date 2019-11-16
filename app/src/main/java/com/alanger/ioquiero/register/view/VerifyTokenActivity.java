@@ -78,7 +78,7 @@ public class VerifyTokenActivity extends Activity implements VerifyTokenView{
         Log.d(TAG,"id:"+id+" "+"code:"+code);
         showProgressBar();
         //consulta
-        GraphqlClient.getMyApolloClient()
+        /*GraphqlClient.getMyApolloClient()
                 .query(
                         CheckCodeQuery
                                 .builder()
@@ -112,7 +112,7 @@ public class VerifyTokenActivity extends Activity implements VerifyTokenView{
                     }
 
 
-                });
+                });*/
 
     }
 

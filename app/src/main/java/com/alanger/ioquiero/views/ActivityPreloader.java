@@ -13,7 +13,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.airbnb.lottie.LottieAnimationView;
-import com.alanger.ioquiero.GetPrice_Query;
 import com.alanger.ioquiero.R;
 import com.alanger.ioquiero.WakeUpHerokuQuery;
 import com.alanger.ioquiero.login.view.LoginActivity;
@@ -60,7 +59,6 @@ public class ActivityPreloader extends Activity {
 
 
     void conectandoServer(){
-
 
         Log.d(TAG,"conectandoServer");
 

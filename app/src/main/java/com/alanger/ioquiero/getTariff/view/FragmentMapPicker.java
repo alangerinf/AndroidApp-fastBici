@@ -47,10 +47,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.alanger.ioquiero.Configurations;
-import com.alanger.ioquiero.GetPrice_Query;
+import com.alanger.ioquiero.GetPriceQuery;
 import com.alanger.ioquiero.R;
 import com.alanger.ioquiero.app.AppController;
 import com.alanger.ioquiero.directionhelpers.FetchURL;
+import com.alanger.ioquiero.fragment.Failed;
 import com.alanger.ioquiero.getTariff.models.Place;
 import com.alanger.ioquiero.getTariff.view.adapters.RViewAdapterPlace;
 import com.alanger.ioquiero.getTariff.view.unused.ActivityShowTariffResult;
@@ -77,6 +78,7 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.google.android.gms.maps.model.TileOverlay;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -925,7 +927,7 @@ public class FragmentMapPicker extends Fragment implements OnMapReadyCallback, T
 
         GraphqlClient.getMyApolloClient()
                 .query(
-                        GetPrice_Query
+                        GetPriceQuery
                                 .builder()
                                 .latStart(latStart)
                                 .lonStart(lonStart)
@@ -933,12 +935,12 @@ public class FragmentMapPicker extends Fragment implements OnMapReadyCallback, T
                                 .lonEnd(lonFinish)
                                 .build()
                 )
-                .enqueue(new ApolloCall.Callback<GetPrice_Query.Data>() {
+                .enqueue(new ApolloCall.Callback<GetPriceQuery.Data>() {
 
                     @Override
-                    public void onResponse(@Nonnull com.apollographql.apollo.api.Response<GetPrice_Query.Data> response) {
+                    public void onResponse(@Nonnull com.apollographql.apollo.api.Response<GetPriceQuery.Data> response) {
                         hideProgressDialog();
-                        GetPrice_Query.Data data = response.data();
+                        GetPriceQuery.Data data = response.data();
 
                         final String successCode = "00";
                         final String errorCommonCode = "01";//error comun
@@ -946,100 +948,113 @@ public class FragmentMapPicker extends Fragment implements OnMapReadyCallback, T
                         final String errorLimitDistanceCode = "03"; //cuando se exede el limite de  distancia
                         final String errorDistanceZeroCode = "04"; //cuando se exede el limite de  distancia
 
-                        GetPrice_Query.GetPrice resp = data.getPrice();
-
-                        GetPrice_Query.VolskayaResponse volskayaResponse = resp.volskayaResponse();
-
-                        switch (volskayaResponse.responseCode()) {
-                            case successCode:
-                                h.post(
-                                        new Runnable() {
-                                            @Override
-                                            public void run() {
-
-                                                clPedir.setVisibility(View.VISIBLE);
-
-                                                tViewKilometers.setText("" + (float) (resp.distance() / 1));
-                                                tViewCo2.setText("" + (float) (resp.co2Saved() / 1));
-                                                tViewMin.setText("" + (int) (float) (resp.approximateTime() / 1));
-
-                                                CO2 = resp.co2Saved();
-                                                KM = resp.distance();
-
-                                                timeAproximate = resp.approximateTime();
-
-                                                //  tViewKilometers.setText(resp.);
-                                                //tViewKilometers.setText(""+data.getPrice().);
-                                                PRECIO = resp.price();
+                        GetPriceQuery.Value value = data.calculatePriceRoute().value();
+                        GetPriceQuery.VolskayaResponse volskayaResponse = data.calculatePriceRoute().volskayaResponse();
 
 
-                                                tViewPriceEntero.setText("S/ " + resp.price());
-                                            }
+                        if (volskayaResponse.fragments().success()!=null){
+
+                            h.post(
+                                    new Runnable() {
+                                        @Override
+                                        public void run() {
+
+                                            clPedir.setVisibility(View.VISIBLE);
+
+                                            tViewKilometers.setText("" + (float) ((double)value.distance() / 1));
+                                            tViewCo2.setText("" + (float) ((double)value.co2Saved() / 1));
+                                            tViewMin.setText("" + (int) (float) ((double)value.approximateTime() / 1));
+
+                                            CO2 = (double)value.co2Saved();
+                                            KM = (double)value.distance();
+
+                                            timeAproximate = (double)value.approximateTime();
+
+                                            //  tViewKilometers.setText(resp.);
+                                            //tViewKilometers.setText(""+data.getPrice().);
+                                            PRECIO = (double)value.price();
+
+
+                                            tViewPriceEntero.setText("S/ " + (double)value.price());
                                         }
-                                );
-                                break;
+                                    }
+                            );
 
-                            case errorCommonCode:
-                                h.post(
 
-                                        new Runnable() {
-                                            @Override
-                                            public void run() {
 
-                                                markerTo.setVisibility(View.VISIBLE);
-                                                Snackbar snackbar = Snackbar.make(root, "Ocurrio un Error Desconocido", Snackbar.LENGTH_LONG);
-                                                snackbar.show();
-                                            }
-                                        }
-                                );
-                                break;
-                            case errorSinCoverturaCode:
-                                h.post(
-                                        new Runnable() {
-                                            @Override
-                                            public void run() {
 
-                                                markerTo.setVisibility(View.VISIBLE);
-                                                showSnackBackError("Delivery Fuera de la Cobertura");
-                                                returnToSetFinish();
-                                            }
-                                        }
-                                );
-                                break;
-                            case errorLimitDistanceCode:
-                                h.post(
-                                        new Runnable() {
-                                            @Override
-                                            public void run() {
+                        }else {
 
-                                                markerTo.setVisibility(View.VISIBLE);
-                                                showSnackBackError("Distancia Máxima Superada");
+                            Failed  failed = volskayaResponse.fragments().failed();
+                            if (failed!=null){
 
-                                                returnToSetFinish();
-                                            }
-                                        }
-                                );
-                                break;
-                            case errorDistanceZeroCode:
-                                h.post(
-                                        new Runnable() {
-                                            @Override
-                                            public void run() {
 
-                                                markerTo.setVisibility(View.VISIBLE);
-                                                showSnackBackError("No se supero la distancia minima");
+                                switch (failed.responseCode()){
+                                    case errorCommonCode:
+                                        h.post(
 
-                                                returnToSetFinish();
-                                            }
-                                        }
-                                );
-                                break;
-                            default:
-                                markerTo.setVisibility(View.VISIBLE);
-                                Toast.makeText(ctx, "errorCode:" + volskayaResponse.responseCode(), Toast.LENGTH_LONG).show();
-                                break;
+                                                new Runnable() {
+                                                    @Override
+                                                    public void run() {
 
+                                                        markerTo.setVisibility(View.VISIBLE);
+                                                        Snackbar snackbar = Snackbar.make(root, "Ocurrio un Error Desconocido", Snackbar.LENGTH_LONG);
+                                                        snackbar.show();
+                                                    }
+                                                }
+                                        );
+                                        break;
+                                    case errorSinCoverturaCode:
+                                        h.post(
+                                                new Runnable() {
+                                                    @Override
+                                                    public void run() {
+
+                                                        markerTo.setVisibility(View.VISIBLE);
+                                                        showSnackBackError("Delivery Fuera de la Cobertura");
+                                                        returnToSetFinish();
+                                                    }
+                                                }
+                                        );
+                                        break;
+                                    case errorLimitDistanceCode:
+                                        h.post(
+                                                new Runnable() {
+                                                    @Override
+                                                    public void run() {
+
+                                                        markerTo.setVisibility(View.VISIBLE);
+                                                        showSnackBackError("Distancia Máxima Superada");
+
+                                                        returnToSetFinish();
+                                                    }
+                                                }
+                                        );
+                                        break;
+                                    case errorDistanceZeroCode:
+                                        h.post(
+                                                new Runnable() {
+                                                    @Override
+                                                    public void run() {
+
+                                                        markerTo.setVisibility(View.VISIBLE);
+                                                        showSnackBackError("No se supero la distancia minima");
+
+                                                        returnToSetFinish();
+                                                    }
+                                                }
+                                        );
+                                        break;
+                                    default:
+                                        markerTo.setVisibility(View.VISIBLE);
+                                        Toast.makeText(ctx, "errorCode:" + failed.responseCode(), Toast.LENGTH_LONG).show();
+                                        break;
+                                }
+
+                            }
                         }
+
+
 
 
                     }
@@ -1051,7 +1066,7 @@ public class FragmentMapPicker extends Fragment implements OnMapReadyCallback, T
                                 new Runnable() {
                                     @Override
                                     public void run() {
-
+                                        Log.d(TAG,"apollo Error: "+ e.toString());
                                         showSnackBackError("No se pudo Conectar",
                                                 new View.OnClickListener() {
                                                     @Override

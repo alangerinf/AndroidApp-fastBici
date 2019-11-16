@@ -1,9 +1,9 @@
 package com.alanger.ioquiero.login.repository;
-
+/*
 import android.util.Log;
-
-import com.alanger.ioquiero.LoginQuery;
+*/
 import com.alanger.ioquiero.login.presenter.LoginPresenter;
+/*
 import com.alanger.ioquiero.volskayaGraphql.GraphqlClient;
 import com.apollographql.apollo.ApolloCall;
 import com.apollographql.apollo.api.Response;
@@ -15,7 +15,7 @@ import org.json.JSONObject;
 import java.util.List;
 
 import javax.annotation.Nonnull;
-
+*/
 public class LoginRepositoryImpl implements LoginRepository {
 
 

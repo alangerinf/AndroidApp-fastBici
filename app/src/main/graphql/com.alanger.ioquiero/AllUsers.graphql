@@ -1,111 +1,37 @@
-query AllUsersQuery {
-    allUsers {
-        id
-        email
-        password
-    }
+fragment success on VolskayaSuccessResponse {
+    responseCode
+    responseMessage
+}
+
+fragment failed on VolskayaFailedResponse{
+    responseCode
+    responseMessage
 }
 
 query wakeUpHeroku {
     wakeUpHeroku
 }
 
-
-query GetPrice_Query($latStart:Float!,$lonStart:Float!,$latEnd:Float!,$lonEnd:Float!) {
-    getPrice(
-        coordinateStart:{
+query getPriceQuery($latStart:Double!,$lonStart:Double!,$latEnd:Double!,$lonEnd:Double!) {
+    calculatePriceRoute(
+        coordinateStart: {
             latitude: $latStart,
             longitude: $lonStart
-        },
-        coordinateFinish: {
+        }
+        coordinateFinish : {
             latitude: $latEnd,
             longitude: $lonEnd
         }
     ){
-        distance,
-        price,
-        co2Saved,
-        approximateTime,
-        volskayaResponse{
-            message,
-            responseCode,
-            responseMessage
+        value {
+            price,
+            distance,
+            co2Saved,
+            approximateTime
         }
-    }
-}
-
-
-mutation RegisterOrder(
-$route: RouteFieldsInput!
-$clientId: String!
-$finalClient: FinalClientFieldsInput!
-$products: [ProductFieldsInput!]!
-$price: Float!
-$distance: Float!
-$generalDescription: String!
-){
-    registerOrder(
-        route:$route,
-        clientId : $clientId,
-        finalClient:$finalClient,
-        products: $products,
-        price:$price,
-        distance: $distance,
-        generalDescription: $generalDescription
-    ) {
-        id,
-        volskayaResponse{
-            responseCode,
-            responseMessage,
-            message
-        }
-    }
-}
-mutation Register($email:String!,$pass:String!,$phone:String!){
-    register(email: $email,password: $pass,phoneNumber: $phone){
-        user{
-            id
-        }
-        volskayaResponse{
-            message
-            responseCode
-            responseMessage
-        }
-    }
-}
-
-
-query CheckCode($id:String!,$code:String!){
-    checkCode(id: $id,code: $code){
-        message
-        responseCode
-        responseMessage
-    }
-}
-
-query LoginQuery($email:String!,$pass:String!) {
-    login(email:$email,password: $pass) {
-        volskayaResponse{
-            message,
-            responseCode,
-            responseMessage
-        },
-        user{
-            id
-        }
-    }
-}
-query getUser($_id:String!){
-    getUser(id: $_id){
-        user{
-            id,
-            email,
-            password
-        }
-        ,volskayaResponse{
-            message,
-            responseCode,
-            responseMessage
+        volskayaResponse {
+            ... success
+            ... failed
         }
     }
 }

@@ -1,29 +1,26 @@
 # This file was generated based on "schema.json". Do not edit manually.
 
 schema {
-    query: Query
-    mutation: Mutation
+    query: Queries
+    mutation: Mutations
 }
 
-"volskaya Message Interface Description"
-interface volskayaMessageInterface {
-    message: String!
-}
+union VolskayaResponse = VolskayaFailedResponse | VolskayaSuccessResponse
 
-type Address {
-    coordinate: Coordinate!
-    nameAddress: String!
-    reference: String!
+type CompanyInformation {
+    address: String!
+    name: String!
+    ruc: String!
 }
 
 type Coordinate {
-    latitude: Float!
-    longitude: Float!
+    latitude: Double!
+    longitude: Double!
 }
 
 type Device {
-    imei: String!
-    name: String!
+    imei: String
+    name: String
     number: String!
     token: String
 }
@@ -34,41 +31,11 @@ type FavoriteSite {
     name: String!
 }
 
-type FinalClient {
-    name: String!
-    phoneNumber: String!
-}
-
-type Mutation {
-    addFavoriteSite(favoriteSite: FavoriteSiteFieldsInput!, id: String!): volskayaMessageOutputType!
-    register(email: String!, password: String!, phoneNumber: String!): volskayaMessageUserOutputType!
-    registerOrder(clientId: String!, distance: Float!, finalClient: FinalClientFieldsInput!, generalDescription: String!, price: Float!, products: [ProductFieldsInput!]!, route: RouteFieldsInput!): volskayaMessageRegisterOutputType!
-    updatePassword(id: String!, newPassword: String!, oldPassword: String!): volskayaMessageOutputType!
-}
-
-type OrderDomain {
-    clientId: String
-    created: String
-    cyclistId: String
-    distance: Float
-    finalClient: FinalClient
-    generalDescription: String
-    id: String
-    isPaid: Boolean
-    lastState: OrderState
-    orderStates: [OrderState!]!
-    payMethod: String
-    price: Float
-    products: [Product!]!
-    route: Route
-}
-
-type OrderState {
-    description: String
-    endTime: String
-    isFinished: Boolean!
-    nameState: String!
-    startTime: String
+type Mutations {
+    "Volskaya create a user with just a role"
+    insertUser(role: Role!): VolskayaResultOptionUser!
+    "Volskaya return a user by id"
+    updatePassword(id: String!, newPassword: String!, oldPassword: String!): VolskayaResultOptionString!
 }
 
 type PersonalInformation {
@@ -77,107 +44,82 @@ type PersonalInformation {
     lastName: String!
 }
 
-type Product {
-    name: String!
-    quantity: Int!
-}
-
-type Query {
-    "Returns a list of all available orders."
-    allOrders(limit: Int = 20, offset: Int = 0): [OrderDomain!]!
-    "Returns a list of all available users."
-    allUsers(limit: Int = 20, offset: Int = 0): [UserDomain!]!
-    checkCode(code: String!, id: String!): volskayaMessageOutputType!
-    "Return a specific User by ID"
-    getOrder(id: String!): volskayaMessageOrderOutputType!
-    "Return a price of one Route"
-    getPrice(coordinateFinish: CoordinateFieldsInput!, coordinateStart: CoordinateFieldsInput!): volskayaMessagePriceOutputType!
-    "Return a specific User by ID"
-    getUser(id: String!): volskayaMessageUserOutputType!
-    login(email: String!, password: String!): volskayaMessageUserOutputType!
-    "lets wake up heroku"
+type Queries {
+    "Volskaya return price of one Route"
+    calculatePriceRoute(coordinateFinish: CoordinateInput!, coordinateStart: CoordinateInput!): VolskayaResultOptionVolskayaPrice!
+    "Volskaya return a list of users"
+    getAllUsers(limit: Int, offset: Int): VolskayaResultListUser!
+    "Volskaya return a user by id"
+    getUserById(id: String!): VolskayaResultOptionUser!
+    "Volskaya return a list of users"
     wakeUpHeroku: String!
 }
 
-type Route {
-    endAddress: Address!
-    startAddress: Address!
-}
-
-type UserDomain {
-    confirmationCode: String
+type User {
+    _id: String!
+    companyInformation: CompanyInformation
     device: Device
     email: String
     favoriteSites: [FavoriteSite!]
-    id: String
-    isAuthenticated: Boolean
     password: String
     personalInformation: PersonalInformation
-    role: String
+    role: Role
+    userAuthenticate: UserAuthenticate
 }
 
-"Format to return getORder request"
-type volskayaMessageOrderOutputType {
-    order: OrderDomain
-    volskayaResponse: volskayaMessageOutputType!
+type UserAuthenticate {
+    isAuthenticated: Boolean!
+    verificationCode: Int!
 }
 
-"Format to return some request"
-type volskayaMessageOutputType implements volskayaMessageInterface {
-    message: String!
+type VolskayaFailedResponse {
     responseCode: String!
     responseMessage: String!
 }
 
-"Format to return getPrice request"
-type volskayaMessagePriceOutputType {
-    approximateTime: Float
-    co2Saved: Float
-    distance: Float
-    price: Float
-    volskayaResponse: volskayaMessageOutputType!
+type VolskayaPrice {
+    approximateTime: Double!
+    co2Saved: Double!
+    distance: Double!
+    price: Double!
 }
 
-"Format to return register request"
-type volskayaMessageRegisterOutputType {
-    id: String
-    volskayaResponse: volskayaMessageOutputType!
+type VolskayaResultListUser {
+    value: [User!]!
+    volskayaResponse: VolskayaResponse!
 }
 
-"Format to return getUser request"
-type volskayaMessageUserOutputType {
-    user: UserDomain
-    volskayaResponse: volskayaMessageOutputType!
+type VolskayaResultOptionString {
+    value: String
+    volskayaResponse: VolskayaResponse!
 }
 
-input AddressFieldsInput {
-    coordinate: CoordinateFieldsInput!
-    nameAddress: String!
-    reference: String!
+type VolskayaResultOptionUser {
+    value: User
+    volskayaResponse: VolskayaResponse!
 }
 
-input CoordinateFieldsInput {
-    latitude: Float!
-    longitude: Float!
+type VolskayaResultOptionVolskayaPrice {
+    value: VolskayaPrice
+    volskayaResponse: VolskayaResponse!
 }
 
-input FavoriteSiteFieldsInput {
-    address: String!
-    coordinate: CoordinateFieldsInput!
-    name: String!
+type VolskayaSuccessResponse {
+    responseCode: String!
+    responseMessage: String!
 }
 
-input FinalClientFieldsInput {
-    name: String!
-    phoneNumber: String!
+enum Role {
+    Client
+    Company
+    DeliveryCompany
+    DeliveryPerson
 }
 
-input ProductFieldsInput {
-    name: String!
-    quantity: Int!
+input CoordinateInput {
+    latitude: Double!
+    longitude: Double!
 }
 
-input RouteFieldsInput {
-    endAddress: AddressFieldsInput!
-    startAddress: AddressFieldsInput!
-}
+
+scalar Double

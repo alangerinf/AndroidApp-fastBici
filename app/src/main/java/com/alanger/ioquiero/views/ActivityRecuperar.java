@@ -3,19 +3,7 @@ package com.alanger.ioquiero.views;
 import android.app.Activity;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
-import android.util.Log;
-
-import com.alanger.ioquiero.AllUsersQuery;
-import com.alanger.ioquiero.LoginQuery;
 import com.alanger.ioquiero.R;
-import com.alanger.ioquiero.volskayaGraphql.GraphqlClient;
-import com.apollographql.apollo.ApolloCall;
-import com.apollographql.apollo.api.Response;
-import com.apollographql.apollo.exception.ApolloException;
-
-import java.util.List;
-
-import javax.annotation.Nonnull;
 
 public class ActivityRecuperar extends Activity {
 
@@ -28,7 +16,6 @@ public class ActivityRecuperar extends Activity {
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         testVolskayaGraphql();
     }
-
 
     public void testVolskayaGraphql(){
       /*  GraphqlClient.getMyApolloClient().query(

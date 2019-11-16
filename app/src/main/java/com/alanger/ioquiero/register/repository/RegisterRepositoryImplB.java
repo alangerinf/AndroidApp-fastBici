@@ -1,6 +1,6 @@
 package com.alanger.ioquiero.register.repository;
 
-import com.alanger.ioquiero.RegisterMutation;
+//import com.alanger.ioquiero.RegisterMutation;
 import com.alanger.ioquiero.register.presenter.RegisterPresenterA;
 import com.alanger.ioquiero.register.presenter.RegisterPresenterB;
 import com.alanger.ioquiero.volskayaGraphql.GraphqlClient;

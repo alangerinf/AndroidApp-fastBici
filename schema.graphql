@@ -5,6 +5,8 @@ schema {
     mutation: Mutations
 }
 
+scalar Double
+
 union VolskayaResponse = VolskayaFailedResponse | VolskayaSuccessResponse
 
 type CompanyInformation {
@@ -120,6 +122,3 @@ input CoordinateInput {
     latitude: Double!
     longitude: Double!
 }
-
-
-scalar Double

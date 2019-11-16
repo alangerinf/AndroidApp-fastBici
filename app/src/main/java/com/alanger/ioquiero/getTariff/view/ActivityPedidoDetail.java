@@ -28,7 +28,7 @@ public class ActivityPedidoDetail extends AppCompatActivity {
     public static String EXTRA_PRICE = "price";
     public static String EXTRA_CO2 = "co2";
     public static String EXTRA_KM = "km";
-    public static String EXTRA_TIME = "timeAproximate";
+    public static String EXTRA_TIME = "approximateTime";
 
     public static String EXTRA_ADDRESSSTART = "addressStart";
     public static String EXTRA_ADDRESSFINISH = "addressFinisht";

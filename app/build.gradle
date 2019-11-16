@@ -26,7 +26,9 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
     }
     apollo {
-        customTypeMapping['GenericScalar'] = "Object"
+        customTypeMapping = [
+                "Double": "java.lang.Double"
+        ]
     }
     buildToolsVersion = '28.0.3'
 }

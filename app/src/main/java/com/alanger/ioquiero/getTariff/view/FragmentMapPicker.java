@@ -52,6 +52,7 @@ import com.alanger.ioquiero.R;
 import com.alanger.ioquiero.app.AppController;
 import com.alanger.ioquiero.directionhelpers.FetchURL;
 import com.alanger.ioquiero.fragment.Failed;
+import com.alanger.ioquiero.fragment.Success;
 import com.alanger.ioquiero.getTariff.models.Place;
 import com.alanger.ioquiero.getTariff.view.adapters.RViewAdapterPlace;
 import com.alanger.ioquiero.getTariff.view.unused.ActivityShowTariffResult;
@@ -78,7 +79,6 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
-import com.google.android.gms.maps.model.TileOverlay;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -116,20 +116,19 @@ public class FragmentMapPicker extends Fragment implements OnMapReadyCallback, T
     private static double LatTemp = 0, LonTemp = 0, //ubicacion temporal para algun paso de data
 
     CurrentLat = 0, CurrentLon = 0,//ubicacion actual
-    latStart, lonStart, latFinish, lonFinish; //lo q se seteo
+            latStart, lonStart, latFinish, lonFinish; //lo q se seteo
 
 
     private static Button btnSetStart, btnSetFinish, btnPedir;
-    private static ConstraintLayout  clPedir;
+    private static ConstraintLayout clPedir;
     private static ExtendedFloatingActionButton btnRestart;
     private static TextView tViewAddressStart, tViewAddressFinish, tViewMensaje;
     private static TextView tViewPriceEntero;
 
     public static ConstraintLayout clSearch;
-    public static boolean clSearchIsVisible=false;
+    public static boolean clSearchIsVisible = false;
 
     private static TextView tViewKilometers, tViewMin, tViewCo2;
-
 
 
     private static Marker markerStart = null, markerFinish = null;
@@ -146,13 +145,12 @@ public class FragmentMapPicker extends Fragment implements OnMapReadyCallback, T
     FloatingActionButton fAButtonClearText;
     EditText eTextSearch;
 
-    ProgressBar progress_search ;
+    ProgressBar progress_search;
 
 
-
-    List<Place> placeList ;
-    RViewAdapterPlace rViewAdapterPlace ;
-    RecyclerView rViewPlaces ;
+    List<Place> placeList;
+    RViewAdapterPlace rViewAdapterPlace;
+    RecyclerView rViewPlaces;
 
 
     private FusedLocationProviderClient fusedLocationClient;
@@ -229,7 +227,6 @@ public class FragmentMapPicker extends Fragment implements OnMapReadyCallback, T
 
         alert.show();
     }
-
 
 
     @Override
@@ -396,7 +393,7 @@ public class FragmentMapPicker extends Fragment implements OnMapReadyCallback, T
 
 
             String text = eTextSearch.getText().toString().replaceAll(" ", "+");
-            Log.d(TAG,"buscando direcciones:"+text);
+            Log.d(TAG, "buscando direcciones:" + text);
 
             if (text.length() > 0) {
 
@@ -409,7 +406,7 @@ public class FragmentMapPicker extends Fragment implements OnMapReadyCallback, T
                     myURL = new URL(Configurations.getUrlSearchPlaces(text, String.valueOf(CurrentLat), String.valueOf(CurrentLon)));
 
                 } catch (MalformedURLException e) {
-                    Log.d(TAG,e.toString());
+                    Log.d(TAG, e.toString());
                     e.printStackTrace();
                 }
 
@@ -532,7 +529,7 @@ public class FragmentMapPicker extends Fragment implements OnMapReadyCallback, T
     };
 
     private void showDialogSearch(int mode) {
-        clSearchIsVisible= true;
+        clSearchIsVisible = true;
         placeList = new ArrayList<>();
         rViewAdapterPlace = new RViewAdapterPlace(placeList);
 
@@ -554,13 +551,13 @@ public class FragmentMapPicker extends Fragment implements OnMapReadyCallback, T
 
             if (STATUS == 2) { //si ya se registraron las  2 fechas
                 clPedir.setVisibility(View.GONE);
-                if ( mode == 0 ) {
+                if (mode == 0) {
                     tViewAddressStart.setText(item.getFormatted_address());
                     markerStart.setPosition(latLng);
                     updateLatLngStart(latLng);
                 }
 
-                if ( mode == 1 ) {
+                if (mode == 1) {
                     tViewAddressFinish.setText(item.getFormatted_address());
                     markerFinish.setPosition(latLng);
                     updateLatLngFinish(latLng);
@@ -589,7 +586,6 @@ public class FragmentMapPicker extends Fragment implements OnMapReadyCallback, T
 
 
         rViewPlaces.setAdapter(rViewAdapterPlace);
-
 
 
         h.post(new Runnable() {
@@ -640,7 +636,6 @@ public class FragmentMapPicker extends Fragment implements OnMapReadyCallback, T
         });
 
 
-
         eTextSearch.addTextChangedListener(new TextWatcher() {
 
             @Override
@@ -669,7 +664,7 @@ public class FragmentMapPicker extends Fragment implements OnMapReadyCallback, T
                 }
 
                 progress_search.setVisibility(View.GONE);
-                if(!eTextSearch.getText().toString().equals("")){
+                if (!eTextSearch.getText().toString().equals("")) {
                     handler.postDelayed(
                             runSearch
                             , 1000);
@@ -758,7 +753,7 @@ public class FragmentMapPicker extends Fragment implements OnMapReadyCallback, T
         //  Toast.makeText(ctx,""+(latStart-latFinish)+" "+(lonStart==lonFinish) , Toast.LENGTH_LONG).show();
 
 
-       // returnToSetFinish();
+        // returnToSetFinish();
 
         tViewMensaje.setVisibility(View.GONE);
         if (markerFinish != null) {
@@ -796,8 +791,13 @@ public class FragmentMapPicker extends Fragment implements OnMapReadyCallback, T
         //}
     }
 
-    private void hideFabDrawer() { fabDrawer.setVisibility(View.INVISIBLE); }
-    private void showFabDrawer() { fabDrawer.setVisibility(View.VISIBLE); }
+    private void hideFabDrawer() {
+        fabDrawer.setVisibility(View.INVISIBLE);
+    }
+
+    private void showFabDrawer() {
+        fabDrawer.setVisibility(View.VISIBLE);
+    }
 
 
     @Override
@@ -838,24 +838,24 @@ public class FragmentMapPicker extends Fragment implements OnMapReadyCallback, T
         btnPedir.setOnClickListener(v -> {
 
             Intent i = new Intent(getActivity(), ActivityPedidoDetail.class);
-            i.putExtra(ActivityPedidoDetail.EXTRA_LATSTART,latStart);
-            i.putExtra(ActivityPedidoDetail.EXTRA_LONSTART,lonStart);
-            i.putExtra(ActivityPedidoDetail.EXTRA_LATFINISH,latFinish);
-            i.putExtra(ActivityPedidoDetail.EXTRA_LONFINISH,lonFinish);
+            i.putExtra(ActivityPedidoDetail.EXTRA_LATSTART, latStart);
+            i.putExtra(ActivityPedidoDetail.EXTRA_LONSTART, lonStart);
+            i.putExtra(ActivityPedidoDetail.EXTRA_LATFINISH, latFinish);
+            i.putExtra(ActivityPedidoDetail.EXTRA_LONFINISH, lonFinish);
 
 
-            i.putExtra(ActivityPedidoDetail.EXTRA_ADDRESSSTART,tViewAddressStart.getText().toString());
-            i.putExtra(ActivityPedidoDetail.EXTRA_ADDRESSFINISH,tViewAddressFinish.getText().toString());
+            i.putExtra(ActivityPedidoDetail.EXTRA_ADDRESSSTART, tViewAddressStart.getText().toString());
+            i.putExtra(ActivityPedidoDetail.EXTRA_ADDRESSFINISH, tViewAddressFinish.getText().toString());
 
-            i.putExtra(ActivityPedidoDetail.EXTRA_PRICE,PRECIO);
-            i.putExtra(ActivityPedidoDetail.EXTRA_CO2,CO2);
-            i.putExtra(ActivityPedidoDetail.EXTRA_KM,KM);
-            i.putExtra(ActivityPedidoDetail.EXTRA_TIME,timeAproximate);
+            i.putExtra(ActivityPedidoDetail.EXTRA_PRICE, price);
+            i.putExtra(ActivityPedidoDetail.EXTRA_CO2, co2);
+            i.putExtra(ActivityPedidoDetail.EXTRA_KM, kilometers);
+            i.putExtra(ActivityPedidoDetail.EXTRA_TIME, approximateTime);
 
             startActivity(i);
             // Check if we're running on Android 5.0 or higher
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                getActivity().overridePendingTransition(R.anim.fade_in,R.anim.fade_out);
+                getActivity().overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
             } else {
                 // Swap without transition
             }
@@ -871,9 +871,9 @@ public class FragmentMapPicker extends Fragment implements OnMapReadyCallback, T
 
             Uri uri = Uri.parse("https://api.whatsapp.com/send?phone=" + phone + "&text=" + uriGoogleMaps +
                     "\nHola, FastBici. Quiero un delivery con este recorrido" +
-                    "\n*Precio:*" + " " + PRECIO +
-                    "\n*Co2:*" + " " + CO2 +
-                    "\n*Tiempo Aprox:*" + " " + timeAproximate +
+                    "\n*Precio:*" + " " + price +
+                    "\n*Co2:*" + " " + co2 +
+                    "\n*Tiempo Aprox:*" + " " + approximateTime +
                     ""
             );
             //    uri = Uri.parse("smsto:" + "98*********7");
@@ -916,15 +916,12 @@ public class FragmentMapPicker extends Fragment implements OnMapReadyCallback, T
     }
 
     private static Handler h = new Handler();
-    Double PRECIO;
-    Double CO2;
-    Double KM;
-    Double timeAproximate;
-
+    double price;
+    double co2;
+    double kilometers;
+    double approximateTime;
     private void getPriceFromServer(double latStart, double lonStart, double latFinish, double lonFinish) {
-
         showProgressDialog();
-
         GraphqlClient.getMyApolloClient()
                 .query(
                         GetPriceQuery
@@ -936,112 +933,78 @@ public class FragmentMapPicker extends Fragment implements OnMapReadyCallback, T
                                 .build()
                 )
                 .enqueue(new ApolloCall.Callback<GetPriceQuery.Data>() {
-
                     @Override
                     public void onResponse(@Nonnull com.apollographql.apollo.api.Response<GetPriceQuery.Data> response) {
                         hideProgressDialog();
                         GetPriceQuery.Data data = response.data();
 
+
                         final String successCode = "00";
                         final String errorCommonCode = "01";//error comun
-                        final String errorSinCoverturaCode = "02";//cuadno no se puede llegar al lugar
+                        final String errorSinCoverturaCode = "02";//cuando no se puede llegar al lugar
                         final String errorLimitDistanceCode = "03"; //cuando se exede el limite de  distancia
                         final String errorDistanceZeroCode = "04"; //cuando se exede el limite de  distancia
 
-                        GetPriceQuery.Value value = data.calculatePriceRoute().value();
-                        GetPriceQuery.VolskayaResponse volskayaResponse = data.calculatePriceRoute().volskayaResponse();
-
-
-                        if (volskayaResponse.fragments().success()!=null){
-
+                        assert data != null;
+                        final GetPriceQuery.Value value = data.calculatePriceRoute().value();
+                        final GetPriceQuery.VolskayaResponse volskayaResponse = data.calculatePriceRoute().volskayaResponse();
+                        final Success success = volskayaResponse.fragments().success();
+                        final Failed failed = volskayaResponse.fragments().failed();
+                        if (success != null) {
                             h.post(
-                                    new Runnable() {
-                                        @Override
-                                        public void run() {
+                                    () -> {
+                                        clPedir.setVisibility(View.VISIBLE);
+                                        assert value != null;
+                                        co2 = value.co2Saved();
+                                        kilometers = value.distance();
+                                        price = value.price();
+                                        approximateTime = value.approximateTime();
 
-                                            clPedir.setVisibility(View.VISIBLE);
-
-                                            tViewKilometers.setText("" + (float) ((double)value.distance() / 1));
-                                            tViewCo2.setText("" + (float) ((double)value.co2Saved() / 1));
-                                            tViewMin.setText("" + (int) (float) ((double)value.approximateTime() / 1));
-
-                                            CO2 = (double)value.co2Saved();
-                                            KM = (double)value.distance();
-
-                                            timeAproximate = (double)value.approximateTime();
-
-                                            //  tViewKilometers.setText(resp.);
-                                            //tViewKilometers.setText(""+data.getPrice().);
-                                            PRECIO = (double)value.price();
-
-
-                                            tViewPriceEntero.setText("S/ " + (double)value.price());
-                                        }
+                                        String priceText = "S/" +   String.format("%s", price);
+                                        tViewPriceEntero.setText(priceText);
+                                        tViewKilometers.setText(String.format("%s", kilometers));
+                                        tViewCo2.setText(String.format("%s", co2));
+                                        tViewMin.setText(String.format("%s", approximateTime));
                                     }
                             );
-
-
-
-
-                        }else {
-
-                            Failed  failed = volskayaResponse.fragments().failed();
-                            if (failed!=null){
-
-
-                                switch (failed.responseCode()){
+                        } else {
+                            if (failed != null) {
+                                switch (failed.responseCode()) {
                                     case errorCommonCode:
                                         h.post(
-
-                                                new Runnable() {
-                                                    @Override
-                                                    public void run() {
-
-                                                        markerTo.setVisibility(View.VISIBLE);
-                                                        Snackbar snackbar = Snackbar.make(root, "Ocurrio un Error Desconocido", Snackbar.LENGTH_LONG);
-                                                        snackbar.show();
-                                                    }
+                                                () -> {
+                                                    markerTo.setVisibility(View.VISIBLE);
+                                                    Snackbar snackbar = Snackbar.make(root, "Ocurrio un Error Desconocido", Snackbar.LENGTH_LONG);
+                                                    snackbar.show();
                                                 }
                                         );
                                         break;
                                     case errorSinCoverturaCode:
                                         h.post(
-                                                new Runnable() {
-                                                    @Override
-                                                    public void run() {
-
-                                                        markerTo.setVisibility(View.VISIBLE);
-                                                        showSnackBackError("Delivery Fuera de la Cobertura");
-                                                        returnToSetFinish();
-                                                    }
+                                                () -> {
+                                                    markerTo.setVisibility(View.VISIBLE);
+                                                    showSnackBackError("Delivery Fuera de la Cobertura");
+                                                    returnToSetFinish();
                                                 }
                                         );
                                         break;
                                     case errorLimitDistanceCode:
                                         h.post(
-                                                new Runnable() {
-                                                    @Override
-                                                    public void run() {
+                                                () -> {
+                                                    markerTo.setVisibility(View.VISIBLE);
+                                                    showSnackBackError("Distancia Máxima Superada");
 
-                                                        markerTo.setVisibility(View.VISIBLE);
-                                                        showSnackBackError("Distancia Máxima Superada");
-
-                                                        returnToSetFinish();
-                                                    }
+                                                    returnToSetFinish();
                                                 }
                                         );
                                         break;
                                     case errorDistanceZeroCode:
                                         h.post(
-                                                new Runnable() {
-                                                    @Override
-                                                    public void run() {
+                                                () -> {
+                                                    markerTo.setVisibility(View.VISIBLE);
+                                                    showSnackBackError("No se supero la distancia minima");
 
-                                                        markerTo.setVisibility(View.VISIBLE);
-                                                        showSnackBackError("No se supero la distancia minima");
-
-                                                        returnToSetFinish();
-                                                    }
+                                                    returnToSetFinish();
                                                 }
                                         );
                                         break;
@@ -1053,40 +1016,31 @@ public class FragmentMapPicker extends Fragment implements OnMapReadyCallback, T
 
                             }
                         }
-
-
-
-
                     }
 
                     @Override
                     public void onFailure(@Nonnull ApolloException e) {
                         hideProgressDialog();
                         h.post(
-                                new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        Log.d(TAG,"apollo Error: "+ e.toString());
-                                        showSnackBackError("No se pudo Conectar",
-                                                new View.OnClickListener() {
-                                                    @Override
-                                                    public void onClick(View v) {
+                                () -> {
+                                    Log.d(TAG, "apollo Error: " + e.toString());
+                                    Log.d(TAG, "apollo Error: " + latStart);
+                                    Log.d(TAG, "apollo Error: " + latFinish);
+                                    Log.d(TAG, "apollo Error: " + lonStart);
+                                    Log.d(TAG, "apollo Error: " + lonFinish);
 
-                                                        markerTo.setVisibility(View.VISIBLE);
-                                                        getPriceFromServer(latStart, lonStart, latFinish, lonFinish);
-                                                    }
-                                                },
-                                                "Reintentar"
-                                        );
-
-
-                                    }
+                                    showSnackBackError("No se pudo Conectar",
+                                            v -> {
+                                                markerTo.setVisibility(View.VISIBLE);
+                                                getPriceFromServer(latStart, lonStart, latFinish, lonFinish);
+                                            },
+                                            "Reintentar"
+                                    );
                                 }
                         );
 
                     }
                 });
-
     }
 
 
@@ -1198,10 +1152,10 @@ public class FragmentMapPicker extends Fragment implements OnMapReadyCallback, T
         tViewPriceEntero = getView().findViewById(R.id.tViewPrecio);
 
         fabDrawer = (FloatingActionButton) getActivity().findViewById(R.id.fabDrawer);
-        progress_search= getView().findViewById(R.id.progress_search);
+        progress_search = getView().findViewById(R.id.progress_search);
 
         fAButtonClearText = getView().findViewById(R.id.fAButtonClearText);
-         eTextSearch = getView().findViewById(R.id.eTextSearch);
+        eTextSearch = getView().findViewById(R.id.eTextSearch);
 
 
         rViewPlaces = getView().findViewById(R.id.rViewPlaces);
@@ -1229,7 +1183,7 @@ public class FragmentMapPicker extends Fragment implements OnMapReadyCallback, T
         @Override
         public void run() {
             try {
-                Log.d(TAG,"runnableSetCurrentLocation()");
+                Log.d(TAG, "runnableSetCurrentLocation()");
                 if (ActivityCompat.checkSelfPermission(ctx, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(ctx, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                     verifyPermission();
                     return;
@@ -1241,14 +1195,14 @@ public class FragmentMapPicker extends Fragment implements OnMapReadyCallback, T
 
                             if (location != null) {
 
-                                    mMap.setMyLocationEnabled(true);
-                                    setCurrentLoc(location);
-                                    positionLastLoc();
-                                    finishMoveMapEvent();
-                                    handler.removeCallbacks(runnableSetCurrentLocation);
-                                } else {
-                                    handler.postDelayed(runnableSetCurrentLocation, 100);
-                                }
+                                mMap.setMyLocationEnabled(true);
+                                setCurrentLoc(location);
+                                positionLastLoc();
+                                finishMoveMapEvent();
+                                handler.removeCallbacks(runnableSetCurrentLocation);
+                            } else {
+                                handler.postDelayed(runnableSetCurrentLocation, 100);
+                            }
 
 
                         });
@@ -1270,7 +1224,7 @@ public class FragmentMapPicker extends Fragment implements OnMapReadyCallback, T
 
     private void posicionarMarker() {
 
-        Log.d(TAG,"posicionarMarker()"+CurrentLat+","+CurrentLon);
+        Log.d(TAG, "posicionarMarker()" + CurrentLat + "," + CurrentLon);
         LatLng posicion = new LatLng(CurrentLat, CurrentLon);
         CameraPosition cameraPosition = new CameraPosition.Builder().target(posicion).zoom(16.0f).build();
         CameraUpdate cameraUpdate = CameraUpdateFactory.newCameraPosition(cameraPosition);
@@ -1294,17 +1248,17 @@ public class FragmentMapPicker extends Fragment implements OnMapReadyCallback, T
         });
 
         mMap.setOnCameraIdleListener(() -> {
-            finishMoveMapEvent();
-            }
+                    finishMoveMapEvent();
+                }
         );
 
     }
 
 
-    void finishMoveMapEvent(){
+    void finishMoveMapEvent() {
         try {
 
-            if (ActivityCompat.checkSelfPermission(ctx,Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(ctx,Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            if (ActivityCompat.checkSelfPermission(ctx, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(ctx, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                 verifyPermission();
                 return;
             }
@@ -1312,7 +1266,7 @@ public class FragmentMapPicker extends Fragment implements OnMapReadyCallback, T
             double CameraLat = mMap.getCameraPosition().target.latitude;
             double CameraLong = mMap.getCameraPosition().target.longitude;
 
-            Log.d(TAG,"setOnCameraIdleListener() "+CameraLat+" , "+CameraLong);
+            Log.d(TAG, "setOnCameraIdleListener() " + CameraLat + " , " + CameraLong);
 
             Location loc = new Location("provider");
 
@@ -1323,7 +1277,7 @@ public class FragmentMapPicker extends Fragment implements OnMapReadyCallback, T
 
 
         } catch (Exception e) {
-            Log.d(TAG,"setOnCameraIdleListener()"+e.toString());
+            Log.d(TAG, "setOnCameraIdleListener()" + e.toString());
         }
         if (!isFirstIdle) {//si es la primera  ves q se inicia el mapa
             isFirstIdle = true;
@@ -1358,7 +1312,7 @@ public class FragmentMapPicker extends Fragment implements OnMapReadyCallback, T
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     mMap.getUiSettings().setMyLocationButtonEnabled(true);
-                    if (ActivityCompat.checkSelfPermission(ctx,Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(ctx,Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                    if (ActivityCompat.checkSelfPermission(ctx, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(ctx, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                         // TODO: Consider calling
                         //    Activity#requestPermissions
                         // here to request the missing permissions, and then overriding
@@ -1370,11 +1324,11 @@ public class FragmentMapPicker extends Fragment implements OnMapReadyCallback, T
                     }
                     mMap.setMyLocationEnabled(true);
                     runnableSetCurrentLocation.run();
-                    Toast.makeText(ctx,"permiso concedido",Toast.LENGTH_LONG).show();
-                }else {
+                    Toast.makeText(ctx, "permiso concedido", Toast.LENGTH_LONG).show();
+                } else {
                     handler.postDelayed(
                             this::verifyPermission
-                    ,1000);
+                            , 1000);
                 }
                 return;
 
@@ -1384,8 +1338,8 @@ public class FragmentMapPicker extends Fragment implements OnMapReadyCallback, T
     }
 
 
-
     private OnFragmentInteractionListener mListener;
+
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -1397,12 +1351,12 @@ public class FragmentMapPicker extends Fragment implements OnMapReadyCallback, T
         }
     }
 
-    private void updateLocInView(Location loc){
+    private void updateLocInView(Location loc) {
         String text = ("Buscando tu dirección");
-        if(STATUS==0){
+        if (STATUS == 0) {
             tViewAddressStart.setText(text);
-        }else {
-            if(STATUS==1){
+        } else {
+            if (STATUS == 1) {
                 tViewAddressFinish.setText(text);
             }
         }
@@ -1412,8 +1366,8 @@ public class FragmentMapPicker extends Fragment implements OnMapReadyCallback, T
         handler.post(runnableSerchAddress);
     }
 
-    private void showProgressDialog(){
-        ConstraintLayout cl  = getView().findViewById(R.id.progress_dialog );
+    private void showProgressDialog() {
+        ConstraintLayout cl = getView().findViewById(R.id.progress_dialog);
         h.post(new Runnable() {
             @Override
             public void run() {
@@ -1427,8 +1381,8 @@ public class FragmentMapPicker extends Fragment implements OnMapReadyCallback, T
     }
 
 
-    private void hideProgressDialog(){
-        ConstraintLayout cl  = getView().findViewById(R.id.progress_dialog );
+    private void hideProgressDialog() {
+        ConstraintLayout cl = getView().findViewById(R.id.progress_dialog);
 
 
         h.post(new Runnable() {
@@ -1440,59 +1394,59 @@ public class FragmentMapPicker extends Fragment implements OnMapReadyCallback, T
             }
         });
 
-                            }
+    }
 
 
-                            Runnable runnableSerchAddress = new Runnable() {
-                                @Override
-                                public void run() {
+    Runnable runnableSerchAddress = new Runnable() {
+        @Override
+        public void run() {
 
-                                    int statusTemp = STATUS;
+            int statusTemp = STATUS;
 
-                                    if(LatTemp !=0 && LonTemp != 0) {
+            if (LatTemp != 0 && LonTemp != 0) {
 
-                                        CurrentLat = LatTemp;
-                                        CurrentLon = LonTemp;
-                                        String apiKey = Configurations.API_KEY;
-                                        String url = "https://maps.googleapis.com/maps/api/geocode/json?latlng=" + LatTemp + "," + LonTemp + "&key=" + apiKey;
-                                        Log.d(TAG,"buscando: "+url);
+                CurrentLat = LatTemp;
+                CurrentLon = LonTemp;
+                String apiKey = Configurations.API_KEY;
+                String url = "https://maps.googleapis.com/maps/api/geocode/json?latlng=" + LatTemp + "," + LonTemp + "&key=" + apiKey;
+                Log.d(TAG, "buscando: " + url);
 
-                                        JsonObjectRequest sr = new JsonObjectRequest(url, null,
-                                                response -> {
-                                                    try {
-                                                        JSONArray results = response.getJSONArray("results");
-                                                        JSONObject zero = results.getJSONObject(0);
-                                                        JSONArray address_components = zero.getJSONArray("address_components");
+                JsonObjectRequest sr = new JsonObjectRequest(url, null,
+                        response -> {
+                            try {
+                                JSONArray results = response.getJSONArray("results");
+                                JSONObject zero = results.getJSONObject(0);
+                                JSONArray address_components = zero.getJSONArray("address_components");
 
-                                                        // direccion = Utils.NoPrecisa;
-                                                        int procede = 0;
+                                // direccion = Utils.NoPrecisa;
+                                int procede = 0;
 
-                                                        for (int i = 0; i < address_components.length(); i++) {
-                                                            JSONObject zero2 = address_components.getJSONObject(i);
-                                                            String long_name = zero2.getString("long_name");
-                                                            JSONArray mtypes = zero2.getJSONArray("types");
-                                                            String Type = mtypes.getString(0);
+                                for (int i = 0; i < address_components.length(); i++) {
+                                    JSONObject zero2 = address_components.getJSONObject(i);
+                                    String long_name = zero2.getString("long_name");
+                                    JSONArray mtypes = zero2.getJSONArray("types");
+                                    String Type = mtypes.getString(0);
 
-                                                            if (Type.equalsIgnoreCase("street_number")) {
-                                                                number = long_name;
-                                                            }
+                                    if (Type.equalsIgnoreCase("street_number")) {
+                                        number = long_name;
+                                    }
 
-                                                            if (Type.equalsIgnoreCase("route")) {
-                                                                direccion = long_name;
-                                                                procede = 1;
-                                                            }
-                                                        }
+                                    if (Type.equalsIgnoreCase("route")) {
+                                        direccion = long_name;
+                                        procede = 1;
+                                    }
+                                }
 
-                                                        if(statusTemp==0){
+                                if (statusTemp == 0) {
 
-                                                           // tViewAddressStart.setText(direccion + " " + number);
-                                                            tViewAddressStart.setText(zero.getString("formatted_address"));
-                                                        }else {
-                                                            if(statusTemp==1){
+                                    // tViewAddressStart.setText(direccion + " " + number);
+                                    tViewAddressStart.setText(zero.getString("formatted_address"));
+                                } else {
+                                    if (statusTemp == 1) {
 //                                                                tViewAddressFinish.setText(direccion + " " + number);
-                                                                tViewAddressFinish.setText(zero.getString("formatted_address"));
-                                                            }
-                                                        }
+                                        tViewAddressFinish.setText(zero.getString("formatted_address"));
+                                    }
+                                }
 
                                 if (procede == 1) {
                                     //   btn_pedir.setVisibility(View.VISIBLE);
@@ -1502,7 +1456,7 @@ public class FragmentMapPicker extends Fragment implements OnMapReadyCallback, T
 
                             } catch (JSONException e) {
                                 e.printStackTrace();
-                                Log.d(TAG,"jsonE: "+e.toString());
+                                Log.d(TAG, "jsonE: " + e.toString());
                                 //      Toast.makeText(getContext(),"jsonE: "+e.toString(),Toast.LENGTH_LONG).show();
                             }
 
@@ -1510,18 +1464,18 @@ public class FragmentMapPicker extends Fragment implements OnMapReadyCallback, T
                     @Override
                     public void onErrorResponse(VolleyError error) {
 
-                        if(statusTemp==0){
+                        if (statusTemp == 0) {
                             tViewAddressStart.setText("Reintentando");
-                        }else {
-                            if(statusTemp==1){
+                        } else {
+                            if (statusTemp == 1) {
                                 tViewAddressFinish.setText("Reintentando");
                             }
                         }
                         verifyPermission();
-                        handler.postDelayed(runnableSerchAddress,2000);
+                        handler.postDelayed(runnableSerchAddress, 2000);
 
 
-                        Log.d(TAG,"voleyE "+error.toString());
+                        Log.d(TAG, "voleyE " + error.toString());
                         //    Toast.makeText(getContext(),"jsonE: "+error.toString(),Toast.LENGTH_LONG).show();
                     }
                 });
@@ -1542,13 +1496,13 @@ public class FragmentMapPicker extends Fragment implements OnMapReadyCallback, T
         }
 
         protected String doInBackground(String... args) {
-            if(LatTemp !=0 && LonTemp != 0) {
+            if (LatTemp != 0 && LonTemp != 0) {
 
                 CurrentLat = LatTemp;
                 CurrentLon = LonTemp;
                 String apiKey = Configurations.API_KEY;
                 String url = "https://maps.googleapis.com/maps/api/geocode/json?latlng=" + LatTemp + "," + LonTemp + "&key=" + apiKey;
-                Log.d(TAG,"buscando: "+url);
+                Log.d(TAG, "buscando: " + url);
 
                 JsonObjectRequest sr = new JsonObjectRequest(url, null,
                         response -> {
@@ -1578,12 +1532,12 @@ public class FragmentMapPicker extends Fragment implements OnMapReadyCallback, T
                                     }
                                 }
 
-                                if(STATUS==0){
-                                   // tViewAddressStart.setText(direccion + " " + number);
+                                if (STATUS == 0) {
+                                    // tViewAddressStart.setText(direccion + " " + number);
                                     tViewAddressStart.setText(zero.getString("formatted_address"));
-                                }else {
-                                    if(STATUS==1){
-                                       // tViewAddressFinish.setText(direccion + " " + number);
+                                } else {
+                                    if (STATUS == 1) {
+                                        // tViewAddressFinish.setText(direccion + " " + number);
                                         tViewAddressFinish.setText(zero.getString("formatted_address"));
                                     }
                                 }
@@ -1596,7 +1550,7 @@ public class FragmentMapPicker extends Fragment implements OnMapReadyCallback, T
 
                             } catch (JSONException e) {
                                 e.printStackTrace();
-                                Log.d(TAG,"jsonE: "+e.toString());
+                                Log.d(TAG, "jsonE: " + e.toString());
                                 //      Toast.makeText(getContext(),"jsonE: "+e.toString(),Toast.LENGTH_LONG).show();
                             }
 
@@ -1604,14 +1558,14 @@ public class FragmentMapPicker extends Fragment implements OnMapReadyCallback, T
                     @Override
                     public void onErrorResponse(VolleyError error) {
 
-                        if(STATUS==0){
+                        if (STATUS == 0) {
                             tViewAddressStart.setText("No se pudo Obtener");
-                        }else {
-                            if(STATUS==1){
+                        } else {
+                            if (STATUS == 1) {
                                 tViewAddressFinish.setText("No se pudo Obtener");
                             }
                         }
-                        Log.d(TAG,"voleyE "+error.toString());
+                        Log.d(TAG, "voleyE " + error.toString());
                         //    Toast.makeText(getContext(),"jsonE: "+error.toString(),Toast.LENGTH_LONG).show();
                     }
                 });
@@ -1628,7 +1582,7 @@ public class FragmentMapPicker extends Fragment implements OnMapReadyCallback, T
     @Override
     public void onStart() {
         super.onStart();
-        if(mMap!=null){
+        if (mMap != null) {
             verifyPermission();
         }
 

@@ -1,0 +1,31 @@
+fragment success on VolskayaSuccessResponse {
+    responseCode
+    responseMessage
+}
+
+fragment failed on VolskayaFailedResponse{
+    responseCode
+    responseMessage
+}
+
+query wakeUpHeroku {
+    wakeUpHeroku
+}
+
+query getPriceQuery(  $coordinateStart: CoordinateInput!, $coordinateFinish: CoordinateInput!) {
+    calculatePriceRoute(
+        coordinateStart: $coordinateStart
+        coordinateFinish : $coordinateFinish
+    ){
+        value {
+            price,
+            distance,
+            co2Saved,
+            approximateTime
+        }
+        volskayaResponse {
+            ... success
+            ... failed
+        }
+    }
+}

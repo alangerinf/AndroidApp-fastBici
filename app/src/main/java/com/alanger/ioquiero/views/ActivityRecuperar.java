@@ -3,19 +3,7 @@ package com.alanger.ioquiero.views;
 import android.app.Activity;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
-import android.util.Log;
-
-import com.alanger.ioquiero.AllUsersQuery;
-import com.alanger.ioquiero.LoginQuery;
 import com.alanger.ioquiero.R;
-import com.alanger.ioquiero.volskayaGraphql.GraphqlClient;
-import com.apollographql.apollo.ApolloCall;
-import com.apollographql.apollo.api.Response;
-import com.apollographql.apollo.exception.ApolloException;
-
-import java.util.List;
-
-import javax.annotation.Nonnull;
 
 public class ActivityRecuperar extends Activity {
 
@@ -29,9 +17,8 @@ public class ActivityRecuperar extends Activity {
         testVolskayaGraphql();
     }
 
-
     public void testVolskayaGraphql(){
-        GraphqlClient.getMyApolloClient().query(
+      /*  GraphqlClient.getMyApolloClient().query(
                 AllUsersQuery.builder().build()).enqueue(new ApolloCall.Callback<AllUsersQuery.Data>() {
             @Override
             public void onResponse(@Nonnull Response<AllUsersQuery.Data> response) {
@@ -45,12 +32,12 @@ public class ActivityRecuperar extends Activity {
             public void onFailure(@Nonnull ApolloException e) {
 
             }
-        });
+        });*/
 
     }
 
-    public void Login(String email,String password){
-        GraphqlClient.getMyApolloClient()
+    public void Login(String email,String password) {
+   /*     GraphqlClient.getMyApolloClient()
                 .query(
                     LoginQuery
                             .builder()
@@ -70,7 +57,7 @@ public class ActivityRecuperar extends Activity {
 
                     }
                 });
-
+*/
     }
 
 

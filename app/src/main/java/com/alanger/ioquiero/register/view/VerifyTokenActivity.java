@@ -13,19 +13,8 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import com.alanger.ioquiero.CheckCodeQuery;
-import com.alanger.ioquiero.CheckCodeQuery.CheckCode;
-import com.alanger.ioquiero.LoginQuery;
 import com.alanger.ioquiero.R;
 import com.alanger.ioquiero.views.ActivityMain;
-import com.alanger.ioquiero.volskayaGraphql.GraphqlClient;
-import com.apollographql.apollo.ApolloCall;
-import com.apollographql.apollo.api.Response;
-import com.apollographql.apollo.exception.ApolloException;
-
-import javax.annotation.Nonnull;
 
 public class VerifyTokenActivity extends Activity implements VerifyTokenView{
 
@@ -78,7 +67,7 @@ public class VerifyTokenActivity extends Activity implements VerifyTokenView{
         Log.d(TAG,"id:"+id+" "+"code:"+code);
         showProgressBar();
         //consulta
-        GraphqlClient.getMyApolloClient()
+        /*GraphqlClient.getMyApolloClient()
                 .query(
                         CheckCodeQuery
                                 .builder()
@@ -112,7 +101,7 @@ public class VerifyTokenActivity extends Activity implements VerifyTokenView{
                     }
 
 
-                });
+                });*/
 
     }
 

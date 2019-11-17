@@ -7,10 +7,8 @@ import android.net.Uri;
 import android.os.Bundle;
 
 import com.alanger.ioquiero.R;
-import com.alanger.ioquiero.RegisterMutation;
-import com.alanger.ioquiero.RegisterOrderMutation;
 import com.alanger.ioquiero.models.Pedido;
-import com.alanger.ioquiero.models.Product;
+
 import com.alanger.ioquiero.pedido.main.CustomViewPager;
 import com.alanger.ioquiero.pedido.main.PageViewModel;
 import com.alanger.ioquiero.pedido.main.Paso1Fragment;
@@ -30,21 +28,9 @@ import android.widget.TextView;
 import com.alanger.ioquiero.pedido.main.Paso2Fragment;
 import com.alanger.ioquiero.pedido.main.ResumenFragment;
 import com.alanger.ioquiero.pedido.main.SectionsPagerAdapter;
-import com.alanger.ioquiero.type.AddressFieldsInput;
-import com.alanger.ioquiero.type.CoordinateFieldsInput;
-import com.alanger.ioquiero.type.FinalClientFieldsInput;
-import com.alanger.ioquiero.type.ProductFieldsInput;
-import com.alanger.ioquiero.type.RouteFieldsInput;
-import com.alanger.ioquiero.volskayaGraphql.GraphqlClient;
-import com.apollographql.apollo.ApolloCall;
-import com.apollographql.apollo.api.Response;
-import com.apollographql.apollo.exception.ApolloException;
+
 import com.google.android.material.button.MaterialButton;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.annotation.Nonnull;
 
 public class PedidoActivity extends AppCompatActivity implements
         Paso1Fragment.OnFragmentInteractionListener ,

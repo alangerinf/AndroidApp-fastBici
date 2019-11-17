@@ -5,9 +5,7 @@ import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 
 public class GraphqlClient {
-    private static final String BASE_URL = "https://volskayaforce-beta.herokuapp.com/graphql";
-    private static ApolloClient apolloClient;
-
+    private static final String BASE_URL = "https://volskayaforce-alfa.herokuapp.com/api/graphql";
     public static ApolloClient getMyApolloClient() {
 
         HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
@@ -17,7 +15,7 @@ public class GraphqlClient {
                 .addInterceptor(logging)
                 .build();
 
-        apolloClient = ApolloClient.builder()
+        ApolloClient apolloClient = ApolloClient.builder()
                 .serverUrl(BASE_URL)
                 .okHttpClient(okHttpClient)
                 .build();

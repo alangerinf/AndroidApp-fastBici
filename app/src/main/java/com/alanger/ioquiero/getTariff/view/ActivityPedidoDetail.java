@@ -17,6 +17,7 @@ import android.widget.Toast;
 import com.alanger.ioquiero.Configurations;
 import com.alanger.ioquiero.R;
 import com.alanger.ioquiero.getTariff.view.adapters.DialogSelectEnterprise;
+import com.alanger.ioquiero.getTariff.view.adapters.UriOrderHelper;
 import com.google.android.material.button.MaterialButton;
 
 public class ActivityPedidoDetail extends AppCompatActivity {
@@ -93,134 +94,47 @@ public class ActivityPedidoDetail extends AppCompatActivity {
 
     }
 
-    private void buildWhatsAppRequest(Uri bodyMsg) {
-        /*
-        Intent whatsappIntent =  new Intent("android.intent.action.MAIN");
-        whatsappIntent.setAction(Intent.ACTION_SEND);
-        whatsappIntent.setType("text/plain");
-        whatsappIntent.putExtra(Intent.EXTRA_TEXT,  bodyMsg + uriGoogleMaps);
-        whatsappIntent.setPackage("com.whatsapp");
-        whatsappIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-        */
 
-        Intent whatsappIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(bodyMsg.toString()));
-
-        try {
-            startActivity(whatsappIntent);
-        } catch (android.content.ActivityNotFoundException ex) {
-            Toast.makeText(ctx,"Whatsapp no esta instalado.",Toast.LENGTH_LONG).show();
-        }
-    }
 
     private void events() {
 
         btnOk.setOnClickListener(v -> {
+            UriOrderHelper uriOrderHelper
+                = new UriOrderHelper()
+                    .putLatStart(""+latStart)
+                    .putLonStart(""+lonStart)
+                    .putLatEnd(""+latFinish)
+                    .putLonEnd(""+lonFinish)
+                    .putAddressStart(addressStart)
+                    .putAddressEnd(addressFinish)
+                    .putPrice(""+price)
+                    .putTime(""+time)
 
-            if(formIsValid()){
-                String uriGoogleMaps = "http://maps.google.com/?mode=walking&saddr=" + latStart + "," + lonStart + "&daddr=" + latFinish + "," + lonFinish;
-                //String uriGoogleMaps = "http://maps.google.com/?mode=walking%26saddr=-8.1158903,-79.0356704%26daddr=-8.1179977,-79.0358920";
-                String phone = Configurations.phone;
+                    .putReferenceStart(eTextRefStart.getText().toString())
+                    .putReferenceEnd(eTextRefFinish.getText().toString())
+                    .putProductDetail(eTextProduct.getText().toString())
+                    .putClientName(eTextClientName.getText().toString())
+                    .putClientPhone(eTextClientPhone.getText().toString())
+                    .putHowMatch(eTextConCuantoPaga.getText().toString())
+                    .putPayMode(spnQuienPaga.getSelectedItem().toString())
+                    .putObservations(eTextObservations.getText().toString());
 
-                /**
-                ENTREGA PEDIDO ENCARACOLADOS
-                HORA DE ENTREGA 12 AM
-                CLIENTE: KARINA FLORES
-                CELULAR: 948051691
-                DIRECCION: CALLE LOS BRILLANTES 627, RESIDENCIAL LOS BRILLANTES BLOCK H DPTO 404, URB SANTA INÉS
-                COBRAR: 99.00 SOLES INCLUIDO DELIVERY
-                COSTO DEL DELIVERY 9.00
-                OBSERVACION: CLIENTE PAGA CON 100.00 SOLES
-                UBICACION
-                */
-
-                String product = eTextProduct.getText().toString().trim();
-
-                /******************************* */
-
-                Uri uriMensaje =
-                        Uri.parse(
-                        "https://api.whatsapp.com/send?phone=" + "xxxxxxxxxx" + "&text=" +
-                        "\n*___________ ENTREGA PEDIDO ___________*"+
-                        "\n*NOMBRE:*"                         +" "+eTextClientName.getText().toString().trim() +
-                        "\n*TELEFONO:*"                       +" "+eTextClientPhone.getText().toString().trim() +
-                        "\n*DESCRIPCIÓN DEL PRODUCTO:*"     +" "+product+
-                        "\n*TIEMPO APROXIMADO:*"              +" "+time   +" MINUTOS"+
-                        "\n*COSTO DEL DELIVERY:*"             +" "+ price +" SOLES" +
-                        "\n"+
-                        "\n*¿DONDE RECOJEMOS?:*"     +
-                        "\n "+ addressStart +
-                        "\n"+
-                        (eTextRefStart.getText().toString().trim().isEmpty()?
-                                ""
-                                :
-                                "*_REFERENCIA DE DONDE RECOJEMOS:_*"+
-                                        "\n"+eTextRefStart.getText().toString().trim()
-
-                        ) +
-                        "\n*¿DONDE VAMOS?:*" +
-                        "\n "+ addressFinish +
-                        "\n" +
-                        (eTextRefFinish.getText().toString().trim().isEmpty()?
-                                ""
-                                :
-                                "*_REFERENCIA DE DONDE VAMOS:_*"+
-                                        "\n"+eTextRefFinish.getText().toString().trim()
-
-                        )+
-                        "\n"+
-                        (eTextObservations.getText().toString().trim().isEmpty()?
-                                ""
-                                :
-                                "*OBSERVACIONES:*"+
-                                        "\n"+eTextObservations.getText().toString().trim()
-                        )+
-                        "\n"+
-                        (eTextConCuantoPaga.getText().toString().trim().isEmpty()?
-                                ""
-                                :
-                        "*Paga con:* S/ "+ eTextConCuantoPaga.getText().toString().trim()+" ( *"+ spnQuienPaga.getSelectedItem().toString() +"* ) "
-                        )+
-                        "\n"+
-                        uriGoogleMaps)
-                        ;
-                new DialogSelectEnterprise(ctx,uriMensaje);
-                //buildWhatsAppRequest(uriMensaje);
-
-            }else {
-                Toast.makeText(ctx,"Faltan campos obligatorios(*)",Toast.LENGTH_LONG).show();
+            try {
+                if(uriOrderHelper.validate(eTextClientPhone,eTextClientName,eTextProduct,eTextRefStart,eTextRefFinish)){
+                    new DialogSelectEnterprise(ctx,uriOrderHelper);
+                }
+                //si pasa la excepcion
+            } catch (Exception e) {
+                Toast.makeText(ctx,"Faltan campos obligatorios",Toast.LENGTH_SHORT).show();
             }
+
+
         });
 
         iViewCloseDetailPedido.setOnClickListener(ev -> {
             onBackPressed();
         });
 
-    }
-
-    private boolean formIsValid() {
-        String phone = eTextClientPhone.getText().toString();
-        boolean isEmptyName = eTextClientName.getText().toString().isEmpty();
-        boolean isEmptyProduct = eTextProduct.getText().toString().isEmpty();
-        boolean isEmptyRefFinish = eTextRefFinish.getText().toString().isEmpty();
-        boolean isEmptyRefStart = eTextRefStart.getText().toString().isEmpty();
-        boolean isInvalidPhone = phone.length()!=9;
-
-        if(isInvalidPhone){
-            eTextClientPhone.setError("Ingrese un numero de 9 digitos");
-        }
-        if(isEmptyName){
-            eTextClientName.setError("Ingrese su nombre");
-        }
-        if(isEmptyProduct){
-            eTextProduct.setError("Ingrese un producto");
-        }
-        if(isEmptyRefStart) {
-            eTextRefStart.setError("Ingrese una referencia de recojo");
-        }
-        if(isEmptyRefFinish) {
-            eTextRefFinish.setError("Ingrese una referencia de donde vamos");
-        }
-        return !(isEmptyProduct || isEmptyName|| isEmptyRefFinish || isEmptyRefStart ||  isInvalidPhone);
     }
 
 

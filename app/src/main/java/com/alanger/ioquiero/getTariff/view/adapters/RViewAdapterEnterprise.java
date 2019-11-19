@@ -25,14 +25,12 @@ public class RViewAdapterEnterprise
 
     List<Enterprise> enterpriseList;
     Context ctx;
-    Uri uri;
 
     private View.OnClickListener onClickListener;
 
-    public RViewAdapterEnterprise(Context ctx, List<Enterprise> enterpriseList,Uri uri) {
+    public RViewAdapterEnterprise(Context ctx, List<Enterprise> enterpriseList) {
         this.enterpriseList = enterpriseList;
         this.ctx = ctx;
-        this.uri = uri;
     }
 
     @NonNull

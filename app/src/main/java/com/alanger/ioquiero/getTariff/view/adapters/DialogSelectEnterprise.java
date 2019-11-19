@@ -6,15 +6,10 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
-import android.util.Config;
 import android.util.Log;
-import android.widget.Adapter;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.alanger.ioquiero.Configurations;
 import com.alanger.ioquiero.R;
 import com.alanger.ioquiero.getTariff.models.Enterprise;
 
@@ -26,14 +21,14 @@ public class DialogSelectEnterprise {
     private List<Enterprise> enterpriseList= null;
 
     private Context ctx;
-    private Uri uriMessage;
+    private UriOrderHelper uriOrderHelper;
 
 
 
-    public DialogSelectEnterprise(Context ctx, Uri uriMessage) {
+    public DialogSelectEnterprise(Context ctx, UriOrderHelper uriOrderHelper) {
         this.enterpriseList= new ArrayList<>();
         this.ctx = ctx;
-        this.uriMessage = uriMessage;
+        this.uriOrderHelper = uriOrderHelper;
 
         Enterprise enterprise1 = new Enterprise();
         enterprise1.setName("FastBici");
@@ -66,33 +61,18 @@ public class DialogSelectEnterprise {
         return x;
     }
 
-    private void buildWhatsAppRequest(Uri bodyMsg) {
-        /*
-        Intent whatsappIntent =  new Intent("android.intent.action.MAIN");
-        whatsappIntent.setAction(Intent.ACTION_SEND);
-        whatsappIntent.setType("text/plain");
-        whatsappIntent.putExtra(Intent.EXTRA_TEXT,  bodyMsg + uriGoogleMaps);
-        whatsappIntent.setPackage("com.whatsapp");
-        whatsappIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-        */
-        Intent whatsappIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(bodyMsg.toString()));
-
-            ctx.startActivity(whatsappIntent);
-
-    }
 
     private void showDialog(){
         Dialog dialog = new Dialog(ctx);
         dialog.setContentView(R.layout.activity_pedido_detail_dialog_select_enterprise);
         RecyclerView rView = dialog.findViewById(R.id.apddse_rView);
-        RViewAdapterEnterprise adapter = new RViewAdapterEnterprise(ctx,enterpriseList,uriMessage);
+        RViewAdapterEnterprise adapter = new RViewAdapterEnterprise(ctx,enterpriseList);
         adapter.setOnClicListener(v->{
             int pos = rView.getChildAdapterPosition(v);
             Enterprise temp = enterpriseList.get(pos);
-           // Toast.makeText(ctx,"llamando a "+temp.getName(),Toast.LENGTH_LONG).show();
-            String strURI = uriMessage.toString();
-             Uri uri = Uri.parse(strURI.replaceAll("xxxxxxxxxx",temp.getPhone()));
-            buildWhatsAppRequest(uri);
+            Uri  x  =uriOrderHelper.makeUriByPhone(temp.getPhone());
+            UriOrderHelper.buildWhatsAppRequest(ctx,x);
+
         });
         rView.setAdapter(adapter);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));

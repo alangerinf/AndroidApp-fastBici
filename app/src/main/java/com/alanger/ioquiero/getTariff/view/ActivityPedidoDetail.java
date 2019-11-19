@@ -118,8 +118,6 @@ public class ActivityPedidoDetail extends AppCompatActivity {
             public void onClick(View v) {
 
                 if(formIsValid()){
-                    v.setClickable(false);
-                    v.setFocusable(false);
                     String uriGoogleMaps = "http://maps.google.com/?mode=walking&saddr=" + latStart + "," + lonStart + "&daddr=" + latFinish + "," + lonFinish;
                     //String uriGoogleMaps = "http://maps.google.com/?mode=walking%26saddr=-8.1158903,-79.0356704%26daddr=-8.1179977,-79.0358920";
                     String phone = Configurations.phone;
@@ -207,8 +205,9 @@ public class ActivityPedidoDetail extends AppCompatActivity {
         boolean isEmptyProduct = eTextProduct.getText().toString().isEmpty();
         boolean isEmptyRefFinish = eTextRefFinish.getText().toString().isEmpty();
         boolean isEmptyRefStart = eTextRefStart.getText().toString().isEmpty();
+        boolean isInvalidPhone = phone.length()!=9;
 
-        if(phone.length()!=9){
+        if(isInvalidPhone){
             eTextClientPhone.setError("Ingrese un numero de 9 digitos");
         }
         if(isEmptyName){
@@ -223,15 +222,15 @@ public class ActivityPedidoDetail extends AppCompatActivity {
         if(isEmptyRefFinish) {
             eTextRefFinish.setError("Ingrese una referencia de donde vamos");
         }
-        return !(isEmptyProduct || isEmptyName|| isEmptyRefFinish || isEmptyRefStart );
+        return !(isEmptyProduct || isEmptyName|| isEmptyRefFinish || isEmptyRefStart ||  isInvalidPhone);
     }
 
 
     @Override
     protected void onResume() {
         super.onResume();
-        btnOk.setClickable(true);
-        btnOk.setFocusable(true);
+       // btnOk.setClickable(true);
+       // btnOk.setFocusable(true);
     }
 
     private void setDefaults() {

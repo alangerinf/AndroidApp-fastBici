@@ -39,17 +39,32 @@ public class DialogSelectEnterprise {
         enterprise1.setName("FastBici");
         enterprise1.setPhone("+51973446468");
         enterprise1.setLogo(ctx.getDrawable(R.drawable.ic_logo_fast));
-        enterpriseList.add(enterprise1);
+
 
         Enterprise enterprise2 = new Enterprise();
         enterprise2.setName("MuskBike");
-        enterprise2.setPhone("+51929258017");
+        enterprise2.setPhone("+51977382412");
         enterprise2.setLogo(ctx.getDrawable(R.drawable.musklogo));
-        enterpriseList.add(enterprise2);
+
+
+        if( getRandomIntegerBetweenRange(0,10)%2==0){
+            enterpriseList.add(enterprise1);
+            enterpriseList.add(enterprise2);
+        }else {
+
+            enterpriseList.add(enterprise2);
+            enterpriseList.add(enterprise1);
+        }
 
         showDialog();
     }
 
+
+    public static int getRandomIntegerBetweenRange(double min, double max){
+        int x = (int) ((int)( Math.random()*((max-min)+1) )+min);
+        Log.d("numRand",""+x);
+        return x;
+    }
 
     private void buildWhatsAppRequest(Uri bodyMsg) {
         /*
@@ -87,13 +102,7 @@ public class DialogSelectEnterprise {
     }
 
 
-    private Enterprise getRandomEnterprise(){
-        return enterpriseList.get(getRandom());
-    }
 
-    private int getRandom(){
-        return (int) Math.random() % enterpriseList.size();
-    }
 
 
 

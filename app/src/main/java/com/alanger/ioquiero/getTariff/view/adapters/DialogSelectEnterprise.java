@@ -90,9 +90,9 @@ public class DialogSelectEnterprise {
             int pos = rView.getChildAdapterPosition(v);
             Enterprise temp = enterpriseList.get(pos);
            // Toast.makeText(ctx,"llamando a "+temp.getName(),Toast.LENGTH_LONG).show();
-            //    String strURI = uriMessage.toString();
-            //     Uri uri = Uri.parse(strURI.replaceAll(Configurations.phone,temp.getPhone()));
-            buildWhatsAppRequest(uriMessage);
+            String strURI = uriMessage.toString();
+             Uri uri = Uri.parse(strURI.replaceAll("xxxxxxxxxx",temp.getPhone()));
+            buildWhatsAppRequest(uri);
         });
         rView.setAdapter(adapter);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));

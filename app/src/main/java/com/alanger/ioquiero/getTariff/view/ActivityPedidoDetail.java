@@ -102,6 +102,7 @@ public class ActivityPedidoDetail extends AppCompatActivity {
         whatsappIntent.setPackage("com.whatsapp");
         whatsappIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
         */
+
         Intent whatsappIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(bodyMsg.toString()));
 
         try {
@@ -113,83 +114,80 @@ public class ActivityPedidoDetail extends AppCompatActivity {
 
     private void events() {
 
-        btnOk.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        btnOk.setOnClickListener(v -> {
 
-                if(formIsValid()){
-                    String uriGoogleMaps = "http://maps.google.com/?mode=walking&saddr=" + latStart + "," + lonStart + "&daddr=" + latFinish + "," + lonFinish;
-                    //String uriGoogleMaps = "http://maps.google.com/?mode=walking%26saddr=-8.1158903,-79.0356704%26daddr=-8.1179977,-79.0358920";
-                    String phone = Configurations.phone;
+            if(formIsValid()){
+                String uriGoogleMaps = "http://maps.google.com/?mode=walking&saddr=" + latStart + "," + lonStart + "&daddr=" + latFinish + "," + lonFinish;
+                //String uriGoogleMaps = "http://maps.google.com/?mode=walking%26saddr=-8.1158903,-79.0356704%26daddr=-8.1179977,-79.0358920";
+                String phone = Configurations.phone;
 
-                    /**
-                    ENTREGA PEDIDO ENCARACOLADOS
-                    HORA DE ENTREGA 12 AM
-                    CLIENTE: KARINA FLORES
-                    CELULAR: 948051691
-                    DIRECCION: CALLE LOS BRILLANTES 627, RESIDENCIAL LOS BRILLANTES BLOCK H DPTO 404, URB SANTA INÉS
-                    COBRAR: 99.00 SOLES INCLUIDO DELIVERY
-                    COSTO DEL DELIVERY 9.00
-                    OBSERVACION: CLIENTE PAGA CON 100.00 SOLES
-                    UBICACION
-                    */
+                /**
+                ENTREGA PEDIDO ENCARACOLADOS
+                HORA DE ENTREGA 12 AM
+                CLIENTE: KARINA FLORES
+                CELULAR: 948051691
+                DIRECCION: CALLE LOS BRILLANTES 627, RESIDENCIAL LOS BRILLANTES BLOCK H DPTO 404, URB SANTA INÉS
+                COBRAR: 99.00 SOLES INCLUIDO DELIVERY
+                COSTO DEL DELIVERY 9.00
+                OBSERVACION: CLIENTE PAGA CON 100.00 SOLES
+                UBICACION
+                */
 
-                    String product = eTextProduct.getText().toString().trim();
+                String product = eTextProduct.getText().toString().trim();
 
-                    /******************************* */
+                /******************************* */
 
-                    Uri uriMensaje =
-                            Uri.parse(
-                            "https://api.whatsapp.com/send?phone=" + phone + "&text=" +
-                            "\n*___________ ENTREGA PEDIDO ___________*"+
-                            "\n*NOMBRE:*"                         +" "+eTextClientName.getText().toString().trim() +
-                            "\n*TELEFONO:*"                       +" "+eTextClientPhone.getText().toString().trim() +
-                            "\n*DESCRIPCIÓN DEL PRODUCTO:*"     +" "+product+
-                            "\n*TIEMPO APROXIMADO:*"              +" "+time   +" MINUTOS"+
-                            "\n*COSTO DEL DELIVERY:*"             +" "+ price +" SOLES" +
-                            "\n"+
-                            "\n*¿DONDE RECOJEMOS?:*"     +
-                            "\n "+ addressStart +
-                            "\n"+
-                            (eTextRefStart.getText().toString().trim().isEmpty()?
-                                    ""
-                                    :
-                                    "*_REFERENCIA DE DONDE RECOJEMOS:_*"+
-                                            "\n"+eTextRefStart.getText().toString().trim()
+                Uri uriMensaje =
+                        Uri.parse(
+                        "https://api.whatsapp.com/send?phone=" + "xxxxxxxxxx" + "&text=" +
+                        "\n*___________ ENTREGA PEDIDO ___________*"+
+                        "\n*NOMBRE:*"                         +" "+eTextClientName.getText().toString().trim() +
+                        "\n*TELEFONO:*"                       +" "+eTextClientPhone.getText().toString().trim() +
+                        "\n*DESCRIPCIÓN DEL PRODUCTO:*"     +" "+product+
+                        "\n*TIEMPO APROXIMADO:*"              +" "+time   +" MINUTOS"+
+                        "\n*COSTO DEL DELIVERY:*"             +" "+ price +" SOLES" +
+                        "\n"+
+                        "\n*¿DONDE RECOJEMOS?:*"     +
+                        "\n "+ addressStart +
+                        "\n"+
+                        (eTextRefStart.getText().toString().trim().isEmpty()?
+                                ""
+                                :
+                                "*_REFERENCIA DE DONDE RECOJEMOS:_*"+
+                                        "\n"+eTextRefStart.getText().toString().trim()
 
-                            ) +
-                            "\n*¿DONDE VAMOS?:*" +
-                            "\n "+ addressFinish +
-                            "\n" +
-                            (eTextRefFinish.getText().toString().trim().isEmpty()?
-                                    ""
-                                    :
-                                    "*_REFERENCIA DE DONDE VAMOS:_*"+
-                                            "\n"+eTextRefFinish.getText().toString().trim()
+                        ) +
+                        "\n*¿DONDE VAMOS?:*" +
+                        "\n "+ addressFinish +
+                        "\n" +
+                        (eTextRefFinish.getText().toString().trim().isEmpty()?
+                                ""
+                                :
+                                "*_REFERENCIA DE DONDE VAMOS:_*"+
+                                        "\n"+eTextRefFinish.getText().toString().trim()
 
-                            )+
-                            "\n"+
-                            (eTextObservations.getText().toString().trim().isEmpty()?
-                                    ""
-                                    :
-                                    "*OBSERVACIONES:*"+
-                                            "\n"+eTextObservations.getText().toString().trim()
-                            )+
-                            "\n"+
-                            (eTextConCuantoPaga.getText().toString().trim().isEmpty()?
-                                    ""
-                                    :
-                            "*Paga con:* S/ "+ eTextConCuantoPaga.getText().toString().trim()+" ( *"+ spnQuienPaga.getSelectedItem().toString() +"* ) "
-                            )+
-                            "\n"+
-                            uriGoogleMaps)
-                            ;
-                    new DialogSelectEnterprise(ctx,uriMensaje);
-                    //buildWhatsAppRequest(uriMensaje);
+                        )+
+                        "\n"+
+                        (eTextObservations.getText().toString().trim().isEmpty()?
+                                ""
+                                :
+                                "*OBSERVACIONES:*"+
+                                        "\n"+eTextObservations.getText().toString().trim()
+                        )+
+                        "\n"+
+                        (eTextConCuantoPaga.getText().toString().trim().isEmpty()?
+                                ""
+                                :
+                        "*Paga con:* S/ "+ eTextConCuantoPaga.getText().toString().trim()+" ( *"+ spnQuienPaga.getSelectedItem().toString() +"* ) "
+                        )+
+                        "\n"+
+                        uriGoogleMaps)
+                        ;
+                new DialogSelectEnterprise(ctx,uriMensaje);
+                //buildWhatsAppRequest(uriMensaje);
 
-                }else {
-                    Toast.makeText(ctx,"Faltan campos obligatorios(*)",Toast.LENGTH_LONG).show();
-                }
+            }else {
+                Toast.makeText(ctx,"Faltan campos obligatorios(*)",Toast.LENGTH_LONG).show();
             }
         });
 
